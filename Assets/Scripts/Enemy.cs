@@ -9,6 +9,8 @@ public class Enemy : MonoBehaviour {
 
 	public float Damage = 1.0f;
 
+	public float Range = 1.0f;
+
 	void Start () {
 		Vector3 randomPosition = getRandomPosition(Vector3.zero, 5);
 		Debug.Log(randomPosition);
@@ -27,6 +29,9 @@ public class Enemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		float step = MovementSpeed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, Vector3.zero, step);
+		if (Vector3.Distance(Vector3.zero, transform.position) > Range) {
+			transform.position = Vector3.MoveTowards(transform.position, Vector3.zero, step);
+		}
+        
 	}
 }
