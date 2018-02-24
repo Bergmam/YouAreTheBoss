@@ -11,9 +11,10 @@ public class Enemy : MonoBehaviour {
 
 	public float Range = 1.0f;
 
+	public float Health = 100.0f;
+
 	void Start () {
 		Vector3 randomPosition = getRandomPosition(Vector3.zero, 5);
-		Debug.Log(randomPosition);
 		transform.position = randomPosition;
 	}
 
