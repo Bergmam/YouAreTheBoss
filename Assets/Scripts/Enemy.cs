@@ -34,12 +34,10 @@ public class Enemy : MonoBehaviour {
 		float step = MovementSpeed * Time.deltaTime;
 		if (Vector3.Distance(Vector3.zero, transform.position) > Range) {
 			transform.position = Vector3.MoveTowards(transform.position, Vector3.zero, step);
-		}
-        
+		}   
 	}
-
 	public bool isInAttackArea(float lowAngle, float highAngle, float closeRadius, float farRadius){
-		
+
 		bool inAngle = RotationUtils.InCounterClockwiseLimits(angle, lowAngle, highAngle);
 
 		float distanceToBoss = Vector3.Distance(Vector3.zero, transform.position);
@@ -47,4 +45,20 @@ public class Enemy : MonoBehaviour {
 
 		return inAngle && inRadius;
 	}
+
+	public void applyDamageTo(float damage){
+		Health -= damage;
+		if (Health <= 0){
+			Destroy(gameObject);
+		} else {
+			gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+			StartCoroutine(WhiteColorAfterTime(gameObject.GetComponent<SpriteRenderer>()));
+		}
+	}
+
+	IEnumerator WhiteColorAfterTime(SpriteRenderer renderer)
+    {
+        yield return new WaitForSeconds(0.5f);
+		renderer.color = Color.white;
+    }
 }

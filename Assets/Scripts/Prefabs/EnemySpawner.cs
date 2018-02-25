@@ -10,7 +10,7 @@ public class EnemySpawner : MonoBehaviour {
 
 	void Start () {
 		preInitEnemy = Resources.Load("Prefabs/Enemy", typeof (GameObject)) as GameObject;
-		InvokeRepeating("instantiateEnemyPrefab", 0, 0.1f);
+		InvokeRepeating("instantiateEnemyPrefab", 0, 2.0f);
 	}
 
 	void instantiateEnemyPrefab() {
