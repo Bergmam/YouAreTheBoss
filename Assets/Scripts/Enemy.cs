@@ -13,13 +13,15 @@ public class Enemy : MonoBehaviour {
 
 	public float Health = 100.0f;
 
+	float angle;
+
 	void Start () {
 		Vector3 randomPosition = getRandomPosition(Vector3.zero, 5);
 		transform.position = randomPosition;
 	}
 
 	Vector3 getRandomPosition(Vector3 center, float radius) {
-		float angle = Random.value * 360;
+		angle = Random.value * 360;
 		Vector3 position;
 		position.x = center.x + radius * Mathf.Sin(angle * Mathf.Deg2Rad);
 		position.y = center.y + radius * Mathf.Cos(angle * Mathf.Deg2Rad);
@@ -34,5 +36,15 @@ public class Enemy : MonoBehaviour {
 			transform.position = Vector3.MoveTowards(transform.position, Vector3.zero, step);
 		}
         
+	}
+
+	public bool isInAttackArea(float lowAngle, float highAngle, float closeRadius, float farRadius){
+		
+		bool inAngle = RotationUtils.InCounterClockwiseLimits(angle, lowAngle, highAngle);
+
+		float distanceToBoss = Vector3.Distance(Vector3.zero, transform.position);
+		bool inRadius =  distanceToBoss >= closeRadius && distanceToBoss <= farRadius; 
+
+		return inAngle && inRadius;
 	}
 }

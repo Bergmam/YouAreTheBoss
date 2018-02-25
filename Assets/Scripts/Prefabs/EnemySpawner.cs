@@ -5,13 +5,17 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour {
 
 	GameObject preInitEnemy;
+
+	int numberOfEnemies = 0;
+
 	void Start () {
 		preInitEnemy = Resources.Load("Prefabs/Enemy", typeof (GameObject)) as GameObject;
-		instantiateEnemyPrefab();
-		InvokeRepeating("instantiateEnemyPrefab", 0.3f, 0.3f);
+		InvokeRepeating("instantiateEnemyPrefab", 0, 0.1f);
 	}
 
 	void instantiateEnemyPrefab() {
-		Instantiate(preInitEnemy);
+		GameObject initEnemy = Instantiate(preInitEnemy);
+		initEnemy.name = initEnemy.name + numberOfEnemies;
+		numberOfEnemies++;
 	}
 }
