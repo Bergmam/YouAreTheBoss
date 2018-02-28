@@ -18,11 +18,6 @@ public class PassiveAttack : MonoBehaviour {
 		damage = 50;
 		InvokeRepeating("doAttack", 0, 1.2f);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
 	void doAttack() {
 		object[] obj = GameObject.FindObjectsOfType(typeof (GameObject));

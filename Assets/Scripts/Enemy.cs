@@ -48,7 +48,9 @@ public class Enemy : MonoBehaviour {
 
 	public void applyDamageTo(float damage){
 		Health -= damage;
+		UnityUtils.RecursiveFind(transform, "HealthBar").GetComponent<ProgressBarBehaviour>().UpdateFill(Health / 100.0f);
 		if (Health <= 0){
+			Destroy(UnityUtils.RecursiveFind(transform, "HealthBar").gameObject);
 			Destroy(gameObject);
 		} else {
 			gameObject.GetComponent<SpriteRenderer>().color = Color.red;

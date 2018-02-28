@@ -15,7 +15,7 @@ public class EnemySpawner : MonoBehaviour {
 
 	void instantiateEnemyPrefab() {
 		GameObject initEnemy = Instantiate(preInitEnemy);
-		initEnemy.name = initEnemy.name + numberOfEnemies;
+		initEnemy.name = "Enemy " + numberOfEnemies;
 		numberOfEnemies++;
 	}
 }
