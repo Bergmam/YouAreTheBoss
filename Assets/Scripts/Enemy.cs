@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour {
 
 	public float MovementSpeed = 1.0f;
 
-	public float Damage = 1.0f;
+	public float Damage = 20.0f;
 
 	public float Range = 1.0f;
 
@@ -15,7 +15,10 @@ public class Enemy : MonoBehaviour {
 
 	float angle;
 
+	BossHealth bossHealth;
+
 	void Start () {
+		bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>();
 		Vector3 randomPosition = getRandomPosition(Vector3.zero, 5);
 		transform.position = randomPosition;
 	}
@@ -34,7 +37,14 @@ public class Enemy : MonoBehaviour {
 		float step = MovementSpeed * Time.deltaTime;
 		if (Vector3.Distance(Vector3.zero, transform.position) > Range) {
 			transform.position = Vector3.MoveTowards(transform.position, Vector3.zero, step);
-		}   
+
+		} else if (!IsInvoking("doDamageToBoss")) {
+			InvokeRepeating("doDamageToBoss", 0, 0.5f);
+		}
+	}
+
+	void doDamageToBoss() {
+		bossHealth.bossTakeDamage(Damage);
 	}
 	public bool isInAttackArea(float lowAngle, float highAngle, float closeRadius, float farRadius){
 
@@ -63,4 +73,8 @@ public class Enemy : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
 		renderer.color = Color.white;
     }
+
+	void OnDestroy(){
+		CancelInvoke();
+	}
 }
