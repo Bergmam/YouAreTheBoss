@@ -64,15 +64,9 @@ public class Enemy : MonoBehaviour {
 			Destroy(gameObject);
 		} else {
 			gameObject.GetComponent<SpriteRenderer>().color = Color.red;
-			StartCoroutine(WhiteColorAfterTime(gameObject.GetComponent<SpriteRenderer>()));
+			StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Color.white, 0.5f));
 		}
 	}
-
-	IEnumerator WhiteColorAfterTime(SpriteRenderer renderer)
-    {
-        yield return new WaitForSeconds(0.5f);
-		renderer.color = Color.white;
-    }
 
 	void OnDestroy(){
 		CancelInvoke();

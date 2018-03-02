@@ -34,13 +34,7 @@ public class PassiveAttack : MonoBehaviour {
 		// For now, change color of boss when he is attacking
 	 	gameObject.GetComponent<SpriteRenderer>().color = Color.red;
 		
-		StartCoroutine(attackColorChange(gameObject.GetComponent<SpriteRenderer>()));
+		StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Color.white, 0.5f));
 		
 	}
-
-	IEnumerator attackColorChange(SpriteRenderer renderer)
-    {
-        yield return new WaitForSeconds(0.5f);
-		renderer.color = Color.white;
-    }
 }
