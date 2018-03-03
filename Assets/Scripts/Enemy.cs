@@ -13,6 +13,10 @@ public class Enemy : MonoBehaviour {
 
 	public float Health = 100.0f;
 
+	public float Scale = 1.0f;
+
+	public Color SpriteColor = Color.white;
+
 	float angle;
 
 	BossHealth bossHealth;
@@ -64,15 +68,20 @@ public class Enemy : MonoBehaviour {
 			Destroy(gameObject);
 		} else {
 			gameObject.GetComponent<SpriteRenderer>().color = Color.red;
-			StartCoroutine(WhiteColorAfterTime(gameObject.GetComponent<SpriteRenderer>()));
+			StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), SpriteColor, 0.5f));
 		}
 	}
 
-	IEnumerator WhiteColorAfterTime(SpriteRenderer renderer)
-    {
-        yield return new WaitForSeconds(0.5f);
-		renderer.color = Color.white;
-    }
+	public void SetStats(float movementSpeed, float damage, float range, float health, float scale, Color color) {
+		MovementSpeed = movementSpeed;
+		Damage = damage;
+		Range = range;
+		Health = health;
+		Scale = scale;
+		transform.localScale *= scale;
+		SpriteColor = color;
+		GetComponent<SpriteRenderer>().color = color;
+	}
 
 	void OnDestroy(){
 		CancelInvoke();

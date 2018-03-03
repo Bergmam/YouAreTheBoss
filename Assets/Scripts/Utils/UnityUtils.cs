@@ -100,4 +100,9 @@ public class UnityUtils
         return buttonNameDict[button];
     }
 
+    public static IEnumerator ChangeToColorAfterTime(SpriteRenderer renderer, Color color, float time) {
+        yield return new WaitForSeconds(time);
+		renderer.color = color;
+    }
+
 }
