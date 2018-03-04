@@ -8,10 +8,10 @@ public class AttackMaskControl : MonoBehaviour {
 	Image mask;
 	Image image;
 
-	void Start ()
+	void Awake ()
 	{
 		this.mask = GetComponent<Image> ();
-		this.image = transform.FindChild ("Image").GetComponent<Image> ();
+		this.image = transform.Find ("Image").GetComponent<Image> ();
 
 		if (this.mask == null || this.image == null)
 		{

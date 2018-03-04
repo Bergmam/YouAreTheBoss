@@ -7,7 +7,7 @@ public class RadialFillControl : MonoBehaviour {
 
 	Image image;
 
-	void Start ()
+	void Awake ()
 	{
 		this.image = GetComponent<Image> ();
 		if (this.image == null) {
