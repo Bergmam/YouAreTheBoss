@@ -5,5 +5,9 @@ using UnityEngine;
 public static class Parameters {
 
     public static float scrollDelay = 0.15f;
-    
+	public static float MAX_MELE_RANGE = 1.0f;
+	public static float PROJECTILE_SPEED = 2.0f;
+	public static float PROJECTILE_RANGE = 0.5f;
+	public static float PROJECTILE_SCALE = 0.3f;
+	public static Color PROJECTILE_COLOR = Color.black;
 }

@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour {
 
 	private Color SpriteColor = Color.white;
 
-	float angle;
+	private float angle;
 
 	private bool selfDestruct;
 	private bool invunerable;
@@ -27,21 +27,9 @@ public class Enemy : MonoBehaviour {
 	BossHealth bossHealth;
 
 	void Start () {
-		bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>();
-		Vector3 randomPosition = getRandomPosition(Vector3.zero, 5);
-		transform.position = randomPosition;
+		bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>(); // Should all units know of the hero's health?
 	}
 
-	Vector3 getRandomPosition(Vector3 center, float radius) {
-		angle = Random.value * 360;
-		Vector3 position;
-		position.x = center.x + radius * Mathf.Sin(angle * Mathf.Deg2Rad);
-		position.y = center.y + radius * Mathf.Cos(angle * Mathf.Deg2Rad);
-		position.z = center.z;
-		return position;
-	}
-	
-	// Update is called once per frame
 	void Update () {
 		float step = MovementSpeed * Time.deltaTime;
 		if (Vector3.Distance (Vector3.zero, transform.position) > Range)
@@ -49,21 +37,52 @@ public class Enemy : MonoBehaviour {
 			transform.position = Vector3.MoveTowards (transform.position, Vector3.zero, step);
 
 		}
-		else if (selfDestruct)
+		else // If in range, do appropriate attack.
 		{
-			doDamageToBoss ();
-			KillSelf ();
+			if (selfDestruct) {
+				doDamageToBoss ();
+				KillSelf ();
+			}
+			// Mele attack
+			else if (Range <= Parameters.MAX_MELE_RANGE && !IsInvoking ("doDamageToBoss"))
+			{
+				InvokeRepeating ("doDamageToBoss", 0, 0.5f);
+			}
+			// Ranged attack
+			else if (Range > Parameters.MAX_MELE_RANGE && !IsInvoking ("spawnProjectile"))
+			{
+				InvokeRepeating ("spawnProjectile", 0, 0.5f);
+			}
+		}
 
-		}
-		else if (!IsInvoking ("doDamageToBoss"))
-		{
-			InvokeRepeating ("doDamageToBoss", 0, 0.5f);
-		}
 	}
 
 	void doDamageToBoss() {
 		bossHealth.bossTakeDamage(Damage);
 	}
+
+	/// <summary>
+	/// Spawns a projectile. Projectiles are fast, invunerable and self destructs on impact with the hero.
+	/// </summary>
+	void spawnProjectile ()
+	{
+		GameObject preInitEnemy = Resources.Load ("Prefabs/Enemy", typeof(GameObject)) as GameObject;
+		GameObject initEnemy = Instantiate(preInitEnemy);
+		initEnemy.GetComponent<Enemy> ().SetStats (
+			Parameters.PROJECTILE_SPEED,
+			this.Damage,
+			Parameters.PROJECTILE_RANGE,
+			1.0f, //Health of projectile does not matter since they are invunerable.
+			Parameters.PROJECTILE_SCALE,
+			Parameters.PROJECTILE_COLOR,
+			true,
+			true,
+			this.angle
+		);
+		initEnemy.name = "Projectile";
+		initEnemy.transform.position = transform.position;
+	}
+
 	public bool isInAttackArea(float lowAngle, float highAngle, float closeRadius, float farRadius){
 
 		bool inAngle = RotationUtils.InCounterClockwiseLimits(angle, lowAngle, highAngle);
@@ -91,14 +110,15 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public void SetStats(float movementSpeed, float damage, float range,
-		float health, float scale, Color color, bool selfDestruct, bool invunerable)
+		float health, float scale, Color color, bool selfDestruct, bool invunerable, float angle)
 	{
 		this.selfDestruct = selfDestruct;
 		this.invunerable = invunerable;
-		if (invunerable)
+		if (invunerable) //Don't show healthbar for invunerable units (projectiles)
 		{
 			Destroy(UnityUtils.RecursiveFind(transform, "HealthBar").gameObject);
 		}
+		this.angle = angle;
 		MovementSpeed = movementSpeed;
 		Damage = damage;
 		Range = range;
@@ -116,7 +136,12 @@ public class Enemy : MonoBehaviour {
 	}
 
 	private void KillSelf(){
-		Destroy(UnityUtils.RecursiveFind(transform, "HealthBar").gameObject);
+		//Invunerable units' helthbars are already removed so when they die, healthbar is null.
+		Transform healthBarTransform = UnityUtils.RecursiveFind (transform, "HealthBar");
+		if (healthBarTransform != null) {
+			Destroy (healthBarTransform.gameObject);
+		}
+
 		Destroy(gameObject);
 	}
 }

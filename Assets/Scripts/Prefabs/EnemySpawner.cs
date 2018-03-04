@@ -12,7 +12,7 @@ public class EnemySpawner : MonoBehaviour {
 
 	void Start () {
 		enemyTypesDict.Add(1, new StatsHolder("StandardEnemy", 1.0f, 2.5f, 1.0f, 100.0f, 1.0f, Color.white));
-		enemyTypesDict.Add(2, new StatsHolder("FastEnemy", 3.0f, 1.0f, 1.0f, 50.0f, 0.5f, Color.yellow));
+		enemyTypesDict.Add(2, new StatsHolder("FastEnemy", 3.0f, 1.0f, 2.0f, 50.0f, 0.5f, Color.yellow));
 		enemyTypesDict.Add(3, new StatsHolder("SlowEnemy", 0.3f, 6.0f, 1.0f, 300.0f, 2.0f, Color.black));
 
 	//	preInitEnemy = Resources.Load("Prefabs/Enemy", typeof (GameObject)) as GameObject;
@@ -28,6 +28,14 @@ public class EnemySpawner : MonoBehaviour {
 		int keyNumber = rand.Next(1, dictLength+1);
 		StatsHolder currentStats = enemyTypesDict[keyNumber];
 
+		float angle = Random.value * 360;
+		float radius = 5f;
+		Vector3 center = Vector3.zero;
+		Vector3 randomPosition = new Vector3 (
+			                   center.x + radius * Mathf.Sin (angle * Mathf.Deg2Rad),
+			                   center.y + radius * Mathf.Cos (angle * Mathf.Deg2Rad),
+			                   center.z);
+
 		initEnemy.GetComponent<Enemy> ().SetStats (
 			currentStats.MovementSpeed,
 			currentStats.Damage,
@@ -36,11 +44,13 @@ public class EnemySpawner : MonoBehaviour {
 			currentStats.Scale,
 			currentStats.Color,
 			false,
-			false
+			false,
+			angle
 		);
 
 		initEnemy.name = "Enemy " + numberOfEnemies;
 		numberOfEnemies++;
+		initEnemy.transform.position = randomPosition;
 	}
 
 	private class StatsHolder {
