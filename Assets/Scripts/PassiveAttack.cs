@@ -20,7 +20,7 @@ public class PassiveAttack : MonoBehaviour {
 		radialFillControl = GameObject.FindObjectOfType<RadialFillControl> ();
 		attackMaskControl = GameObject.FindObjectOfType<AttackMaskControl> ();
 		attackDict.Add(1, new BossAttack("WideMelee", 30, 0, 2.0f, 50, 1.2f));
-		attackDict.Add(2, new BossAttack("NarrowMeleeAndRanged", 5, 0, 5.0f, 300, 2.0f));
+		attackDict.Add(2, new BossAttack("NarrowMeleeAndRanged", 5, 0, 5.0f, 300, 5.0f));
 		attackDict.Add(3, new BossAttack("WideRanged", 30, 2.0f, 5.0f, 50, 1.2f));
 		setAttack(1);
 	}
@@ -50,9 +50,6 @@ public class PassiveAttack : MonoBehaviour {
 	}
 
 	public void setAttack(int attackNumber) {
-
-
-
 		CancelInvoke();
 		BossAttack attack = attackDict[attackNumber];
 		this.angle = attack.angle;

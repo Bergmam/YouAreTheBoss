@@ -8,9 +8,11 @@ public class CooldownBehaviour : MonoBehaviour {
 	private Image image;
 	private float originalCooldownValue;
 	private float cooldown;
+	private Button parentButton;
 
 	void Awake ()
 	{
+		this.parentButton = transform.parent.GetComponent<Button> ();
 		this.image = GetComponent<Image> ();
 		if (this.image == null) {
 			Destroy (this);
@@ -27,14 +29,20 @@ public class CooldownBehaviour : MonoBehaviour {
 			this.cooldown -= Time.deltaTime;
 			this.image.fillAmount = cooldown / originalCooldownValue;
 		}
+		else if(!this.parentButton.enabled)
+		{
+			this.parentButton.enabled = true;
+		}
 	}
 
 	public void StartCooldown(float cooldown){
+		this.parentButton.enabled = false;
 		this.cooldown = cooldown;
 		this.originalCooldownValue = cooldown;
 	}
 
 	public void RestartCooldown(){
+		this.parentButton.enabled = false;
 		this.cooldown = this.originalCooldownValue;
 	}
 }
