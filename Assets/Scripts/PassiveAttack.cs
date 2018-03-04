@@ -14,6 +14,8 @@ public class PassiveAttack : MonoBehaviour {
 	RadialFillControl radialFillControl;
 	AttackMaskControl attackMaskControl;
 
+	CooldownBehaviour currentCooldownBehaviour;
+
 	void Start () {
 		radialFillControl = GameObject.FindObjectOfType<RadialFillControl> ();
 		attackMaskControl = GameObject.FindObjectOfType<AttackMaskControl> ();
@@ -38,12 +40,19 @@ public class PassiveAttack : MonoBehaviour {
 		// For now, change color of boss when he is attacking
 		// TODO: Change when areas of damage is implemented
 	 	gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+
+		if (currentCooldownBehaviour != null) {
+			currentCooldownBehaviour.RestartCooldown ();
+		}
 		
 		StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Color.white, 0.5f));
 		
 	}
 
 	public void setAttack(int attackNumber) {
+
+
+
 		CancelInvoke();
 		BossAttack attack = attackDict[attackNumber];
 		this.angle = attack.angle;
@@ -60,7 +69,14 @@ public class PassiveAttack : MonoBehaviour {
 		{
 			attackMaskControl.SetSize (closeRadius, farRadius);
 		}
-		
+
+		GameObject currentAttackButton = GameObject.Find ("Passive " + attackNumber);
+		if (currentAttackButton != null) {
+			this.currentCooldownBehaviour = currentAttackButton.GetComponentInChildren<CooldownBehaviour> ();
+			if (this.currentCooldownBehaviour != null) {
+				this.currentCooldownBehaviour.StartCooldown (attack.frequency);
+			}
+		}
 		InvokeRepeating("doAttack", 0, attack.frequency);
 	}
 
