@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour {
 	float angle;
 
 	private bool selfDestruct;
+	private bool invunerable;
 
 	BossHealth bossHealth;
 
@@ -72,9 +73,14 @@ public class Enemy : MonoBehaviour {
 		return inAngle && inRadius;
 	}
 
-	public void applyDamageTo(float damage){
+	public void applyDamageTo(float damage)
+	{
+		if (invunerable)
+		{
+			return;
+		}
+
 		Health -= damage;
-		
 		UnityUtils.RecursiveFind(transform, "HealthBar").GetComponent<ProgressBarBehaviour>().UpdateFill(Health / MaxHealth);
 		if (Health <= 0){
 			KillSelf ();
@@ -84,8 +90,15 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	public void SetStats(float movementSpeed, float damage, float range, float health, float scale, Color color, bool selfDestruct) {
+	public void SetStats(float movementSpeed, float damage, float range,
+		float health, float scale, Color color, bool selfDestruct, bool invunerable)
+	{
 		this.selfDestruct = selfDestruct;
+		this.invunerable = invunerable;
+		if (invunerable)
+		{
+			Destroy(UnityUtils.RecursiveFind(transform, "HealthBar").gameObject);
+		}
 		MovementSpeed = movementSpeed;
 		Damage = damage;
 		Range = range;

@@ -35,6 +35,7 @@ public class EnemySpawner : MonoBehaviour {
 			currentStats.Health,
 			currentStats.Scale,
 			currentStats.Color,
+			false,
 			false
 		);
 
