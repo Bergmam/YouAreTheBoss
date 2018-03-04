@@ -28,13 +28,14 @@ public class EnemySpawner : MonoBehaviour {
 		int keyNumber = rand.Next(1, dictLength+1);
 		StatsHolder currentStats = enemyTypesDict[keyNumber];
 
-		initEnemy.GetComponent<Enemy>().SetStats(
+		initEnemy.GetComponent<Enemy> ().SetStats (
 			currentStats.MovementSpeed,
 			currentStats.Damage,
 			currentStats.Range,
 			currentStats.Health,
 			currentStats.Scale,
-			currentStats.Color
+			currentStats.Color,
+			false
 		);
 
 		initEnemy.name = "Enemy " + numberOfEnemies;

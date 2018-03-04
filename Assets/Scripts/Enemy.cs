@@ -21,6 +21,8 @@ public class Enemy : MonoBehaviour {
 
 	float angle;
 
+	private bool selfDestruct;
+
 	BossHealth bossHealth;
 
 	void Start () {
@@ -41,11 +43,20 @@ public class Enemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		float step = MovementSpeed * Time.deltaTime;
-		if (Vector3.Distance(Vector3.zero, transform.position) > Range) {
-			transform.position = Vector3.MoveTowards(transform.position, Vector3.zero, step);
+		if (Vector3.Distance (Vector3.zero, transform.position) > Range)
+		{
+			transform.position = Vector3.MoveTowards (transform.position, Vector3.zero, step);
 
-		} else if (!IsInvoking("doDamageToBoss")) {
-			InvokeRepeating("doDamageToBoss", 0, 0.5f);
+		}
+		else if (selfDestruct)
+		{
+			doDamageToBoss ();
+			KillSelf ();
+
+		}
+		else if (!IsInvoking ("doDamageToBoss"))
+		{
+			InvokeRepeating ("doDamageToBoss", 0, 0.5f);
 		}
 	}
 
@@ -66,15 +77,15 @@ public class Enemy : MonoBehaviour {
 		
 		UnityUtils.RecursiveFind(transform, "HealthBar").GetComponent<ProgressBarBehaviour>().UpdateFill(Health / MaxHealth);
 		if (Health <= 0){
-			Destroy(UnityUtils.RecursiveFind(transform, "HealthBar").gameObject);
-			Destroy(gameObject);
+			KillSelf ();
 		} else {
 			transform.Find("Sprite").GetComponent<SpriteRenderer>().color = Color.red;
 			StartCoroutine(UnityUtils.ChangeToColorAfterTime(transform.Find("Sprite").GetComponent<SpriteRenderer>(), SpriteColor, 0.5f));
 		}
 	}
 
-	public void SetStats(float movementSpeed, float damage, float range, float health, float scale, Color color) {
+	public void SetStats(float movementSpeed, float damage, float range, float health, float scale, Color color, bool selfDestruct) {
+		this.selfDestruct = selfDestruct;
 		MovementSpeed = movementSpeed;
 		Damage = damage;
 		Range = range;
@@ -94,5 +105,10 @@ public class Enemy : MonoBehaviour {
 
 	void OnDestroy(){
 		CancelInvoke();
+	}
+
+	private void KillSelf(){
+		Destroy(UnityUtils.RecursiveFind(transform, "HealthBar").gameObject);
+		Destroy(gameObject);
 	}
 }
