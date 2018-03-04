@@ -53,7 +53,6 @@ public class Enemy : MonoBehaviour {
 	public bool isInAttackArea(float lowAngle, float highAngle, float closeRadius, float farRadius){
 
 		bool inAngle = RotationUtils.InCounterClockwiseLimits(angle, lowAngle, highAngle);
-
 		float distanceToBoss = Vector3.Distance(Vector3.zero, transform.position);
 		bool inRadius =  distanceToBoss >= closeRadius && distanceToBoss <= farRadius; 
 
@@ -67,8 +66,8 @@ public class Enemy : MonoBehaviour {
 			Destroy(UnityUtils.RecursiveFind(transform, "HealthBar").gameObject);
 			Destroy(gameObject);
 		} else {
-			gameObject.GetComponent<SpriteRenderer>().color = Color.red;
-			StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), SpriteColor, 0.5f));
+			transform.Find("Sprite").GetComponent<SpriteRenderer>().color = Color.red;
+			StartCoroutine(UnityUtils.ChangeToColorAfterTime(transform.Find("Sprite").GetComponent<SpriteRenderer>(), SpriteColor, 0.5f));
 		}
 	}
 
@@ -78,9 +77,10 @@ public class Enemy : MonoBehaviour {
 		Range = range;
 		Health = health;
 		Scale = scale;
-		transform.localScale *= scale;
+		Transform sprite = transform.Find("Sprite");
+		sprite.transform.localScale *= scale;
 		SpriteColor = color;
-		GetComponent<SpriteRenderer>().color = color;
+		sprite.GetComponent<SpriteRenderer>().color = color;
 	}
 
 	void OnDestroy(){

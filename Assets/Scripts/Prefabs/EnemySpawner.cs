@@ -15,6 +15,7 @@ public class EnemySpawner : MonoBehaviour {
 		enemyTypesDict.Add(2, new StatsHolder("FastEnemy", 3.0f, 1.0f, 1.0f, 50.0f, 0.5f, Color.yellow));
 		enemyTypesDict.Add(3, new StatsHolder("SlowEnemy", 0.3f, 6.0f, 1.0f, 300.0f, 2.0f, Color.black));
 
+	//	preInitEnemy = Resources.Load("Prefabs/Enemy", typeof (GameObject)) as GameObject;
 		preInitEnemy = Resources.Load("Prefabs/Enemy", typeof (GameObject)) as GameObject;
 		InvokeRepeating("instantiateEnemyPrefab", 0, 2.0f);
 	}
