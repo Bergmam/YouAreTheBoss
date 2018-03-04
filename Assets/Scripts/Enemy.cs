@@ -127,6 +127,11 @@ public class Enemy : MonoBehaviour {
 		Scale = scale;
 		Transform sprite = transform.Find("Sprite");
 		sprite.transform.localScale *= scale;
+		if (scale > 1) {
+			Transform canvas = transform.Find("Canvas");
+			canvas.localPosition = new Vector3(canvas.localPosition.x, canvas.localPosition.y * 1.5f, canvas.localPosition.z);
+
+		}
 		SpriteColor = color;
 		sprite.GetComponent<SpriteRenderer>().color = color;
 	}
