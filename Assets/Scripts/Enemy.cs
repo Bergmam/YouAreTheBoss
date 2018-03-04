@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour {
-	public float AttackRadius = 1.0f;
+	private float AttackRadius = 1.0f;
 
-	public float MovementSpeed = 1.0f;
+	private float MovementSpeed = 1.0f;
 
-	public float Damage = 20.0f;
+	private float Damage = 20.0f;
 
-	public float Range = 1.0f;
+	private float Range = 1.0f;
 
-	public float Health = 100.0f;
+	private float Health = 100.0f;
 
-	public float Scale = 1.0f;
+	private float MaxHealth = 100.0f;
 
-	public Color SpriteColor = Color.white;
+	private float Scale = 1.0f;
+
+	private Color SpriteColor = Color.white;
 
 	float angle;
 
@@ -61,7 +63,8 @@ public class Enemy : MonoBehaviour {
 
 	public void applyDamageTo(float damage){
 		Health -= damage;
-		UnityUtils.RecursiveFind(transform, "HealthBar").GetComponent<ProgressBarBehaviour>().UpdateFill(Health / 100.0f);
+		
+		UnityUtils.RecursiveFind(transform, "HealthBar").GetComponent<ProgressBarBehaviour>().UpdateFill(Health / MaxHealth);
 		if (Health <= 0){
 			Destroy(UnityUtils.RecursiveFind(transform, "HealthBar").gameObject);
 			Destroy(gameObject);
@@ -76,6 +79,7 @@ public class Enemy : MonoBehaviour {
 		Damage = damage;
 		Range = range;
 		Health = health;
+		MaxHealth = health;
 		Scale = scale;
 		Transform sprite = transform.Find("Sprite");
 		sprite.transform.localScale *= scale;
