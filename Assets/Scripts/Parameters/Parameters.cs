@@ -10,4 +10,5 @@ public static class Parameters {
 	public static float PROJECTILE_RANGE = 0.5f;
 	public static float PROJECTILE_SCALE = 0.3f;
 	public static Color PROJECTILE_COLOR = Color.black;
+	public static float ARENA_BOTTOM = -4.0f;
 }
