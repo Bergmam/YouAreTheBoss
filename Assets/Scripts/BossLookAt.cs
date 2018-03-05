@@ -5,15 +5,16 @@ using UnityEngine;
 public class BossLookAt : MonoBehaviour {
 
 	void Update () {
+		Vector3 touchPos = Vector3.zero;
 		if (Input.touchCount > 0){
 			if (Input.GetTouch(0).phase == TouchPhase.Began || Input.GetTouch(0).phase == TouchPhase.Moved){
-				Vector3 touchPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-				transform.rotation = Quaternion.LookRotation(Vector3.forward, touchPos - transform.position);
+				touchPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
 			}
 		} else {
-			Vector3 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			transform.rotation = Quaternion.LookRotation(Vector3.forward, touchPos - transform.position);
+			touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		}
-		
+		if (touchPos.y > Parameters.ARENA_BOTTOM) {
+			transform.rotation = Quaternion.LookRotation (Vector3.forward, touchPos - transform.position);
+		}
 	}
 }
