@@ -11,7 +11,7 @@ using System;
 /// </summary>
 public class SceneHandler
 {
-	private static bool alreadyInitialized;
+	private static bool alreadyInitialized = false;
 	private static Stack sceneStack;
 	private static AssetBundle myLoadedAssetBundle;
 	private static string[] scenePaths;
@@ -49,7 +49,6 @@ public class SceneHandler
 	/// <param name="sceneName">The name of the scene to be changed to.</param>
 	public static void SwitchScene(string sceneName)
 	{
-		Debug.Log("SWITCHING SCENE");
 		if (scenePathsList.Contains (sceneName))
 		{
 			sceneStack.Push (SceneManager.GetActiveScene().name);
