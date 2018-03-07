@@ -9,7 +9,6 @@ public class EnemySpawner : MonoBehaviour {
 	Dictionary<int, StatsHolder> enemyTypesDict = new Dictionary<int, StatsHolder>();
 
 	int numberOfEnemies;
-	int currentWaveNumber;
 	List<SubWave> currentWave;
 	int currentSubWaveNumber;
 	float delay;
@@ -18,10 +17,9 @@ public class EnemySpawner : MonoBehaviour {
 	{
 		preInitEnemy = Resources.Load ("Prefabs/Enemy", typeof(GameObject)) as GameObject;
 		numberOfEnemies = 0;
-		currentWaveNumber = 0;
 		currentSubWaveNumber = 0;
 		delay = 0;
-		currentWave = WaveFactory.GenerateWave (currentWaveNumber);
+		currentWave = WaveFactory.GenerateWave (WaveNumber.waveNumber);
 	}
 
 	void Update()
@@ -38,12 +36,9 @@ public class EnemySpawner : MonoBehaviour {
 				SpawnSubWave (subWave);
 				delay = subWave.GetDuration ();
 				currentSubWaveNumber++;
-			}
-			else // When all subwaves have spawned, start the next wave.
-			{
-				currentSubWaveNumber = 0;
-				currentWaveNumber++;
-				currentWave = WaveFactory.GenerateWave (currentWaveNumber);
+			} else if (GameObject.FindObjectsOfType(typeof (Enemy)).Length == 0) {
+				WaveNumber.waveNumber++;
+				SceneHandler.SwitchScene("Main Menu Scene");
 			}
 		}
 	}
@@ -51,7 +46,7 @@ public class EnemySpawner : MonoBehaviour {
 	// Spawn all enemies of a subwave.
 	public void SpawnSubWave(SubWave subWave)
 	{
-		print ("Spawning wave: " + currentWaveNumber + ", subwave: " + currentSubWaveNumber);
+		print ("Spawning wave: " + WaveNumber.waveNumber + ", subwave: " + currentSubWaveNumber);
 		foreach (StatsHolder enemy in subWave.GetEnemies())
 		{
 			instantiateEnemyPrefab (enemy);
