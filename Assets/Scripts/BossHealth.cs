@@ -17,17 +17,14 @@ public class BossHealth : MonoBehaviour {
 		bossHealthBar.UpdateFill(BossHealthVal / 100.0f);
 
 		if (BossHealthVal <= 0) {
-			// TODO: Remove temporary logic for reseting the game
-			object[] obj = GameObject.FindObjectsOfType(typeof (GameObject));
-			foreach (object o in obj)
-			{
-				GameObject g = (GameObject) o;
-				if (g.name.Contains("Enemy")){
-					Destroy(g);
-				}
+			if (!WaveNumber.highScoreGenerated){
+				WaveNumber.highScoreGenerated = true;
 			}
-			BossHealthVal = 100.0f;
-			bossHealthBar.UpdateFill(1);
+			if (WaveNumber.waveNumber > WaveNumber.highScore) {
+				WaveNumber.highScore = WaveNumber.waveNumber;
+			}
+			WaveNumber.waveNumber = 0;
+			SceneHandler.SwitchScene("Main Menu Scene");
 		}
 	}
 }
