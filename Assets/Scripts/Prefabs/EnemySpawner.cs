@@ -8,34 +8,54 @@ public class EnemySpawner : MonoBehaviour {
 
 	Dictionary<int, StatsHolder> enemyTypesDict = new Dictionary<int, StatsHolder>();
 
-	int numberOfEnemies = 0;
+	int numberOfEnemies;
+	int currentWaveNumber;
+	List<SubWave> currentWave;
+	int currentSubWaveNumber;
+	float delay;
 
-	void Start () {
-
-		preInitEnemy = Resources.Load("Prefabs/Enemy", typeof (GameObject)) as GameObject;
-
-		List<SubWave> wave1 = new List<SubWave> ();
-		List<StatsHolder> wave1Enemies = new List<StatsHolder> ();
-		wave1Enemies.Add (new StatsHolder ("StandardEnemy", 1.0f, 2.5f, 1.0f, 100.0f, 1.0f, Color.white));
-		wave1Enemies.Add (new StatsHolder ("StandardEnemy", 1.0f, 2.5f, 1.0f, 100.0f, 1.0f, Color.white));
-		wave1Enemies.Add (new StatsHolder ("StandardEnemy", 1.0f, 2.5f, 1.0f, 100.0f, 1.0f, Color.white));
-		enemyTypesDict.Add(2, new StatsHolder("FastEnemy", 3.0f, 1.0f, 2.0f, 50.0f, 0.5f, Color.yellow));
-		enemyTypesDict.Add(3, new StatsHolder("SlowEnemy", 0.3f, 6.0f, 1.0f, 300.0f, 2.0f, Color.black));
-		SubWave wave1SubWave1 = new SubWave (wave1Enemies, 5.0f);
-		wave1.Add (wave1SubWave1);
-		float duration = instantiateSubWave (wave1SubWave1);
-		//TODO: WAIT FOR duration SECONDS
-		duration = instantiateSubWave (wave1SubWave1);
+	void Start ()
+	{
+		preInitEnemy = Resources.Load ("Prefabs/Enemy", typeof(GameObject)) as GameObject;
+		numberOfEnemies = 0;
+		currentWaveNumber = 0;
+		currentSubWaveNumber = 0;
+		delay = 0;
+		currentWave = WaveFactory.GenerateWave (currentWaveNumber);
 	}
 
-	float instantiateSubWave(SubWave subWave)
+	void Update()
 	{
-		float duration = subWave.GetDuration ();
+		if (delay > 0) // Delay used to wait for the duration of each subwave until next one is spawned.
+		{
+			delay -= Time.deltaTime;
+		}
+		else
+		{
+			if (currentSubWaveNumber < currentWave.Count) // Spawn all subwaves of a wave, one at a time with delay between. 
+			{
+				SubWave subWave = currentWave [currentSubWaveNumber];
+				SpawnSubWave (subWave);
+				delay = subWave.GetDuration ();
+				currentSubWaveNumber++;
+			}
+			else // When all subwaves have spawned, start the next wave.
+			{
+				currentSubWaveNumber = 0;
+				currentWaveNumber++;
+				currentWave = WaveFactory.GenerateWave (currentWaveNumber);
+			}
+		}
+	}
+
+	// Spawn all enemies of a subwave.
+	public void SpawnSubWave(SubWave subWave)
+	{
+		print ("Spawning wave: " + currentWaveNumber + ", subwave: " + currentSubWaveNumber);
 		foreach (StatsHolder enemy in subWave.GetEnemies())
 		{
 			instantiateEnemyPrefab (enemy);
 		}
-		return duration;
 	}
 
 	void instantiateEnemyPrefab(StatsHolder currentStats)
