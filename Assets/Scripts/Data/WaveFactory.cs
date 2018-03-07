@@ -8,6 +8,7 @@ public class WaveFactory
 
 	public static List<SubWave> GenerateWave(int n)
 	{
+		n += 7;
 
 		List<SubWave> wave = new List<SubWave> ();
 
