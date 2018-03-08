@@ -86,7 +86,12 @@ public class Enemy : MonoBehaviour {
 	public bool isInAttackArea(float lowAngle, float highAngle, float closeRadius, float farRadius){
 
 		bool inAngle = RotationUtils.InCounterClockwiseLimits(angle, lowAngle, highAngle);
-		float distanceToBoss = Vector3.Distance(Vector3.zero, transform.position);
+
+		float spriteWidth = transform.Find("Sprite").GetComponent<SpriteRenderer>().bounds.size.x;
+		float distanceToBoss = Vector3.Distance(Vector3.zero, transform.position) - spriteWidth;
+
+		print("Distance to boss: " + distanceToBoss);
+		print("SpriteWidth: " + spriteWidth);
 		bool inRadius =  distanceToBoss >= closeRadius && distanceToBoss <= farRadius; 
 
 		return inAngle && inRadius;

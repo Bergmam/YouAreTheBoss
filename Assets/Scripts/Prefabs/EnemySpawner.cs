@@ -46,7 +46,7 @@ public class EnemySpawner : MonoBehaviour {
 	// Spawn all enemies of a subwave.
 	public void SpawnSubWave(SubWave subWave)
 	{
-		print ("Spawning wave: " + WaveNumber.waveNumber + ", subwave: " + currentSubWaveNumber);
+		//print ("Spawning wave: " + WaveNumber.waveNumber + ", subwave: " + currentSubWaveNumber);
 		foreach (StatsHolder enemy in subWave.GetEnemies())
 		{
 			instantiateEnemyPrefab (enemy);
