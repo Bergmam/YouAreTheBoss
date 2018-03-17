@@ -83,18 +83,24 @@ public class Enemy : MonoBehaviour {
 		initEnemy.transform.position = transform.position;
 	}
 
-	public bool isInAttackArea(float lowAngle, float highAngle, float closeRadius, float farRadius){
+	public bool isInAttackArea(float lowAngle, float highAngle, float nearRadius, float farRadius){
 
-		bool inAngle = RotationUtils.InCounterClockwiseLimits(angle, lowAngle, highAngle);
+		float spriteRadius = transform.Find("Sprite").GetComponent<SpriteRenderer>().bounds.size.x / 2;
+		float distanceToBossActual = Mathf.Max(Vector3.Distance(Vector3.zero, transform.position), 0);
+		float distanceToBossFar = distanceToBossActual + spriteRadius;
+		float distanceToBossNear = distanceToBossActual - spriteRadius;
 
-		float spriteWidth = transform.Find("Sprite").GetComponent<SpriteRenderer>().bounds.size.x;
-		float distanceToBoss = Vector3.Distance(Vector3.zero, transform.position) - spriteWidth;
+		float enemyWidthAngle = Mathf.Rad2Deg * Mathf.Acos(1 - Mathf.Pow(spriteRadius / Mathf.Sqrt(2 * distanceToBossActual), 2));
+		float enemyHighAngle = angle + enemyWidthAngle;
+		float enemyLowAngle = angle - enemyWidthAngle;
 
-		print("Distance to boss: " + distanceToBoss);
-		print("SpriteWidth: " + spriteWidth);
-		bool inRadius =  distanceToBoss >= closeRadius && distanceToBoss <= farRadius; 
-
-		return inAngle && inRadius;
+		bool inHighAngle = RotationUtils.InCounterClockwiseLimits(enemyHighAngle, lowAngle, highAngle);
+		bool inLowAngle = RotationUtils.InCounterClockwiseLimits(enemyLowAngle, lowAngle, highAngle);
+		bool bossLargerThanRadius = RotationUtils.InCounterClockwiseLimits(lowAngle, enemyLowAngle, enemyHighAngle) 
+										&& RotationUtils.InCounterClockwiseLimits(highAngle, enemyLowAngle, enemyHighAngle);
+		bool inRadius =  distanceToBossNear <= farRadius && distanceToBossFar >= nearRadius; 
+		
+		return (inLowAngle || inHighAngle || bossLargerThanRadius) && inRadius;
 	}
 
 	public void applyDamageTo(float damage)
