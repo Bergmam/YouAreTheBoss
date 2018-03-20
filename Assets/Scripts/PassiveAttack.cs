@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PassiveAttack : MonoBehaviour {
 
+	float fadeTime = 0;
 
-	float angle, closeRadius, farRadius;
-
-	float damage;
+	BossAttack currentAttack;
+	BossAttack previousAttack;
+	int previousAttackNumber;
+	int currentAttackNumber;
 
 	Dictionary<int, BossAttack> attackDict = new Dictionary<int, BossAttack>();
 
@@ -25,14 +28,22 @@ public class PassiveAttack : MonoBehaviour {
 		setAttack(1);
 	}
 
-	void doAttack() {
+	void doAttack() { 
+		Color color = UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>().color;
+		color.a = 0.0f;
+
+		Color zeroAlphaColor = color;
+		zeroAlphaColor.a = 0.0f;
 		object[] obj = GameObject.FindObjectsOfType(typeof (GameObject));
 		foreach (object o in obj){
 			GameObject g = (GameObject) o;
 			if (g.name.Contains("Enemy")){
 				Enemy enemy = g.GetComponent<Enemy>();
-				if (enemy.isInAttackArea(360 - transform.eulerAngles.z - angle, 360 - transform.eulerAngles.z + angle, closeRadius, farRadius)){
-					enemy.applyDamageTo(damage);
+				if (enemy.isInAttackArea(360 - transform.eulerAngles.z - this.currentAttack.angle, 
+										360 - transform.eulerAngles.z + this.currentAttack.angle, 
+										this.currentAttack.closeRadius, 
+										this.currentAttack.farRadius)){
+					enemy.applyDamageTo(this.currentAttack.damage);
 				}
 			}
 		}
@@ -46,37 +57,56 @@ public class PassiveAttack : MonoBehaviour {
 		}
 		
 		StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Color.white, 0.5f));
-		
 	}
 
 	public void setAttack(int attackNumber) {
 		CancelInvoke();
-		BossAttack attack = attackDict[attackNumber];
-		this.angle = attack.angle;
-		this.farRadius = attack.farRadius;
-		this.closeRadius = attack.closeRadius;
-		this.damage = attack.damage;
+		
+		BossAttack newAttack = attackDict[attackNumber];
 
+		// If the new attack is slow, and this is not the first attack we are doing,
+		// save the attack as a reference to the previous attack
+		if (newAttack.frequency > Parameters.SLOW_ATTACK_LIMIT && this.currentAttack != null) {
+			this.previousAttack = this.currentAttack;
+			this.previousAttackNumber = this.currentAttackNumber;
+		}
+
+		// Set the current attack to be the new attack
+		this.currentAttack = newAttack;
+		this.currentAttackNumber = attackNumber;
+
+		// Set fill and mask for the attack area
 		if (radialFillControl != null)
 		{
-			radialFillControl.SetMirroredFill ((int)this.angle);
+			radialFillControl.SetMirroredFill ((int)this.currentAttack.angle);
 		}
 
 		if (attackMaskControl != null)
 		{
-			attackMaskControl.SetSize (closeRadius, farRadius);
+			attackMaskControl.SetSize (this.currentAttack.closeRadius, this.currentAttack.farRadius);
 		}
 
 		GameObject currentAttackButton = GameObject.Find ("Passive " + attackNumber);
 		if (currentAttackButton != null) {
 			this.currentCooldownBehaviour = currentAttackButton.GetComponentInChildren<CooldownBehaviour> ();
 			if (this.currentCooldownBehaviour != null) {
-				this.currentCooldownBehaviour.StartCooldown (attack.frequency);
+				this.currentCooldownBehaviour.StartCooldown (this.currentAttack.frequency);
 			}
 		}
-		InvokeRepeating("doAttack", 0, attack.frequency);
+
+		InvokeRepeating("doAttack", 0, this.currentAttack.frequency);
+
+		// If the current attack is slow, wait a little and set back to the previous attack
+		if (this.currentAttack.frequency > Parameters.SLOW_ATTACK_LIMIT) {
+			StartCoroutine(WaitAndSetBackAttack(1.0f));
+		}
 	}
 
+	IEnumerator WaitAndSetBackAttack(float time) {
+		yield return new WaitForSeconds(time);
+		setAttack(previousAttackNumber);
+	}
+	
 	public class BossAttack {
 		public string name;
 		public float angle;
