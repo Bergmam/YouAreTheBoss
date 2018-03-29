@@ -34,9 +34,10 @@ public class Enemy : MonoBehaviour {
 		float step = MovementSpeed * Time.deltaTime;
 		if (Vector3.Distance (Vector3.zero, transform.position) > Range)
 		{
-			//this.radialPosition.AddRadius ((-1) * step);
+			this.radialPosition.AddRadius ((-1) * step);
+            //this.radialPosition.AddAngle(1);
 
-			transform.position = Vector3.MoveTowards (transform.position, Vector3.zero, step);
+            transform.position = RotationUtils.RadialPosToXY(this.radialPosition);
 
 		}
 		else // If in range, do appropriate attack.
