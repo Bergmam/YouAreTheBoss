@@ -22,9 +22,11 @@ public class PassiveAttack : MonoBehaviour {
 	void Start () {
 		radialFillControl = GameObject.FindObjectOfType<RadialFillControl> ();
 		attackMaskControl = GameObject.FindObjectOfType<AttackMaskControl> ();
-		attackDict.Add(1, new BossAttack("WideMelee", 30, 0, 2.0f, 50, 1.2f));
-		attackDict.Add(2, new BossAttack("NarrowMeleeAndRanged", 5, 0, 5.0f, 300, 5.0f));
-		attackDict.Add(3, new BossAttack("WideRanged", 30, 2.0f, 5.0f, 50, 1.2f));
+		int dictIndex = 1;
+		foreach(BossAttack attack in AttackLists.chosenAttacks){
+			attackDict.Add(dictIndex, attack);
+			dictIndex++;
+		}
 		setAttack(1);
 	}
 
@@ -105,23 +107,5 @@ public class PassiveAttack : MonoBehaviour {
 	IEnumerator WaitAndSetBackAttack(float time) {
 		yield return new WaitForSeconds(time);
 		setAttack(previousAttackNumber);
-	}
-	
-	public class BossAttack {
-		public string name;
-		public float angle;
-		public float closeRadius;
-		public float farRadius;
-		public float damage;
-		public float frequency;
-
-		public BossAttack(string name, float angle, float closeRadius, float farRadius, float damage, float frequency){
-			this.name = name;
-			this.angle = angle;
-			this.closeRadius = closeRadius;
-			this.farRadius = farRadius;
-			this.damage = damage;
-			this.frequency = frequency;
-		}
 	}
 }
