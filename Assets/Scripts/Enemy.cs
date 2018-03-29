@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour {
 
 	private Color SpriteColor = Color.white;
 
-	private float angle;
+	private RadialPosition radialPosition;
 
 	private bool selfDestruct;
 	private bool invunerable;
@@ -34,6 +34,8 @@ public class Enemy : MonoBehaviour {
 		float step = MovementSpeed * Time.deltaTime;
 		if (Vector3.Distance (Vector3.zero, transform.position) > Range)
 		{
+			//this.radialPosition.AddRadius ((-1) * step);
+
 			transform.position = Vector3.MoveTowards (transform.position, Vector3.zero, step);
 
 		}
@@ -77,7 +79,7 @@ public class Enemy : MonoBehaviour {
 			Parameters.PROJECTILE_COLOR,
 			true,
 			true,
-			this.angle
+			this.radialPosition
 		);
 		initEnemy.name = "Projectile";
 		initEnemy.transform.position = transform.position;
@@ -91,8 +93,8 @@ public class Enemy : MonoBehaviour {
 		float distanceToBossNear = distanceToBossActual - spriteRadius;
 
 		float enemyWidthAngle = Mathf.Rad2Deg * Mathf.Acos(1 - Mathf.Pow(spriteRadius / Mathf.Sqrt(2 * distanceToBossActual), 2));
-		float enemyHighAngle = angle + enemyWidthAngle;
-		float enemyLowAngle = angle - enemyWidthAngle;
+        float enemyHighAngle = radialPosition.GetAngle() + enemyWidthAngle;
+        float enemyLowAngle = radialPosition.GetAngle() - enemyWidthAngle;
 
 		bool inHighAngle = RotationUtils.InCounterClockwiseLimits(enemyHighAngle, lowAngle, highAngle);
 		bool inLowAngle = RotationUtils.InCounterClockwiseLimits(enemyLowAngle, lowAngle, highAngle);
@@ -121,7 +123,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public void SetStats(float movementSpeed, float damage, float range,
-		float health, float scale, Color color, bool selfDestruct, bool invunerable, float angle)
+		float health, float scale, Color color, bool selfDestruct, bool invunerable, RadialPosition radialPosition)
 	{
 		this.selfDestruct = selfDestruct;
 		this.invunerable = invunerable;
@@ -129,7 +131,7 @@ public class Enemy : MonoBehaviour {
 		{
 			Destroy(UnityUtils.RecursiveFind(transform, "HealthBar").gameObject);
 		}
-		this.angle = angle;
+		this.radialPosition = radialPosition;
 		MovementSpeed = movementSpeed;
 		Damage = damage;
 		Range = range;

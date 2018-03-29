@@ -101,20 +101,27 @@ public class RotationUtils
         return angle % 360;
     }
 
-    // public static float CoordinateToRotPos(Vector2 position)
-    // {
-    //     float x = position.x;
-    //     float y = position.y;
-    //     float angle;
+	public static Vector3 RadialPosToXY(RadialPosition radialPosition){
+        float angle = radialPosition.GetAngle ();
+        angle = MakePositiveAngle(angle);
+		float radius = radialPosition.GetRadius ();
+		float x = Mathf.Cos (Mathf.Deg2Rad * angle) * radius;
+        float y = Mathf.Sin (Mathf.Deg2Rad * angle) * radius;
+        if (Mathf.Abs(x) < 0.001)
+        {
+            x = 0;
+        }
+        if (Mathf.Abs(y) < 0.001)
+        {
+            y = 0;
+        }
+		return new Vector3 (x, y);
+	}
 
-    //     if (x >= 0 && y < 0) {
-    //         angle = Mathf.Atan2(x, -y);
-    //     } else if (x >= 0 && y >= 0) {
-    //         angle = Mathf.PI / 2 + Mathf.Atan2(y, x);
-    //     } else if (x < 0 && y >= 0) {
-    //         angle = Mathf.PI + Mathf.Atan2(-x, y);
-    //     } else {
-    //         angle = (3 * Mathf.PI) / 2 + Mathf.Atan2(-y, -x);
-    //     }
-    // } 
+	public static RadialPosition XYToRadialPos (Vector3 position){
+        float angle = Mathf.Rad2Deg * Mathf.Atan2(position.y,position.x);
+        float radius = new Vector2(position.x, position.y).magnitude;
+        angle = MakePositiveAngle (angle);
+		return new RadialPosition (radius, angle);
+	}
 }
