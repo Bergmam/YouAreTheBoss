@@ -28,6 +28,8 @@ public class PassiveAttack : MonoBehaviour {
 			dictIndex++;
 		}
 		setAttack(1);
+
+		UnityUtils.RecursiveFind(transform,"Image").GetComponent<Image>().color = Parameters.AIM_DEFAULT_COLOR;
 	}
 
 	void doAttack() { 
@@ -55,12 +57,16 @@ public class PassiveAttack : MonoBehaviour {
 		// For now, change color of boss when he is attacking
 		// TODO: Change when areas of damage is implemented
 	 	gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+		Transform aim = UnityUtils.RecursiveFind(transform,"Image");
+		Image aimImage = aim.GetComponent<Image>();
+		aimImage.color = Parameters.AIM_DAMAGE_COLOR;
 
 		if (currentCooldownBehaviour != null) {
 			currentCooldownBehaviour.RestartCooldown ();
 		}
 		
 		StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Color.white, 0.5f));
+		StartCoroutine(UnityUtils.ChangeToColorAfterTime(aimImage, Parameters.AIM_DEFAULT_COLOR, 0.5f));
 	}
 
 	public void setAttack(int attackNumber) {

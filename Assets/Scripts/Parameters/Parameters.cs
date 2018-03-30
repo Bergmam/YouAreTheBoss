@@ -13,4 +13,8 @@ public static class Parameters {
 	public static float ARENA_BOTTOM = -4.0f;
 
 	public static float SLOW_ATTACK_LIMIT = 2.5f;
+
+	public static Color AIM_DEFAULT_COLOR = new Color(0.0f,0.0f,0.0f,0.2f);
+
+	public static Color AIM_DAMAGE_COLOR = new Color(1.0f,0.0f,0.0f,0.7f);
 }

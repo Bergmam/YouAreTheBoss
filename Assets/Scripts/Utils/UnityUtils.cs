@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UnityUtils
 {
@@ -104,5 +105,9 @@ public class UnityUtils
         yield return new WaitForSeconds(time);
 		renderer.color = color;
     }
-
+    
+    public static IEnumerator ChangeToColorAfterTime(Image image, Color color, float time) {
+        yield return new WaitForSeconds(time);
+		image.color = color;
+    }
 }
