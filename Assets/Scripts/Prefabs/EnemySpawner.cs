@@ -46,7 +46,6 @@ public class EnemySpawner : MonoBehaviour {
 	// Spawn all enemies of a subwave.
 	public void SpawnSubWave(SubWave subWave)
 	{
-		//print ("Spawning wave: " + WaveNumber.waveNumber + ", subwave: " + currentSubWaveNumber);
 		foreach (StatsHolder enemy in subWave.GetEnemies())
 		{
 			instantiateEnemyPrefab (enemy);
@@ -60,13 +59,11 @@ public class EnemySpawner : MonoBehaviour {
 		float angle = Random.value * 360;
 		float radius = 5f;
 		Vector3 center = Vector3.zero;
-		Vector3 randomPosition = new Vector3 (
-			center.x + radius * Mathf.Sin (angle * Mathf.Deg2Rad),
-			center.y + radius * Mathf.Cos (angle * Mathf.Deg2Rad),
-			center.z);
-
+        RadialPosition randomRadialPos = new RadialPosition(radius, angle);
+        Vector3 randomPosition = RotationUtils.RadialPosToXY(randomRadialPos);
 		initEnemy.GetComponent<Enemy> ().SetStats (
-			currentStats.MovementSpeed,
+            currentStats.MovementSpeed,
+            currentStats.angularSpeed,
 			currentStats.Damage,
 			currentStats.Range,
 			currentStats.Health,
@@ -74,7 +71,7 @@ public class EnemySpawner : MonoBehaviour {
 			currentStats.Color,
 			false,
 			false,
-			angle
+            randomRadialPos
 		);
 
 		initEnemy.name = "Enemy " + numberOfEnemies;

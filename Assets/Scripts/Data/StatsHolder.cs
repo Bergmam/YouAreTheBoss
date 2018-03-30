@@ -2,7 +2,8 @@
 
 public class StatsHolder {
 	public string Name;
-	public float MovementSpeed;
+    public float MovementSpeed;
+    public float angularSpeed;
 	public float Damage;
 	public float Range;
 	public float Health;
@@ -23,5 +24,11 @@ public class StatsHolder {
 		this.Health = Health;
 		this.Scale = Scale;
 		this.Color = Color;
+        this.angularSpeed = 0f;
 	}
+
+    public void SetAngluarSpeed(float angularSpeed)
+    {
+        this.angularSpeed = angularSpeed;
+    }
 }

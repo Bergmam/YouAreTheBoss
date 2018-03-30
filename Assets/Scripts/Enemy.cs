@@ -5,7 +5,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour {
 	private float AttackRadius = 1.0f;
 
-	private float MovementSpeed = 1.0f;
+    private float MovementSpeed = 1.0f;
+    private float angularSpeed = 0f;
 
 	private float Damage = 20.0f;
 
@@ -19,8 +20,6 @@ public class Enemy : MonoBehaviour {
 
 	private Color SpriteColor = Color.white;
 
-	private float angle;
-
 	private bool selfDestruct;
 	private bool invunerable;
 
@@ -31,10 +30,15 @@ public class Enemy : MonoBehaviour {
 	}
 
 	void Update () {
-		float step = MovementSpeed * Time.deltaTime;
+        float step = MovementSpeed * Time.deltaTime;
+        float angularStep = this.angularSpeed * Time.deltaTime;
 		if (Vector3.Distance (Vector3.zero, transform.position) > Range)
 		{
-			transform.position = Vector3.MoveTowards (transform.position, Vector3.zero, step);
+            RadialPosition radialPosition = RotationUtils.XYToRadialPos(this.transform.position);
+			radialPosition.AddRadius ((-1) * step);
+            radialPosition.AddAngle(angularStep);
+
+            MoveTo(radialPosition);
 
 		}
 		else // If in range, do appropriate attack.
@@ -70,6 +74,7 @@ public class Enemy : MonoBehaviour {
 		GameObject initEnemy = Instantiate(preInitEnemy);
 		initEnemy.GetComponent<Enemy> ().SetStats (
 			Parameters.PROJECTILE_SPEED,
+            0, // Projectiles do not have an angular speed;
 			this.Damage,
 			Parameters.PROJECTILE_RANGE,
 			1.0f, //Health of projectile does not matter since they are invunerable.
@@ -77,7 +82,7 @@ public class Enemy : MonoBehaviour {
 			Parameters.PROJECTILE_COLOR,
 			true,
 			true,
-			this.angle
+            RotationUtils.XYToRadialPos(this.transform.position)
 		);
 		initEnemy.name = "Projectile";
 		initEnemy.transform.position = transform.position;
@@ -90,9 +95,11 @@ public class Enemy : MonoBehaviour {
 		float distanceToBossFar = distanceToBossActual + spriteRadius;
 		float distanceToBossNear = distanceToBossActual - spriteRadius;
 
+        RadialPosition radialPosition = RotationUtils.XYToRadialPos(this.transform.position);
+
 		float enemyWidthAngle = Mathf.Rad2Deg * Mathf.Acos(1 - Mathf.Pow(spriteRadius / Mathf.Sqrt(2 * distanceToBossActual), 2));
-		float enemyHighAngle = angle + enemyWidthAngle;
-		float enemyLowAngle = angle - enemyWidthAngle;
+        float enemyHighAngle = radialPosition.GetAngle() + enemyWidthAngle;
+        float enemyLowAngle = radialPosition.GetAngle() - enemyWidthAngle;
 
 		bool inHighAngle = RotationUtils.InCounterClockwiseLimits(enemyHighAngle, lowAngle, highAngle);
 		bool inLowAngle = RotationUtils.InCounterClockwiseLimits(enemyLowAngle, lowAngle, highAngle);
@@ -120,8 +127,8 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	public void SetStats(float movementSpeed, float damage, float range,
-		float health, float scale, Color color, bool selfDestruct, bool invunerable, float angle)
+	public void SetStats(float movementSpeed, float angularSpeed, float damage, float range,
+		float health, float scale, Color color, bool selfDestruct, bool invunerable, RadialPosition radialPosition)
 	{
 		this.selfDestruct = selfDestruct;
 		this.invunerable = invunerable;
@@ -129,8 +136,9 @@ public class Enemy : MonoBehaviour {
 		{
 			Destroy(UnityUtils.RecursiveFind(transform, "HealthBar").gameObject);
 		}
-		this.angle = angle;
+        MoveTo(radialPosition);
 		MovementSpeed = movementSpeed;
+        this.angularSpeed = angularSpeed; 
 		Damage = damage;
 		Range = range;
 		Health = health;
@@ -160,4 +168,9 @@ public class Enemy : MonoBehaviour {
 
 		Destroy(gameObject);
 	}
+
+    public void MoveTo(RadialPosition radialPosition)
+    {
+        transform.position = RotationUtils.RadialPosToXY(radialPosition);
+    }
 }

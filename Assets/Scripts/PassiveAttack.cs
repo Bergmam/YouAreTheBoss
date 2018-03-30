@@ -34,6 +34,8 @@ public class PassiveAttack : MonoBehaviour {
 		Color color = UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>().color;
 		color.a = 0.0f;
 
+        float unitCircleRotation = RotationUtils.MakePositiveAngle(transform.eulerAngles.z + 90);
+
 		Color zeroAlphaColor = color;
 		zeroAlphaColor.a = 0.0f;
 		object[] obj = GameObject.FindObjectsOfType(typeof (GameObject));
@@ -41,11 +43,11 @@ public class PassiveAttack : MonoBehaviour {
 			GameObject g = (GameObject) o;
 			if (g.name.Contains("Enemy")){
 				Enemy enemy = g.GetComponent<Enemy>();
-				if (enemy.isInAttackArea(360 - transform.eulerAngles.z - this.currentAttack.angle, 
-										360 - transform.eulerAngles.z + this.currentAttack.angle, 
+                if (enemy.isInAttackArea(unitCircleRotation - this.currentAttack.angle, 
+                                         unitCircleRotation + this.currentAttack.angle, 
 										this.currentAttack.closeRadius, 
 										this.currentAttack.farRadius)){
-					enemy.applyDamageTo(this.currentAttack.damage);
+                    enemy.applyDamageTo(this.currentAttack.damage);
 				}
 			}
 		}
