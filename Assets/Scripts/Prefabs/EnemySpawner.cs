@@ -62,7 +62,8 @@ public class EnemySpawner : MonoBehaviour {
         RadialPosition randomRadialPos = new RadialPosition(radius, angle);
         Vector3 randomPosition = RotationUtils.RadialPosToXY(randomRadialPos);
 		initEnemy.GetComponent<Enemy> ().SetStats (
-			currentStats.MovementSpeed,
+            currentStats.MovementSpeed,
+            currentStats.angularSpeed,
 			currentStats.Damage,
 			currentStats.Range,
 			currentStats.Health,

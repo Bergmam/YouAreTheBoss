@@ -5,7 +5,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour {
 	private float AttackRadius = 1.0f;
 
-	private float MovementSpeed = 1.0f;
+    private float MovementSpeed = 1.0f;
+    private float angularSpeed = 0f;
 
 	private float Damage = 20.0f;
 
@@ -29,12 +30,13 @@ public class Enemy : MonoBehaviour {
 	}
 
 	void Update () {
-		float step = MovementSpeed * Time.deltaTime;
+        float step = MovementSpeed * Time.deltaTime;
+        float angularStep = this.angularSpeed * Time.deltaTime;
 		if (Vector3.Distance (Vector3.zero, transform.position) > Range)
 		{
             RadialPosition radialPosition = RotationUtils.XYToRadialPos(this.transform.position);
 			radialPosition.AddRadius ((-1) * step);
-            //radialPosition.AddAngle(1);
+            radialPosition.AddAngle(angularStep);
 
             MoveTo(radialPosition);
 
@@ -72,6 +74,7 @@ public class Enemy : MonoBehaviour {
 		GameObject initEnemy = Instantiate(preInitEnemy);
 		initEnemy.GetComponent<Enemy> ().SetStats (
 			Parameters.PROJECTILE_SPEED,
+            0, // Projectiles do not have an angular speed;
 			this.Damage,
 			Parameters.PROJECTILE_RANGE,
 			1.0f, //Health of projectile does not matter since they are invunerable.
@@ -124,7 +127,7 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	public void SetStats(float movementSpeed, float damage, float range,
+	public void SetStats(float movementSpeed, float angularSpeed, float damage, float range,
 		float health, float scale, Color color, bool selfDestruct, bool invunerable, RadialPosition radialPosition)
 	{
 		this.selfDestruct = selfDestruct;
@@ -135,6 +138,7 @@ public class Enemy : MonoBehaviour {
 		}
         MoveTo(radialPosition);
 		MovementSpeed = movementSpeed;
+        this.angularSpeed = angularSpeed; 
 		Damage = damage;
 		Range = range;
 		Health = health;
