@@ -19,8 +19,6 @@ public class Enemy : MonoBehaviour {
 
 	private Color SpriteColor = Color.white;
 
-	private RadialPosition radialPosition;
-
 	private bool selfDestruct;
 	private bool invunerable;
 
@@ -34,10 +32,11 @@ public class Enemy : MonoBehaviour {
 		float step = MovementSpeed * Time.deltaTime;
 		if (Vector3.Distance (Vector3.zero, transform.position) > Range)
 		{
-			this.radialPosition.AddRadius ((-1) * step);
-            //this.radialPosition.AddAngle(1);
+            RadialPosition radialPosition = RotationUtils.XYToRadialPos(this.transform.position);
+			radialPosition.AddRadius ((-1) * step);
+            //radialPosition.AddAngle(1);
 
-            transform.position = RotationUtils.RadialPosToXY(this.radialPosition);
+            MoveTo(radialPosition);
 
 		}
 		else // If in range, do appropriate attack.
@@ -80,7 +79,7 @@ public class Enemy : MonoBehaviour {
 			Parameters.PROJECTILE_COLOR,
 			true,
 			true,
-			this.radialPosition
+            RotationUtils.XYToRadialPos(this.transform.position)
 		);
 		initEnemy.name = "Projectile";
 		initEnemy.transform.position = transform.position;
@@ -92,6 +91,8 @@ public class Enemy : MonoBehaviour {
 		float distanceToBossActual = Mathf.Max(Vector3.Distance(Vector3.zero, transform.position), 0);
 		float distanceToBossFar = distanceToBossActual + spriteRadius;
 		float distanceToBossNear = distanceToBossActual - spriteRadius;
+
+        RadialPosition radialPosition = RotationUtils.XYToRadialPos(this.transform.position);
 
 		float enemyWidthAngle = Mathf.Rad2Deg * Mathf.Acos(1 - Mathf.Pow(spriteRadius / Mathf.Sqrt(2 * distanceToBossActual), 2));
         float enemyHighAngle = radialPosition.GetAngle() + enemyWidthAngle;
@@ -132,7 +133,7 @@ public class Enemy : MonoBehaviour {
 		{
 			Destroy(UnityUtils.RecursiveFind(transform, "HealthBar").gameObject);
 		}
-		this.radialPosition = radialPosition;
+        MoveTo(radialPosition);
 		MovementSpeed = movementSpeed;
 		Damage = damage;
 		Range = range;
@@ -163,4 +164,9 @@ public class Enemy : MonoBehaviour {
 
 		Destroy(gameObject);
 	}
+
+    public void MoveTo(RadialPosition radialPosition)
+    {
+        transform.position = RotationUtils.RadialPosToXY(radialPosition);
+    }
 }
