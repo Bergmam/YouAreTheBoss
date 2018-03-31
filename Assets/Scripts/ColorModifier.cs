@@ -12,11 +12,37 @@ public class ColorModifier : MonoBehaviour
 	private Image image;
 	private Color selectedColor = new Color32 (135, 0, 0, 255);
 	private Color defaultColor = Color.white;
+	private float countDownTime;
+	private float countDownStartTime;
 
 	void Awake ()
 	{
 		spriteRenderer = gameObject.GetComponent<SpriteRenderer> ();
 		image = gameObject.GetComponent<Image> ();
+	}
+
+	void Update()
+	{
+		bool wasOverZero = countDownTime > 0;
+		if(wasOverZero){
+			countDownTime-=Time.deltaTime;
+			float proportion = countDownTime / countDownStartTime;
+			float newR = proportion * defaultColor.r + (1 - proportion) * selectedColor.r;
+			float newB = proportion * defaultColor.b + (1 - proportion) * selectedColor.b;
+			float newG = proportion * defaultColor.g + (1 - proportion) * selectedColor.g;
+			float newA = proportion * defaultColor.a + (1 - proportion) * selectedColor.a;
+			SetColor(new Color(newA,newB,newG,newA));
+		}
+		bool reachedZero = countDownTime < 0 && wasOverZero; // Became less than zero after update.
+		if(reachedZero){
+			Select();
+		}
+	}
+
+	public void FadeToSelected(float duration)
+	{
+		this.countDownStartTime = duration;
+		this.countDownTime = duration;
 	}
 
 	public void SetSelectedColor(Color color)
