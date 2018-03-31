@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Color modifier. Used to change the color of a GameObject between predefined colors.
-/// </summary>
-public class ColorModifier : MonoBehaviour
-{
+public class ColorModifier : MonoBehaviour {
+
 	private SpriteRenderer spriteRenderer;
 	private Image image;
 	private Color selectedColor = new Color32 (135, 0, 0, 255);
