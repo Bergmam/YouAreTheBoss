@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour {
 	private float attackFrequency;
 
 	BossHealth bossHealth;
-	//private ColorModifier colorModifier;
+	private ColorModifier colorModifier;
 
 	void Start () {
 		bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>(); // Should all units know of the hero's health?
@@ -65,7 +65,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 	void doDamageToBoss() {
-		//this.colorModifier.FadeToDelected(this.attackFrequency / 3f);
+		this.colorModifier.FadeToDelected(this.attackFrequency / 3f);
 		bossHealth.bossTakeDamage(Damage);
 	}
 
@@ -74,7 +74,7 @@ public class Enemy : MonoBehaviour {
 	/// </summary>
 	void spawnProjectile ()
 	{
-		//this.colorModifier.FadeToDelected(this.attackFrequency / 3f);
+		this.colorModifier.FadeToDelected(this.attackFrequency / 3f);
 		GameObject preInitEnemy = Resources.Load ("Prefabs/Enemy", typeof(GameObject)) as GameObject;
 		GameObject initEnemy = Instantiate(preInitEnemy);
 		initEnemy.GetComponent<Enemy> ().SetStats (
@@ -157,9 +157,9 @@ public class Enemy : MonoBehaviour {
 
 		}
 		SpriteColor = color;
-		/*this.colorModifier = sprite.GetComponent<ColorModifier>();
+		this.colorModifier = sprite.GetComponent<ColorModifier>();
 		colorModifier.SetDefaultColor(color);
-		colorModifier.SetSelectedColor(Parameters.ENEMY_ATTACK_COLOR);*/
+		colorModifier.SetSelectedColor(Parameters.ENEMY_ATTACK_COLOR);
 	}
 
 	void OnDestroy(){

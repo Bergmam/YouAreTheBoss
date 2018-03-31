@@ -18,7 +18,7 @@ public class PassiveAttack : MonoBehaviour {
 	AttackMaskControl attackMaskControl;
 
 	CooldownBehaviour currentCooldownBehaviour;
-	//private ColorModifier aimColorModifier;
+	private ColorModifier aimColorModifier;
 
 	void Start () {
 		radialFillControl = GameObject.FindObjectOfType<RadialFillControl> ();
@@ -32,9 +32,9 @@ public class PassiveAttack : MonoBehaviour {
 
 
 		Transform aim = UnityUtils.RecursiveFind(transform,"Image");
-		/*this.aimColorModifier = aim.GetComponent<ColorModifier>();
+		this.aimColorModifier = aim.GetComponent<ColorModifier>();
 		aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
-		aimColorModifier.SetSelectedColor(Parameters.AIM_DAMAGE_COLOR);*/
+		aimColorModifier.SetSelectedColor(Parameters.AIM_DAMAGE_COLOR);
 
 		UnityUtils.RecursiveFind(transform,"Image").GetComponent<Image>().color = Parameters.AIM_DEFAULT_COLOR;
 	}
@@ -69,7 +69,7 @@ public class PassiveAttack : MonoBehaviour {
 			currentCooldownBehaviour.RestartCooldown ();
 		}
 
-		//this.aimColorModifier.FadeToSelected(this.currentAttack.frequency);
+		this.aimColorModifier.FadeToSelected(this.currentAttack.frequency);
 		
 		StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Color.white, 0.5f));
 	}
