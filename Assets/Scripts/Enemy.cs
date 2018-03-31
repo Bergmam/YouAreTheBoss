@@ -22,11 +22,14 @@ public class Enemy : MonoBehaviour {
 
 	private bool selfDestruct;
 	private bool invunerable;
+	private float attackFrequency;
 
 	BossHealth bossHealth;
+	private ColorModifier colorModifier;
 
 	void Start () {
 		bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>(); // Should all units know of the hero's health?
+		this.attackFrequency = 0.5f;
 	}
 
 	void Update () {
@@ -50,18 +53,19 @@ public class Enemy : MonoBehaviour {
 			// Mele attack
 			else if (Range <= Parameters.MAX_MELE_RANGE && !IsInvoking ("doDamageToBoss"))
 			{
-				InvokeRepeating ("doDamageToBoss", 0, 0.5f);
+				InvokeRepeating ("doDamageToBoss", 0, this.attackFrequency);
 			}
 			// Ranged attack
 			else if (Range > Parameters.MAX_MELE_RANGE && !IsInvoking ("spawnProjectile"))
 			{
-				InvokeRepeating ("spawnProjectile", 0, 0.5f);
+				InvokeRepeating ("spawnProjectile", 0, this.attackFrequency);
 			}
 		}
 
 	}
 
 	void doDamageToBoss() {
+		this.colorModifier.FadeToDelected(this.attackFrequency / 3f);
 		bossHealth.bossTakeDamage(Damage);
 	}
 
@@ -70,6 +74,7 @@ public class Enemy : MonoBehaviour {
 	/// </summary>
 	void spawnProjectile ()
 	{
+		this.colorModifier.FadeToDelected(this.attackFrequency / 3f);
 		GameObject preInitEnemy = Resources.Load ("Prefabs/Enemy", typeof(GameObject)) as GameObject;
 		GameObject initEnemy = Instantiate(preInitEnemy);
 		initEnemy.GetComponent<Enemy> ().SetStats (
@@ -152,7 +157,9 @@ public class Enemy : MonoBehaviour {
 
 		}
 		SpriteColor = color;
-		sprite.GetComponent<SpriteRenderer>().color = color;
+		this.colorModifier = sprite.GetComponent<ColorModifier>();
+		colorModifier.SetDefaultColor(color);
+		colorModifier.SetSelectedColor(Parameters.ENEMY_ATTACK_COLOR);
 	}
 
 	void OnDestroy(){

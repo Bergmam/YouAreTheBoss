@@ -18,6 +18,7 @@ public class PassiveAttack : MonoBehaviour {
 	AttackMaskControl attackMaskControl;
 
 	CooldownBehaviour currentCooldownBehaviour;
+	private ColorModifier aimColorModifier;
 
 	void Start () {
 		radialFillControl = GameObject.FindObjectOfType<RadialFillControl> ();
@@ -28,6 +29,12 @@ public class PassiveAttack : MonoBehaviour {
 			dictIndex++;
 		}
 		setAttack(1);
+
+
+		Transform aim = UnityUtils.RecursiveFind(transform,"Image");
+		this.aimColorModifier = aim.GetComponent<ColorModifier>();
+		aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
+		aimColorModifier.SetSelectedColor(Parameters.AIM_DAMAGE_COLOR);
 
 		UnityUtils.RecursiveFind(transform,"Image").GetComponent<Image>().color = Parameters.AIM_DEFAULT_COLOR;
 	}
@@ -57,16 +64,14 @@ public class PassiveAttack : MonoBehaviour {
 		// For now, change color of boss when he is attacking
 		// TODO: Change when areas of damage is implemented
 	 	gameObject.GetComponent<SpriteRenderer>().color = Color.red;
-		Transform aim = UnityUtils.RecursiveFind(transform,"Image");
-		Image aimImage = aim.GetComponent<Image>();
-		aimImage.color = Parameters.AIM_DAMAGE_COLOR;
 
 		if (currentCooldownBehaviour != null) {
 			currentCooldownBehaviour.RestartCooldown ();
 		}
+
+		this.aimColorModifier.FadeToSelected(this.currentAttack.frequency);
 		
 		StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Color.white, 0.5f));
-		StartCoroutine(UnityUtils.ChangeToColorAfterTime(aimImage, Parameters.AIM_DEFAULT_COLOR, 0.5f));
 	}
 
 	public void setAttack(int attackNumber) {
