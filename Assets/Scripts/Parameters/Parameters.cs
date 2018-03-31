@@ -17,4 +17,5 @@ public static class Parameters {
 	public static Color AIM_DEFAULT_COLOR = new Color(0.0f,0.0f,0.0f,0.2f);
 
 	public static Color AIM_DAMAGE_COLOR = new Color(1.0f,0.0f,0.0f,0.7f);
+	public static Color ENEMY_ATTACK_COLOR = Color.black;
 }

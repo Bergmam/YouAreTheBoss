@@ -14,6 +14,7 @@ public class ColorModifier : MonoBehaviour
 	private Color defaultColor = Color.white;
 	private float countDownTime;
 	private float countDownStartTime;
+	private bool fadeToSelected;
 
 	void Awake ()
 	{
@@ -27,6 +28,9 @@ public class ColorModifier : MonoBehaviour
 		if(wasOverZero){
 			countDownTime-=Time.deltaTime;
 			float proportion = countDownTime / countDownStartTime;
+			if(!fadeToSelected){
+				proportion = 1 - proportion; //Change which color is according to proportion and which is the inverse
+			}
 			float newR = proportion * defaultColor.r + (1 - proportion) * selectedColor.r;
 			float newB = proportion * defaultColor.b + (1 - proportion) * selectedColor.b;
 			float newG = proportion * defaultColor.g + (1 - proportion) * selectedColor.g;
@@ -35,14 +39,28 @@ public class ColorModifier : MonoBehaviour
 		}
 		bool reachedZero = countDownTime < 0 && wasOverZero; // Became less than zero after update.
 		if(reachedZero){
-			Select();
+			if(fadeToSelected){
+				Select();
+			} else {
+				DeSelect();
+			}
 		}
 	}
 
 	public void FadeToSelected(float duration)
 	{
+		DeSelect();
 		this.countDownStartTime = duration;
 		this.countDownTime = duration;
+		this.fadeToSelected = true;
+	}
+
+	public void FadeToDelected(float duration)
+	{
+		Select();
+		this.countDownStartTime = duration;
+		this.countDownTime = duration;
+		this.fadeToSelected = false;
 	}
 
 	public void SetSelectedColor(Color color)
