@@ -54,8 +54,16 @@ public class EnemySpawner : MonoBehaviour {
 	void instantiateEnemyPrefab(StatsHolder currentStats)
 	{
 		GameObject initEnemy = Instantiate (preInitEnemy);
-
-		float angle = Random.value * 360;
+		float angle;
+		if(currentStats.predefinedPosition)
+		{
+			angle = currentStats.spawnAngle;
+		}
+		else
+		{
+			angle = Random.value * 360;
+		}
+		 
 		float radius = 5f;
 		Vector3 center = Vector3.zero;
         RadialPosition randomRadialPos = new RadialPosition(radius, angle);
