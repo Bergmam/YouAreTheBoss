@@ -64,4 +64,9 @@ public class EnemyFactory {
 		stats.SetRadialSpawnPosition(spawnAngle,spawnRadius);
 		return stats;
     }
+
+	public static StatsHolder Minion(){
+		StatsHolder stats = new StatsHolder("Minion", 2.0f, 0.5f, 1.0f, 0.5f, 0.5f, Color.black);
+		return stats;
+	}
 }
