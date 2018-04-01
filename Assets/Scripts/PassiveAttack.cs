@@ -30,7 +30,18 @@ public class PassiveAttack : MonoBehaviour {
 				dictIndex++;
 			}
 		}
-		setAttack(1);
+
+		if (attackDict[1].frequency < Parameters.SLOW_ATTACK_LIMIT) {
+			setAttack(1);
+		} else {
+			foreach(KeyValuePair<int, BossAttack> keyVal in attackDict){
+				if (keyVal.Value.frequency < Parameters.SLOW_ATTACK_LIMIT){
+					setAttack(keyVal.Key);
+					break;
+				}
+			}
+		}
+		
 
 
 		Transform aim = UnityUtils.RecursiveFind(transform,"Image");
