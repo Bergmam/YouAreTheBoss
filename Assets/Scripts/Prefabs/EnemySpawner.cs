@@ -46,22 +46,20 @@ public class EnemySpawner : MonoBehaviour {
 	{
 		foreach (StatsHolder enemy in subWave.GetEnemies())
 		{
-			instantiateEnemyPrefab (enemy);
+			InstantiateEnemyPrefab (enemy);
 		}
 	}
 
-	void instantiateEnemyPrefab(StatsHolder currentStats)
+	public void InstantiateEnemyPrefab(StatsHolder stats)
 	{
 		GameObject initEnemy = Instantiate (preInitEnemy);
-		float angle;
-		if(!currentStats.predefinedPosition)
+		if(!stats.predefinedPosition)
 		{
-			currentStats.spawnAngle = Random.value * 360;
+			stats.spawnAngle = Random.value * 360;
 		}
 		
-		Vector3 center = Vector3.zero;
 		initEnemy.GetComponent<Enemy> ().SetStats (
-            currentStats
+            stats
 		);
 
 		initEnemy.name = "Enemy " + numberOfEnemies;

@@ -25,6 +25,12 @@ public class Enemy : MonoBehaviour {
 
 	BossHealth bossHealth;
 	private ColorModifier colorModifier;
+	private EnemySpawner enemySpawner;
+
+	void Awake()
+	{
+		this.enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
+	}
 
 	void Start () {
 		bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>(); // Should all units know of the hero's health?
@@ -77,11 +83,9 @@ public class Enemy : MonoBehaviour {
 	void spawnProjectile ()
 	{
 		this.colorModifier.FadeToDelected(this.attackFrequency / 3f);
-		GameObject preInitEnemy = Resources.Load ("Prefabs/Enemy", typeof(GameObject)) as GameObject;
-		GameObject initEnemy = Instantiate(preInitEnemy);
 		RadialPosition thisRadialPos = RotationUtils.XYToRadialPos(transform.position);
 		StatsHolder projectileStats = EnemyFactory.Projectile(this.Damage,thisRadialPos.GetRadius(),thisRadialPos.GetAngle());
-		initEnemy.GetComponent<Enemy> ().SetStats (projectileStats);
+		this.enemySpawner.InstantiateEnemyPrefab(projectileStats);
 	}
 
 	public bool isInAttackArea(float lowAngle, float highAngle, float nearRadius, float farRadius){
