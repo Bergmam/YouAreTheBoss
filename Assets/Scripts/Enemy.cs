@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour {
 	private float MaxHealth = 100.0f;
 
 	private float Scale = 1.0f;
+	private float circlingSpeed;
 
 	private bool selfDestruct;
 	private bool invunerable;
@@ -31,11 +32,12 @@ public class Enemy : MonoBehaviour {
 	}
 
 	void Update () {
+        RadialPosition radialPosition = RotationUtils.XYToRadialPos(this.transform.position);
         float step = MovementSpeed * Time.deltaTime;
         float angularStep = this.angularSpeed * Time.deltaTime;
+        float circlingStep = this.circlingSpeed * Time.deltaTime;
 		if (Vector3.Distance (Vector3.zero, transform.position) > Range)
 		{
-            RadialPosition radialPosition = RotationUtils.XYToRadialPos(this.transform.position);
 			radialPosition.AddRadius ((-1) * step);
             radialPosition.AddAngle(angularStep);
 
@@ -44,6 +46,8 @@ public class Enemy : MonoBehaviour {
 		}
 		else // If in range, do appropriate attack.
 		{
+			radialPosition.AddAngle(circlingStep);
+			MoveTo(radialPosition);
 			if (selfDestruct) {
 				doDamageToBoss ();
 				KillSelf ();
@@ -101,7 +105,7 @@ public class Enemy : MonoBehaviour {
 		
 		return (inLowAngle || inHighAngle || bossLargerThanRadius) && inRadius;
 	}
-
+	
 	public void applyDamageTo(float damage)
 	{
 		if (invunerable)
@@ -122,6 +126,7 @@ public class Enemy : MonoBehaviour {
 	public void SetStats(StatsHolder stats)
 	{
 		transform.name = stats.Name;
+		this.circlingSpeed = stats.circlingSpeed;
 		this.selfDestruct = stats.selfDestruct;
 		this.invunerable = stats.invunerable;
 		if (invunerable) //Don't show healthbar for invunerable units (projectiles)

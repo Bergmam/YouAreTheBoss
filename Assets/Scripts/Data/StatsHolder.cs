@@ -14,6 +14,7 @@ public class StatsHolder {
 	public float spawnRadius;
 	public bool selfDestruct;
 	public bool invunerable;
+	public float circlingSpeed;
 
 	public StatsHolder(string name, 
 		float MovementSpeed, 
@@ -33,21 +34,6 @@ public class StatsHolder {
 		this.predefinedPosition = false;
 		this.spawnRadius = Parameters.ENEMY_SPAWN_RADIUS;
 	}
-
-    public void SetAngluarSpeed(float angularSpeed)
-    {
-        this.angularSpeed = angularSpeed;
-    }
-
-    public void SetSelfDestruct(bool selfDestruct)
-    {
-        this.selfDestruct = selfDestruct;
-    }
-
-    public void SetInvunerable(bool invunerable)
-    {
-        this.invunerable = invunerable;
-    }
 
 	public void SetRadialSpawnPosition(float spawnAngle, float spawnRadius)
 	{

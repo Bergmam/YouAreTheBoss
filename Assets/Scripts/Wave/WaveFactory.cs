@@ -6,49 +6,68 @@ using System;
 public class WaveFactory
 {
 
-	public static List<SubWave> GenerateWave(int n)
+	public static List<SubWave> GenerateWave(int numberOfEnemies)
 	{
-		n += 7;
+        bool clockwise = false;
+        List<SubWave> wave = new List<SubWave> ();
 
-		List<SubWave> wave = new List<SubWave> ();
-
-        bool spawnClockwiseRotator = true;
-
-        // Generate subwaves
-        while (n >= 0)
-        {
-            if (n % 10 == 0 && n > 0)
-            { // Add a subwave containing a slow enemy.
+        while(numberOfEnemies > 0){
+            if (numberOfEnemies % 10 == 0)
+            {
                 SubWave subWave = new SubWave(0.5f);
                 subWave.AddEnemy(EnemyFactory.SlowEnemy());
                 wave.Add(subWave);
-                n -= 10;
             }
-            else if (n % 3 == 0 && n > 0)
-            { // Add a subwave containing a fast, rotating enemy.
-                SubWave subWave = new SubWave(0.5f);
-                StatsHolder holder = EnemyFactory.Rotator(spawnClockwiseRotator);
-                spawnClockwiseRotator = !spawnClockwiseRotator; // Alternate between enemies rotating clockwise and counterclockwise
-                subWave.AddEnemy(holder);
-                wave.Add(subWave);
-                n -= 3;
-            }
-            else if (n % 2 == 0 && n > 0)
-            { // Add a subwave containing a fast enemy.
-                SubWave subWave = new SubWave(0.5f);
-                subWave.AddEnemy(EnemyFactory.FastEnemy());
-                wave.Add(subWave);
-                n -= 2;
-            }
-            else
-            {
+            else if(numberOfEnemies % 9 == 0){
                 SubWave subWave = new SubWave(0.5f);  // 
                 subWave.AddEnemy(EnemyFactory.StandardEnemy());
                 wave.Add(subWave);
-                n--;
             }
+            else if(numberOfEnemies % 8 == 0){
+                SubWave subWave = new SubWave(0.5f);
+                subWave.AddEnemy(EnemyFactory.RangedCirclingEnemy(clockwise));
+                clockwise = !clockwise;
+                wave.Add(subWave);
+            }
+            else if(numberOfEnemies % 7 == 0){
+                SubWave subWave = new SubWave(0.5f);
+                subWave.AddEnemy(EnemyFactory.Rotator(clockwise));
+                clockwise = !clockwise;
+                wave.Add(subWave);
+            }
+            else if(numberOfEnemies % 6 == 0){
+                SubWave subWave = new SubWave(0.5f);
+                subWave.AddEnemy(EnemyFactory.FastEnemy());
+                wave.Add(subWave);
+            }
+            else if(numberOfEnemies % 5 == 0){
+                SubWave subWave = new SubWave(0.5f);
+                subWave.AddEnemy(EnemyFactory.Rotator(clockwise));
+                clockwise = !clockwise;
+                wave.Add(subWave);
+            }
+            else if(numberOfEnemies % 4 == 0){
+                SubWave subWave = new SubWave(0.5f);  // 
+                subWave.AddEnemy(EnemyFactory.StandardEnemy());
+                wave.Add(subWave);
+            }
+            else if(numberOfEnemies % 3 == 0){
+                SubWave subWave = new SubWave(0.5f);
+                subWave.AddEnemy(EnemyFactory.RangedCirclingEnemy(clockwise));
+                clockwise = !clockwise;
+                wave.Add(subWave);
+            }
+            else {
+                SubWave subWave = new SubWave(0.5f);
+                subWave.AddEnemy(EnemyFactory.FastEnemy());
+                wave.Add(subWave);
+            }
+                
+            numberOfEnemies--;
         }
-
+        SubWave lastSubWave = new SubWave(0.5f);  // 
+        lastSubWave.AddEnemy(EnemyFactory.StandardEnemy());
+        wave.Add(lastSubWave);
 		//Shuffle the order of the subwaves within the wave.
 		System.Random rng = new System.Random ((int)DateTime.Now.Ticks);
 		for (int i = 0; i < wave.Count; i++)

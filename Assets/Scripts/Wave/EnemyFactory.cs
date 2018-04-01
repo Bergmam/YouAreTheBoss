@@ -10,16 +10,16 @@ public class EnemyFactory {
 		return new StatsHolder("Slow Enemy", 0.3f, 6.0f, 1.0f, 300.0f, 2.0f, Color.black);
 	}
 
-    public static StatsHolder Rotator(bool spawnClockwiseRotator)
+    public static StatsHolder Rotator(bool clockwise)
     {
         StatsHolder stats = new StatsHolder("Rotator", 0.7f, 2.5f, 1.0f, 100.0f, 0.7f, Color.blue);
-		if (spawnClockwiseRotator)
+		if (clockwise)
         {
-            stats.SetAngluarSpeed(-50f);
+            stats.angularSpeed = -50f;
         }
         else
         {
-            stats.SetAngluarSpeed(50f);
+            stats.angularSpeed = 50f;
         }
 		return stats;
     }
@@ -27,6 +27,20 @@ public class EnemyFactory {
     public static StatsHolder FastEnemy()
     {
         return new StatsHolder("Fast Enemy", 3.0f, 1.0f, 2.0f, 50.0f, 0.5f, Color.yellow);
+    }
+
+    public static StatsHolder RangedCirclingEnemy(bool clockwise)
+    {
+        StatsHolder stats = new StatsHolder("Shooting Shark", 3.0f, 1.0f, 2.5f, 50.0f, 1.2f, new Color(1.0f, 0.0f, 1.0f, 1.0f));
+		if(clockwise)
+		{
+			stats.circlingSpeed = -30f;
+		} 
+		else 
+		{
+			stats.circlingSpeed = 30f;
+		}
+		return stats;
     }
 
     public static StatsHolder StandardEnemy()
@@ -45,8 +59,8 @@ public class EnemyFactory {
 			Parameters.PROJECTILE_SCALE,
 			Parameters.PROJECTILE_COLOR
 		);
-		stats.SetSelfDestruct(true);
-		stats.SetInvunerable(true);
+		stats.selfDestruct = true;
+		stats.invunerable = true;
 		stats.SetRadialSpawnPosition(spawnAngle,spawnRadius);
 		return stats;
     }
