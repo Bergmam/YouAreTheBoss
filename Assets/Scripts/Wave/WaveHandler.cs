@@ -29,12 +29,17 @@ public class WaveHandler : MonoBehaviour {
 		int livingEnemies = GameObject.FindObjectsOfType(typeof (Enemy)).Length;
 		if (livingEnemies <= 0 && requireKillUnitsSpawned >= requiredKillEnemiesInWave) {
 			WaveNumber.waveNumber++;
-			SceneHandler.SwitchScene("Main Menu Scene");
+			StartCoroutine(waitAndGoBack());
 		}
 	}
 
 	public void NofifyRequiredKillUnitSpawned()
 	{
 		requireKillUnitsSpawned++;
+	}
+
+	IEnumerator waitAndGoBack() {
+		yield return new WaitForSeconds(0.8f);
+		SceneHandler.SwitchScene("Main Menu Scene");
 	}
 }
