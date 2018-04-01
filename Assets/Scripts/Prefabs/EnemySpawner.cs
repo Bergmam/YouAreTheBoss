@@ -48,7 +48,6 @@ public class EnemySpawner : MonoBehaviour {
 	{
 		foreach (StatsHolder enemy in subWave.GetEnemies())
 		{
-			waveHandler.NofifyWaveUnitsSpawned();
 			InstantiateEnemyPrefab (enemy);
 		}
 	}
@@ -64,6 +63,10 @@ public class EnemySpawner : MonoBehaviour {
 		initEnemy.GetComponent<Enemy> ().SetStats (
             stats
 		);
+
+		if(stats.requiredKill){
+			waveHandler.NofifyRequiredKillUnitSpawned();
+		}
 
 		initEnemy.name = stats.Name + numberOfEnemies;
 		numberOfEnemies++;
