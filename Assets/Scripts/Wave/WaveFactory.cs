@@ -8,11 +8,21 @@ public class WaveFactory
 
     public static List<SubWave> GenerateWave(int numberOfEnemies){
         List<SubWave> wave = new List<SubWave> ();
-
+        SubWave subWave;
         switch(numberOfEnemies){
 
-            case 5:
+            case 3:
+                for(int i = 0; i < 360; i += 45){
+                    subWave = new SubWave(2.0f);
+                    StatsHolder stats = EnemyFactory.StandardEnemy();
+                    stats.spawnAngle = i;
+                    stats.predefinedPosition = true;
+                    subWave.AddEnemy(stats);
+                    wave.Add(subWave);
+                }
+                break;
 
+            case 5:
                 SubWave bigEnemySubWave = new SubWave(0.0f);
                 StatsHolder bigEnemy = EnemyFactory.SlowEnemy();
                 bigEnemy.predefinedPosition = true;
@@ -39,7 +49,17 @@ public class WaveFactory
                     sub3.AddEnemy(minon3);
                     wave.Add(sub3);
                 }
+                break;
 
+            case 8:
+                subWave = new SubWave(0.0f);
+                for(int i = 0; i < 360; i += 45){
+                    StatsHolder stats = EnemyFactory.Rotator(true);
+                    stats.spawnAngle = i;
+                    stats.predefinedPosition = true;
+                    subWave.AddEnemy(stats);
+                }
+                wave.Add(subWave);
                 break;
 
             default:
