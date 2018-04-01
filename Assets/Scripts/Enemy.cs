@@ -28,6 +28,7 @@ public class Enemy : MonoBehaviour {
 	private EnemySpawner enemySpawner;
 
 	private GameObject hitParticle;
+	private StatsHolder projectile;
 
 	void Awake()
 	{
@@ -39,7 +40,6 @@ public class Enemy : MonoBehaviour {
 
 	void Start () {
 		bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>(); // Should all units know of the hero's health?
-		this.attackFrequency = 0.5f;
 	}
 
 	void Update () {
@@ -93,8 +93,8 @@ public class Enemy : MonoBehaviour {
 	{
 		this.colorModifier.FadeToDelected(this.attackFrequency / 3f);
 		RadialPosition thisRadialPos = RotationUtils.XYToRadialPos(transform.position);
-		StatsHolder projectileStats = EnemyFactory.Projectile(this.Damage,thisRadialPos.GetRadius(),thisRadialPos.GetAngle());
-		this.enemySpawner.InstantiateEnemyPrefab(projectileStats);
+		this.projectile.SetRadialSpawnPosition(thisRadialPos.GetAngle(),thisRadialPos.GetRadius());
+		this.enemySpawner.InstantiateEnemyPrefab(this.projectile);
 	}
 
 	public bool isInAttackArea(float lowAngle, float highAngle, float nearRadius, float farRadius){
@@ -165,6 +165,12 @@ public class Enemy : MonoBehaviour {
 			Transform canvas = transform.Find("Canvas");
 			canvas.localPosition = new Vector3(canvas.localPosition.x, canvas.localPosition.y * stats.Scale * 0.8f, canvas.localPosition.z);
 		}
+		if(stats.projectile == null){
+			this.projectile = EnemyFactory.Projectile(this.Damage);
+		}else{
+			this.projectile = stats.projectile;
+		}
+		this.attackFrequency = stats.attackDelay;
 		colorModifier.SetDefaultColor(stats.Color);
 		colorModifier.SetSelectedColor(Parameters.ENEMY_ATTACK_COLOR);
 	}

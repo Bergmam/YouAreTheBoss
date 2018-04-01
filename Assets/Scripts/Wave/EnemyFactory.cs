@@ -48,7 +48,7 @@ public class EnemyFactory {
         return new StatsHolder("Standard Enemy", 1.0f, 2.5f, 1.0f, 100.0f, 1.0f, Color.white);
     }
 
-    public static StatsHolder Projectile(float damage, float spawnRadius, float spawnAngle)
+    public static StatsHolder Projectile(float damage)
     {
         StatsHolder stats = new StatsHolder(
 			"Projectile",
@@ -61,7 +61,6 @@ public class EnemyFactory {
 		);
 		stats.selfDestruct = true;
 		stats.invunerable = true;
-		stats.SetRadialSpawnPosition(spawnAngle,spawnRadius);
 		stats.requiredKill = false;
 		return stats;
     }
@@ -71,4 +70,21 @@ public class EnemyFactory {
 		stats.requiredKill = false;
 		return stats;
 	}
+
+    public static StatsHolder RangedCirclingMinon()
+    {
+        StatsHolder stats = new StatsHolder("CirclingMinion", 4.0f, 2.0f, 1.4f, 10.0f, 0.5f, Color.white);
+		stats.circlingSpeed = -70f;
+		stats.requiredKill = false;
+		return stats;
+    }
+
+    
+	public static StatsHolder RangedSpawner()
+	{
+        StatsHolder stats = new StatsHolder("Mad Spawner", 10.0f, 1.0f, 3.0f, 400.0f, 3.0f, Color.grey);
+		stats.attackDelay = 0.6f;
+		stats.projectile = RangedCirclingMinon();
+		return stats;
+    }
 }

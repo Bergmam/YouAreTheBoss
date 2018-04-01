@@ -16,6 +16,8 @@ public class StatsHolder {
 	public bool invunerable;
 	public float circlingSpeed;
 	public bool requiredKill;
+	public StatsHolder projectile;
+	public float attackDelay;
 
 	public StatsHolder(string name, 
 		float MovementSpeed, 
@@ -35,6 +37,7 @@ public class StatsHolder {
 		this.predefinedPosition = false;
 		this.spawnRadius = Parameters.ENEMY_SPAWN_RADIUS;
 		this.requiredKill = true;
+		this.attackDelay = 0.5f;
 	}
 
 	public void SetRadialSpawnPosition(float spawnAngle, float spawnRadius)
