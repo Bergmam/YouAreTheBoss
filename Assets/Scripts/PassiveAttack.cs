@@ -61,16 +61,12 @@ public class PassiveAttack : MonoBehaviour {
 		Color zeroAlphaColor = color;
 		zeroAlphaColor.a = 0.0f;
 		object[] obj = GameObject.FindObjectsOfType(typeof (GameObject));
-		foreach (object o in obj){
-			GameObject g = (GameObject) o;
-			if (g.name.Contains("Enemy")){
-				Enemy enemy = g.GetComponent<Enemy>();
-                if (enemy.isInAttackArea(unitCircleRotation - this.currentAttack.angle, 
-                                         unitCircleRotation + this.currentAttack.angle, 
-										this.currentAttack.closeRadius, 
-										this.currentAttack.farRadius)){
-                    enemy.applyDamageTo(this.currentAttack.damage);
-				}
+		foreach (Enemy enemy in GameObject.FindObjectsOfType(typeof (Enemy))){
+			if (enemy.isInAttackArea(unitCircleRotation - this.currentAttack.angle, 
+					unitCircleRotation + this.currentAttack.angle, 
+					this.currentAttack.closeRadius, 
+					this.currentAttack.farRadius)){
+				enemy.applyDamageTo(this.currentAttack.damage);
 			}
 		}
 
