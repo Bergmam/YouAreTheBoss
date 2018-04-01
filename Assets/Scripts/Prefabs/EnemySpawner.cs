@@ -9,9 +9,11 @@ public class EnemySpawner : MonoBehaviour {
 	List<SubWave> currentWave;
 	int currentSubWaveNumber;
 	float delay;
+	private WaveHandler waveHandler;
 
 	void Awake()
 	{
+		this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
 		preInitEnemy = Resources.Load ("Prefabs/Enemy", typeof(GameObject)) as GameObject;
 	}
 
@@ -46,6 +48,7 @@ public class EnemySpawner : MonoBehaviour {
 	{
 		foreach (StatsHolder enemy in subWave.GetEnemies())
 		{
+			waveHandler.NofifyWaveUnitsSpawned();
 			InstantiateEnemyPrefab (enemy);
 		}
 	}
@@ -62,7 +65,7 @@ public class EnemySpawner : MonoBehaviour {
             stats
 		);
 
-		initEnemy.name = "Enemy " + numberOfEnemies;
+		initEnemy.name = stats.Name + numberOfEnemies;
 		numberOfEnemies++;
 	}
 }

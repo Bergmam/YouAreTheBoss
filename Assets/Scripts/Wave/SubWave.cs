@@ -30,4 +30,8 @@ public class SubWave {
 		}
 	}
 
+	public int EnemyCount()
+	{
+		return enemies.Count;
+	}
 }
