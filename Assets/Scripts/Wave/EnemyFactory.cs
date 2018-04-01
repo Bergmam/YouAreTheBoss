@@ -26,7 +26,7 @@ public class EnemyFactory {
 
     public static StatsHolder FastEnemy()
     {
-        return new StatsHolder("Fast Enemy", 2.0f, 1.0f, 2.5f, 50.0f, 0.5f, Color.yellow);
+        return new StatsHolder("Ranged", 2.0f, 1.0f, 2.5f, 50.0f, 0.5f, Color.yellow);
     }
 
     public static StatsHolder RangedCirclingEnemy(bool clockwise)
