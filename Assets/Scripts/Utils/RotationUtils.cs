@@ -24,7 +24,7 @@ public class RotationUtils
 		bool zeroInLimits = high < low;
 		bool inLimitsAroundZero = zeroInLimits && (angle < high || angle > low);
 		bool inLimitsWithoutZero = !zeroInLimits && (angle > low && angle < high);
-		return inLimitsAroundZero || inLimitsWithoutZero;
+		return inLimitsAroundZero || inLimitsWithoutZero || low == high;
 	}	
 
 	/// <summary>
