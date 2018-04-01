@@ -29,6 +29,9 @@ public class Enemy : MonoBehaviour {
 
 	private GameObject hitParticle;
 	private StatsHolder projectile;
+	private float zigZagAngleLow;
+	private float zigZagAngleHigh;
+	private bool zigZag;
 
 	void Awake()
 	{
@@ -54,10 +57,21 @@ public class Enemy : MonoBehaviour {
 
             MoveTo(radialPosition);
 
+			if(RotationUtils.InCounterClockwiseLimits(radialPosition.GetAngle(),zigZagAngleHigh, zigZagAngleLow) && zigZag){
+				angularSpeed = -1 * angularSpeed;
+			}
+
 		}
 		else // If in range, do appropriate attack.
 		{
 			radialPosition.AddAngle(circlingStep);
+
+            MoveTo(radialPosition);
+
+			if(RotationUtils.InCounterClockwiseLimits(radialPosition.GetAngle(),zigZagAngleHigh, zigZagAngleLow) && zigZag){
+				circlingSpeed = -1 * circlingSpeed;
+			}
+
 			MoveTo(radialPosition);
 			if (selfDestruct) {
 				doDamageToBoss ();
@@ -171,6 +185,14 @@ public class Enemy : MonoBehaviour {
 			this.projectile = stats.projectile;
 		}
 		this.attackFrequency = stats.attackDelay;
+		this.zigZag = stats.zigZag;
+		if(stats.angularSpeed > 0){
+			this.zigZagAngleLow = stats.spawnAngle;
+			this.zigZagAngleHigh = stats.spawnAngle + stats.zigZagAngle;
+		} else {
+			this.zigZagAngleHigh = stats.spawnAngle;
+			this.zigZagAngleLow = stats.spawnAngle - stats.zigZagAngle;
+		}
 		colorModifier.SetDefaultColor(stats.Color);
 		colorModifier.SetSelectedColor(Parameters.ENEMY_ATTACK_COLOR);
 	}

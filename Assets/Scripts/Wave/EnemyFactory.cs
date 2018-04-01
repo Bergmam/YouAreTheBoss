@@ -96,4 +96,13 @@ public class EnemyFactory {
 		return stats;
     }
 
+    public static StatsHolder ZigZag()
+    {
+		StatsHolder stats = new StatsHolder("ZigZag", 0.5f, 2.5f, 1.0f, 100.0f, 1.0f, Color.white);
+		stats.angularSpeed = 70f;
+		stats.zigZag = true;
+		stats.zigZagAngle = 90;
+		return stats;
+    }
+
 }

@@ -19,6 +19,9 @@ public class StatsHolder {
 	public StatsHolder projectile;
 	public float attackDelay;
 
+	public float zigZagAngle;
+	public bool zigZag;
+
 	public StatsHolder(string name, 
 		float MovementSpeed, 
 		float Damage, 
@@ -38,6 +41,7 @@ public class StatsHolder {
 		this.spawnRadius = Parameters.ENEMY_SPAWN_RADIUS;
 		this.requiredKill = true;
 		this.attackDelay = 0.5f;
+		this.zigZag = false;
 	}
 
 	public void SetRadialSpawnPosition(float spawnAngle, float spawnRadius)

@@ -103,8 +103,7 @@ public class WaveFactory
             }
             else if(numberOfEnemies % 7 == 0){
                 SubWave subWave = new SubWave(0.5f);
-                subWave.AddEnemy(EnemyFactory.Rotator(clockwise));
-                clockwise = !clockwise;
+                subWave.AddEnemy(EnemyFactory.ZigZag());
                 wave.Add(subWave);
             }
             else if(numberOfEnemies % 6 == 0){
