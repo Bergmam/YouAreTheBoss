@@ -110,4 +110,9 @@ public class UnityUtils
         yield return new WaitForSeconds(time);
 		image.color = color;
     }
+    
+    public static IEnumerator ChangeToDefaultColorAfterTime(ColorModifier colorModifier, float time) {
+        yield return new WaitForSeconds(time);
+		colorModifier.DeSelect();
+    }
 }

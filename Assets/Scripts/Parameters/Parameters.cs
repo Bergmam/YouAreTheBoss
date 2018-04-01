@@ -20,4 +20,6 @@ public static class Parameters {
 
 	public static Color[] COLOR_LIST = new Color[3] {Color.red, Color.blue, Color.green};
 	public static Color ENEMY_ATTACK_COLOR = Color.black;
+
+	public static float ENEMY_SPAWN_RADIUS = 5f;
 }

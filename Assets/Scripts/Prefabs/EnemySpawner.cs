@@ -55,34 +55,17 @@ public class EnemySpawner : MonoBehaviour {
 	{
 		GameObject initEnemy = Instantiate (preInitEnemy);
 		float angle;
-		if(currentStats.predefinedPosition)
+		if(!currentStats.predefinedPosition)
 		{
-			angle = currentStats.spawnAngle;
+			currentStats.spawnAngle = Random.value * 360;
 		}
-		else
-		{
-			angle = Random.value * 360;
-		}
-		 
-		float radius = 5f;
+		
 		Vector3 center = Vector3.zero;
-        RadialPosition randomRadialPos = new RadialPosition(radius, angle);
-        Vector3 randomPosition = RotationUtils.RadialPosToXY(randomRadialPos);
 		initEnemy.GetComponent<Enemy> ().SetStats (
-            currentStats.MovementSpeed,
-            currentStats.angularSpeed,
-			currentStats.Damage,
-			currentStats.Range,
-			currentStats.Health,
-			currentStats.Scale,
-			currentStats.Color,
-			false,
-			false,
-            randomRadialPos
+            currentStats
 		);
 
 		initEnemy.name = "Enemy " + numberOfEnemies;
 		numberOfEnemies++;
-		initEnemy.transform.position = randomPosition;
 	}
 }
