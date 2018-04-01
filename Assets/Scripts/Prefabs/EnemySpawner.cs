@@ -5,21 +5,14 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour {
 
 	GameObject preInitEnemy;
-
-	Dictionary<int, StatsHolder> enemyTypesDict = new Dictionary<int, StatsHolder>();
-
 	int numberOfEnemies;
 	List<SubWave> currentWave;
 	int currentSubWaveNumber;
 	float delay;
 
-	void Start ()
+	void Awake()
 	{
 		preInitEnemy = Resources.Load ("Prefabs/Enemy", typeof(GameObject)) as GameObject;
-		numberOfEnemies = 0;
-		currentSubWaveNumber = 0;
-		delay = 0;
-		currentWave = WaveFactory.GenerateWave (WaveNumber.waveNumber);
 	}
 
 	void Update()
@@ -30,17 +23,23 @@ public class EnemySpawner : MonoBehaviour {
 		}
 		else
 		{
-			if (currentSubWaveNumber < currentWave.Count) // Spawn all subwaves of a wave, one at a time with delay between. 
+			// TODO: Comment in this to enable wave spawning. When doing so, add a WaveHandler to the Handler in the Fighting Scene.
+			/*if (currentSubWaveNumber < currentWave.Count) // Spawn all subwaves of a wave, one at a time with delay between. 
 			{
 				SubWave subWave = currentWave [currentSubWaveNumber];
 				SpawnSubWave (subWave);
 				delay = subWave.GetDuration ();
 				currentSubWaveNumber++;
-			} else if (GameObject.FindObjectsOfType(typeof (Enemy)).Length == 0) {
-				WaveNumber.waveNumber++;
-				SceneHandler.SwitchScene("Main Menu Scene");
-			}
+			}*/
 		}
+	}
+
+	public void SpawnWave(List<SubWave> wave)
+	{
+		this.numberOfEnemies = 0;
+		this.currentSubWaveNumber = 0;
+		this.delay = 0;
+		this.currentWave = wave;
 	}
 
 	// Spawn all enemies of a subwave.
