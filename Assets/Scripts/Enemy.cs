@@ -27,9 +27,16 @@ public class Enemy : MonoBehaviour {
 	BossHealth bossHealth;
 	private ColorModifier colorModifier;
 
+	private GameObject hitParticle;
+
+	void Awake () {
+		Transform sprite = transform.Find("Sprite");
+		this.colorModifier = sprite.GetComponent<ColorModifier>();
+	}
 	void Start () {
 		bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>(); // Should all units know of the hero's health?
 		this.attackFrequency = 0.5f;
+		this.hitParticle = Resources.Load("Prefabs/hitParticleSystem", typeof(GameObject)) as GameObject;
 	}
 
 	void Update () {
@@ -66,6 +73,10 @@ public class Enemy : MonoBehaviour {
 
 	void doDamageToBoss() {
 		this.colorModifier.FadeToDelected(this.attackFrequency / 3f);
+		GameObject hitParticle = Instantiate(this.hitParticle, transform.position / 2, transform.rotation);
+		var main = hitParticle.GetComponent<ParticleSystem>().main;
+		main.startColor = new Color(0.3f, 0.082f, 0.3945f, 0.6f);
+		Destroy(hitParticle, hitParticle.GetComponent<ParticleSystem>().main.duration);
 		bossHealth.bossTakeDamage(Damage);
 	}
 
@@ -117,6 +128,12 @@ public class Enemy : MonoBehaviour {
 
 	public void applyDamageTo(float damage)
 	{
+
+		GameObject hitParticle = Instantiate(this.hitParticle, transform.position, transform.rotation);
+		var main = hitParticle.GetComponent<ParticleSystem>().main;
+		main.startColor = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+		Destroy(hitParticle, hitParticle.GetComponent<ParticleSystem>().main.duration);
+
 		if (invunerable)
 		{
 			return;
@@ -150,14 +167,13 @@ public class Enemy : MonoBehaviour {
 		MaxHealth = health;
 		Scale = scale;
 		Transform sprite = transform.Find("Sprite");
-		sprite.transform.localScale *= scale;
+		sprite.localScale *= scale;
 		if (scale > 1) {
 			Transform canvas = transform.Find("Canvas");
 			canvas.localPosition = new Vector3(canvas.localPosition.x, canvas.localPosition.y * 1.5f, canvas.localPosition.z);
 
 		}
 		SpriteColor = color;
-		this.colorModifier = sprite.GetComponent<ColorModifier>();
 		colorModifier.SetDefaultColor(color);
 		colorModifier.SetSelectedColor(Parameters.ENEMY_ATTACK_COLOR);
 	}
