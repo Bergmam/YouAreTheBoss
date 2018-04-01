@@ -23,14 +23,13 @@ public class EnemySpawner : MonoBehaviour {
 		}
 		else
 		{
-			// TODO: Comment in this to enable wave spawning. When doing so, add a WaveHandler to the Handler in the Fighting Scene.
-			/*if (currentSubWaveNumber < currentWave.Count) // Spawn all subwaves of a wave, one at a time with delay between. 
+			if (currentSubWaveNumber < currentWave.Count) // Spawn all subwaves of a wave, one at a time with delay between. 
 			{
 				SubWave subWave = currentWave [currentSubWaveNumber];
 				SpawnSubWave (subWave);
 				delay = subWave.GetDuration ();
 				currentSubWaveNumber++;
-			}*/
+			}
 		}
 	}
 
