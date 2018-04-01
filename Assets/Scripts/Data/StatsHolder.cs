@@ -9,6 +9,12 @@ public class StatsHolder {
 	public float Health;
 	public float Scale;
 	public Color Color;
+	public bool predefinedPosition;
+	public float spawnAngle;
+	public float spawnRadius;
+	public bool selfDestruct;
+	public bool invunerable;
+	public float circlingSpeed;
 
 	public StatsHolder(string name, 
 		float MovementSpeed, 
@@ -25,10 +31,14 @@ public class StatsHolder {
 		this.Scale = Scale;
 		this.Color = Color;
         this.angularSpeed = 0f;
+		this.predefinedPosition = false;
+		this.spawnRadius = Parameters.ENEMY_SPAWN_RADIUS;
 	}
 
-    public void SetAngluarSpeed(float angularSpeed)
-    {
-        this.angularSpeed = angularSpeed;
-    }
+	public void SetRadialSpawnPosition(float spawnAngle, float spawnRadius)
+	{
+		this.predefinedPosition = true;
+		this.spawnAngle = spawnAngle;
+		this.spawnRadius = spawnRadius;
+	}
 }

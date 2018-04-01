@@ -17,8 +17,7 @@ public class Enemy : MonoBehaviour {
 	private float MaxHealth = 100.0f;
 
 	private float Scale = 1.0f;
-
-	private Color SpriteColor = Color.white;
+	private float circlingSpeed;
 
 	private bool selfDestruct;
 	private bool invunerable;
@@ -26,13 +25,17 @@ public class Enemy : MonoBehaviour {
 
 	BossHealth bossHealth;
 	private ColorModifier colorModifier;
+	private EnemySpawner enemySpawner;
 
 	private GameObject hitParticle;
 
-	void Awake () {
+	void Awake()
+	{
+		this.enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
 		Transform sprite = transform.Find("Sprite");
 		this.colorModifier = sprite.GetComponent<ColorModifier>();
 	}
+s
 	void Start () {
 		bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>(); // Should all units know of the hero's health?
 		this.attackFrequency = 0.5f;
@@ -40,11 +43,12 @@ public class Enemy : MonoBehaviour {
 	}
 
 	void Update () {
+        RadialPosition radialPosition = RotationUtils.XYToRadialPos(this.transform.position);
         float step = MovementSpeed * Time.deltaTime;
         float angularStep = this.angularSpeed * Time.deltaTime;
+        float circlingStep = this.circlingSpeed * Time.deltaTime;
 		if (Vector3.Distance (Vector3.zero, transform.position) > Range)
 		{
-            RadialPosition radialPosition = RotationUtils.XYToRadialPos(this.transform.position);
 			radialPosition.AddRadius ((-1) * step);
             radialPosition.AddAngle(angularStep);
 
@@ -53,6 +57,8 @@ public class Enemy : MonoBehaviour {
 		}
 		else // If in range, do appropriate attack.
 		{
+			radialPosition.AddAngle(circlingStep);
+			MoveTo(radialPosition);
 			if (selfDestruct) {
 				doDamageToBoss ();
 				KillSelf ();
@@ -86,22 +92,9 @@ public class Enemy : MonoBehaviour {
 	void spawnProjectile ()
 	{
 		this.colorModifier.FadeToDelected(this.attackFrequency / 3f);
-		GameObject preInitEnemy = Resources.Load ("Prefabs/Enemy", typeof(GameObject)) as GameObject;
-		GameObject initEnemy = Instantiate(preInitEnemy);
-		initEnemy.GetComponent<Enemy> ().SetStats (
-			Parameters.PROJECTILE_SPEED,
-            0, // Projectiles do not have an angular speed;
-			this.Damage,
-			Parameters.PROJECTILE_RANGE,
-			1.0f, //Health of projectile does not matter since they are invunerable.
-			Parameters.PROJECTILE_SCALE,
-			Parameters.PROJECTILE_COLOR,
-			true,
-			true,
-            RotationUtils.XYToRadialPos(this.transform.position)
-		);
-		initEnemy.name = "Projectile";
-		initEnemy.transform.position = transform.position;
+		RadialPosition thisRadialPos = RotationUtils.XYToRadialPos(transform.position);
+		StatsHolder projectileStats = EnemyFactory.Projectile(this.Damage,thisRadialPos.GetRadius(),thisRadialPos.GetAngle());
+		this.enemySpawner.InstantiateEnemyPrefab(projectileStats);
 	}
 
 	public bool isInAttackArea(float lowAngle, float highAngle, float nearRadius, float farRadius){
@@ -125,7 +118,7 @@ public class Enemy : MonoBehaviour {
 		
 		return (inLowAngle || inHighAngle || bossLargerThanRadius) && inRadius;
 	}
-
+	
 	public void applyDamageTo(float damage)
 	{
 
@@ -145,36 +138,35 @@ public class Enemy : MonoBehaviour {
 			KillSelf ();
 		} else {
 			transform.Find("Sprite").GetComponent<SpriteRenderer>().color = Color.red;
-			StartCoroutine(UnityUtils.ChangeToColorAfterTime(transform.Find("Sprite").GetComponent<SpriteRenderer>(), SpriteColor, 0.5f));
+			StartCoroutine(UnityUtils.ChangeToDefaultColorAfterTime(colorModifier, 0.5f));
 		}
 	}
 
-	public void SetStats(float movementSpeed, float angularSpeed, float damage, float range,
-		float health, float scale, Color color, bool selfDestruct, bool invunerable, RadialPosition radialPosition)
+	public void SetStats(StatsHolder stats)
 	{
-		this.selfDestruct = selfDestruct;
-		this.invunerable = invunerable;
+		transform.name = stats.Name;
+		this.circlingSpeed = stats.circlingSpeed;
+		this.selfDestruct = stats.selfDestruct;
+		this.invunerable = stats.invunerable;
 		if (invunerable) //Don't show healthbar for invunerable units (projectiles)
 		{
 			Destroy(UnityUtils.RecursiveFind(transform, "HealthBar").gameObject);
 		}
-        MoveTo(radialPosition);
-		MovementSpeed = movementSpeed;
-        this.angularSpeed = angularSpeed; 
-		Damage = damage;
-		Range = range;
-		Health = health;
-		MaxHealth = health;
-		Scale = scale;
+        MoveTo(new RadialPosition(stats.spawnRadius, stats.spawnAngle));
+		MovementSpeed = stats.MovementSpeed;
+        this.angularSpeed = stats.angularSpeed; 
+		Damage = stats.Damage;
+		Range = stats.Range;
+		Health = stats.Health;
+		MaxHealth = stats.Health;
+		Scale = stats.Scale;
 		Transform sprite = transform.Find("Sprite");
-		sprite.localScale *= scale;
-		if (scale > 1) {
+		sprite.transform.localScale *= stats.Scale;
+		if (stats.Scale > 1) {
 			Transform canvas = transform.Find("Canvas");
 			canvas.localPosition = new Vector3(canvas.localPosition.x, canvas.localPosition.y * 1.5f, canvas.localPosition.z);
-
 		}
-		SpriteColor = color;
-		colorModifier.SetDefaultColor(color);
+		colorModifier.SetDefaultColor(stats.Color);
 		colorModifier.SetSelectedColor(Parameters.ENEMY_ATTACK_COLOR);
 	}
 
@@ -196,4 +188,5 @@ public class Enemy : MonoBehaviour {
     {
         transform.position = RotationUtils.RadialPosToXY(radialPosition);
     }
+
 }
