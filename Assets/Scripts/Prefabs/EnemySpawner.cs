@@ -5,21 +5,14 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour {
 
 	GameObject preInitEnemy;
-
-	Dictionary<int, StatsHolder> enemyTypesDict = new Dictionary<int, StatsHolder>();
-
 	int numberOfEnemies;
 	List<SubWave> currentWave;
 	int currentSubWaveNumber;
 	float delay;
 
-	void Start ()
+	void Awake()
 	{
 		preInitEnemy = Resources.Load ("Prefabs/Enemy", typeof(GameObject)) as GameObject;
-		numberOfEnemies = 0;
-		currentSubWaveNumber = 0;
-		delay = 0;
-		currentWave = WaveFactory.GenerateWave (WaveNumber.waveNumber);
 	}
 
 	void Update()
@@ -36,11 +29,16 @@ public class EnemySpawner : MonoBehaviour {
 				SpawnSubWave (subWave);
 				delay = subWave.GetDuration ();
 				currentSubWaveNumber++;
-			} else if (GameObject.FindObjectsOfType(typeof (Enemy)).Length == 0) {
-				WaveNumber.waveNumber++;
-				SceneHandler.SwitchScene("Main Menu Scene");
 			}
 		}
+	}
+
+	public void SpawnWave(List<SubWave> wave)
+	{
+		this.numberOfEnemies = 0;
+		this.currentSubWaveNumber = 0;
+		this.delay = 0;
+		this.currentWave = wave;
 	}
 
 	// Spawn all enemies of a subwave.
@@ -48,34 +46,23 @@ public class EnemySpawner : MonoBehaviour {
 	{
 		foreach (StatsHolder enemy in subWave.GetEnemies())
 		{
-			instantiateEnemyPrefab (enemy);
+			InstantiateEnemyPrefab (enemy);
 		}
 	}
 
-	void instantiateEnemyPrefab(StatsHolder currentStats)
+	public void InstantiateEnemyPrefab(StatsHolder stats)
 	{
 		GameObject initEnemy = Instantiate (preInitEnemy);
-
-		float angle = Random.value * 360;
-		float radius = 5f;
-		Vector3 center = Vector3.zero;
-        RadialPosition randomRadialPos = new RadialPosition(radius, angle);
-        Vector3 randomPosition = RotationUtils.RadialPosToXY(randomRadialPos);
+		if(!stats.predefinedPosition)
+		{
+			stats.spawnAngle = Random.value * 360;
+		}
+		
 		initEnemy.GetComponent<Enemy> ().SetStats (
-            currentStats.MovementSpeed,
-            currentStats.angularSpeed,
-			currentStats.Damage,
-			currentStats.Range,
-			currentStats.Health,
-			currentStats.Scale,
-			currentStats.Color,
-			false,
-			false,
-            randomRadialPos
+            stats
 		);
 
 		initEnemy.name = "Enemy " + numberOfEnemies;
 		numberOfEnemies++;
-		initEnemy.transform.position = randomPosition;
 	}
 }
