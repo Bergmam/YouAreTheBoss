@@ -17,6 +17,10 @@ public class RotationUtils
 	/// <param name="high">The high value for angle to be compared with.</param>
 	public static bool InCounterClockwiseLimits(float angle, float low, float high)
 	{
+        angle = MakePositiveAngle(angle);
+        low = MakePositiveAngle(low);
+        high = MakePositiveAngle(high);
+
 		bool zeroInLimits = high < low;
 		bool inLimitsAroundZero = zeroInLimits && (angle < high || angle > low);
 		bool inLimitsWithoutZero = !zeroInLimits && (angle > low && angle < high);
@@ -30,6 +34,9 @@ public class RotationUtils
 	/// <param name="high">The High angle.</param>
 	public static float MiddleOfRotations(float low, float high)
 	{
+        low = MakePositiveAngle(low);
+        high = MakePositiveAngle(high);
+
 		//High has to be highter than low. Need to check if high is equal to or has passed zero.
 		if (InCounterClockwiseLimits (0.0f, low, high) || high == 0)
 		{
