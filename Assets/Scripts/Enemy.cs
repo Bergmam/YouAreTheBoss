@@ -163,7 +163,7 @@ public class Enemy : MonoBehaviour {
 		sprite.transform.localScale *= stats.Scale;
 		if (stats.Scale > 1) {
 			Transform canvas = transform.Find("Canvas");
-			canvas.localPosition = new Vector3(canvas.localPosition.x, canvas.localPosition.y * 1.5f, canvas.localPosition.z);
+			canvas.localPosition = new Vector3(canvas.localPosition.x, canvas.localPosition.y * stats.Scale * 0.8f, canvas.localPosition.z);
 		}
 		colorModifier.SetDefaultColor(stats.Color);
 		colorModifier.SetSelectedColor(Parameters.ENEMY_ATTACK_COLOR);

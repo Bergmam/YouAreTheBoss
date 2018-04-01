@@ -7,6 +7,7 @@ public class WaveHandler : MonoBehaviour {
 	private EnemySpawner enemySpawner;
 	private int requiredKillEnemiesInWave;
 	private int requireKillUnitsSpawned;
+	private bool gameOver = false;
 
 	void Awake()
 	{
@@ -27,7 +28,8 @@ public class WaveHandler : MonoBehaviour {
 	void Update()
 	{
 		int livingEnemies = GameObject.FindObjectsOfType(typeof (Enemy)).Length;
-		if (livingEnemies <= 0 && requireKillUnitsSpawned >= requiredKillEnemiesInWave) {
+		if (livingEnemies <= 0 && requireKillUnitsSpawned >= requiredKillEnemiesInWave && !gameOver) {
+			gameOver = true;
 			WaveNumber.waveNumber++;
 			StartCoroutine(waitAndGoBack());
 		}
