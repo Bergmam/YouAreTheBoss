@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour {
 		Transform sprite = transform.Find("Sprite");
 		this.colorModifier = sprite.GetComponent<ColorModifier>();
 	}
-s
+
 	void Start () {
 		bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>(); // Should all units know of the hero's health?
 		this.attackFrequency = 0.5f;
