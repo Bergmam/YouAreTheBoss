@@ -22,4 +22,5 @@ public static class Parameters {
 	public static Color ENEMY_ATTACK_COLOR = Color.black;
 
 	public static float ENEMY_SPAWN_RADIUS = 5f;
+	public static int NUMBER_OF_ATTACKS = 4;
 }

@@ -24,9 +24,11 @@ public class PassiveAttack : MonoBehaviour {
 		radialFillControl = GameObject.FindObjectOfType<RadialFillControl> ();
 		attackMaskControl = GameObject.FindObjectOfType<AttackMaskControl> ();
 		int dictIndex = 1;
-		foreach(BossAttack attack in AttackLists.chosenAttacks){
-			attackDict.Add(dictIndex, attack);
-			dictIndex++;
+		foreach(BossAttack attack in AttackLists.chosenAttacksArray){
+			if (attack != null) {
+				attackDict.Add(dictIndex, attack);
+				dictIndex++;
+			}
 		}
 		setAttack(1);
 
