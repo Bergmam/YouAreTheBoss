@@ -34,12 +34,12 @@ public class Enemy : MonoBehaviour {
 		this.enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
 		Transform sprite = transform.Find("Sprite");
 		this.colorModifier = sprite.GetComponent<ColorModifier>();
+		this.hitParticle = Resources.Load("Prefabs/hitParticleSystem", typeof(GameObject)) as GameObject;
 	}
 
 	void Start () {
 		bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>(); // Should all units know of the hero's health?
 		this.attackFrequency = 0.5f;
-		this.hitParticle = Resources.Load("Prefabs/hitParticleSystem", typeof(GameObject)) as GameObject;
 	}
 
 	void Update () {
@@ -121,16 +121,15 @@ public class Enemy : MonoBehaviour {
 	
 	public void applyDamageTo(float damage)
 	{
+		if (invunerable)
+		{
+			return;
+		}
 
 		GameObject hitParticle = Instantiate(this.hitParticle, transform.position, transform.rotation);
 		var main = hitParticle.GetComponent<ParticleSystem>().main;
 		main.startColor = new Color(1.0f, 0.0f, 0.0f, 1.0f);
 		Destroy(hitParticle, hitParticle.GetComponent<ParticleSystem>().main.duration);
-
-		if (invunerable)
-		{
-			return;
-		}
 
 		Health -= damage;
 		UnityUtils.RecursiveFind(transform, "HealthBar").GetComponent<ProgressBarBehaviour>().UpdateFill(Health / MaxHealth);
