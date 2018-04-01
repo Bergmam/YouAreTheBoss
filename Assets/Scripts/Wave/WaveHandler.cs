@@ -5,8 +5,8 @@ using UnityEngine;
 public class WaveHandler : MonoBehaviour {
 
 	private EnemySpawner enemySpawner;
-	private int enemiesInWave;
-	private int waveUnitsSpawned;
+	private int requiredKillEnemiesInWave;
+	private int requireKillUnitsSpawned;
 
 	void Awake()
 	{
@@ -16,25 +16,25 @@ public class WaveHandler : MonoBehaviour {
 	void Start ()
 	{
 		List<SubWave> wave = WaveFactory.GenerateWave (WaveNumber.waveNumber);
-		enemiesInWave = 0;
+		requiredKillEnemiesInWave = 0;
 		foreach(SubWave subWave in wave){
-			enemiesInWave += subWave.EnemyCount();
+			requiredKillEnemiesInWave += subWave.RequiredKillEnemyCount();
 		}
-		this.waveUnitsSpawned = 0;
+		this.requireKillUnitsSpawned = 0;
 		this.enemySpawner.SpawnWave(wave);
 	}
 
 	void Update()
 	{
 		int livingEnemies = GameObject.FindObjectsOfType(typeof (Enemy)).Length;
-		if (livingEnemies <= 0 && waveUnitsSpawned >= enemiesInWave) {
+		if (livingEnemies <= 0 && requireKillUnitsSpawned >= requiredKillEnemiesInWave) {
 			WaveNumber.waveNumber++;
 			SceneHandler.SwitchScene("Main Menu Scene");
 		}
 	}
 
-	public void NofifyWaveUnitsSpawned()
+	public void NofifyRequiredKillUnitSpawned()
 	{
-		waveUnitsSpawned++;
+		requireKillUnitsSpawned++;
 	}
 }

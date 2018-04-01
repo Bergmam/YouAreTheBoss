@@ -62,11 +62,13 @@ public class EnemyFactory {
 		stats.selfDestruct = true;
 		stats.invunerable = true;
 		stats.SetRadialSpawnPosition(spawnAngle,spawnRadius);
+		stats.requiredKill = false;
 		return stats;
     }
 
 	public static StatsHolder Minion(){
 		StatsHolder stats = new StatsHolder("Minion", 2.0f, 0.5f, 1.0f, 0.5f, 0.5f, Color.black);
+		stats.requiredKill = false;
 		return stats;
 	}
 }

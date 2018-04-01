@@ -29,7 +29,7 @@ public class WaveFactory
                 bigEnemy.spawnAngle = 225f;
                 bigEnemySubWave.AddEnemy(bigEnemy);
                 wave.Add(bigEnemySubWave);
-                for(int i = 0; i < 4; i++){
+                for(int i = 0; i < 20; i++){
                     StatsHolder minon1 = EnemyFactory.Minion();
                     minon1.spawnAngle = 65f;
                     minon1.predefinedPosition = true;
