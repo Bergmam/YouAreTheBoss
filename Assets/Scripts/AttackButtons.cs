@@ -35,15 +35,14 @@ public class AttackButtons : MonoBehaviour {
 		int buttonNumber = Int32.Parse(button.transform.name.Replace("Attack ", ""));
 
 		if (button.image.color == Color.white && clickedButtons.Count < 3) {
-
-			AttackLists.chosenAttacksArray[buttonNumber] = AttackLists.allAttacks[buttonNumber];
-
+		
 			foreach(KeyValuePair<Color, bool> keyVal in colorTaken){
 				if(!keyVal.Value){
 					button.image.color = keyVal.Key;
 					int index = colorTaken.IndexOf(keyVal);
 					colorTaken.RemoveAt(index);
 					colorTaken.Insert(index, new KeyValuePair<Color, bool>(keyVal.Key, true));
+					AttackLists.chosenAttacksArray[index] = AttackLists.allAttacks[buttonNumber];
 					break;
 				}
 			}
@@ -55,13 +54,12 @@ public class AttackButtons : MonoBehaviour {
 
 		} else if (button.image.color != Color.white) {
 
-			AttackLists.chosenAttacksArray[buttonNumber] = null;
-
 			foreach(KeyValuePair<Color, bool> keyVal in colorTaken){
 				if (keyVal.Key == button.image.color) {
 					int index = colorTaken.IndexOf(keyVal);
 					colorTaken.RemoveAt(index);
 					colorTaken.Insert(index, new KeyValuePair<Color, bool>(keyVal.Key, false));
+					AttackLists.chosenAttacksArray[index] = null;
 					break;
 				}
 			}
