@@ -8,6 +8,9 @@ public class PassiveAttack : MonoBehaviour {
 	float fadeTime = 0;
 
 	BossAttack currentAttack;
+
+	BossAttack currentActiveAttack;
+
 	BossAttack previousAttack;
 	int previousAttackNumber;
 	int currentAttackNumber;
@@ -122,12 +125,15 @@ public class PassiveAttack : MonoBehaviour {
 
 		// If the current attack is slow, wait a little and set back to the previous attack
 		if (this.currentAttack.frequency > Parameters.SLOW_ATTACK_LIMIT) {
+			this.currentActiveAttack = this.currentAttack;
 			StartCoroutine(WaitAndSetBackAttack(1.0f));
 		}
 	}
 
 	IEnumerator WaitAndSetBackAttack(float time) {
 		yield return new WaitForSeconds(time);
-		setAttack(previousAttackNumber);
+		if (this.currentActiveAttack.Equals(this.currentAttack)) {
+			setAttack(previousAttackNumber);
+		}
 	}
 }

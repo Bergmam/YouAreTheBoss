@@ -18,4 +18,13 @@ public class BossAttack {
 		this.damage = damage;
 		this.frequency = frequency;
 	}
+
+	bool Equals(BossAttack other) {
+		return this.name == other.name &&
+				this.angle == other.angle && 
+				this.closeRadius == other.closeRadius && 
+				this.farRadius == other.farRadius &&
+				this.damage == other.damage &&
+				this.frequency == other.frequency;
+	}
 }
