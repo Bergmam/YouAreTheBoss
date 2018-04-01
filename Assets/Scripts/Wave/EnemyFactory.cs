@@ -7,7 +7,7 @@ public class EnemyFactory {
 
 	public static StatsHolder SlowEnemy ()
 	{
-		return new StatsHolder("Slow Enemy", 0.3f, 6.0f, 1.0f, 300.0f, 5.0f, Color.black);
+		return new StatsHolder("Big Boss", 0.3f, 6.0f, 1.0f, 300.0f, 5.0f, Color.black);
 	}
 
     public static StatsHolder Rotator(bool clockwise)
@@ -87,4 +87,13 @@ public class EnemyFactory {
 		stats.projectile = RangedCirclingMinon();
 		return stats;
     }
+
+    public static StatsHolder SmallBomber()
+    {
+		StatsHolder stats = new StatsHolder("Small Bomber", 1.5f, 7.5f, 0.1f, 0.1f, 1.0f, new Color(1.0f, 0.6f, 0.2f, 1.0f));
+		stats.angularSpeed = 20f;
+		stats.selfDestruct = true;
+		return stats;
+    }
+
 }

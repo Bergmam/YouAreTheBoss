@@ -119,14 +119,14 @@ public class WaveFactory
                 wave.Add(subWave);
             }
             else if(numberOfEnemies % 4 == 0){
-                SubWave subWave = new SubWave(0.5f);  // 
-                subWave.AddEnemy(EnemyFactory.StandardEnemy());
+                SubWave subWave = new SubWave(0.5f);
+                subWave.AddEnemy(EnemyFactory.RangedCirclingEnemy(clockwise));
+                clockwise = !clockwise;
                 wave.Add(subWave);
             }
             else if(numberOfEnemies % 3 == 0){
                 SubWave subWave = new SubWave(0.5f);
-                subWave.AddEnemy(EnemyFactory.RangedCirclingEnemy(clockwise));
-                clockwise = !clockwise;
+                subWave.AddEnemy(EnemyFactory.SmallBomber());
                 wave.Add(subWave);
             }
             else {
