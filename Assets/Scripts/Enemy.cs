@@ -76,20 +76,7 @@ public class Enemy : MonoBehaviour {
 		GameObject preInitEnemy = Resources.Load ("Prefabs/Enemy", typeof(GameObject)) as GameObject;
 		GameObject initEnemy = Instantiate(preInitEnemy);
 		RadialPosition thisRadialPos = RotationUtils.XYToRadialPos(transform.position);
-		StatsHolder projectileStats = new StatsHolder(
-			"Projectile",
-			Parameters.PROJECTILE_SPEED,
-			this.Damage,
-			Parameters.PROJECTILE_RANGE,
-			1.0f, //Health of projectile does not matter since they are invunerable.
-			Parameters.PROJECTILE_SCALE,
-			Parameters.PROJECTILE_COLOR,
-			thisRadialPos.GetAngle(),
-			thisRadialPos.GetRadius()
-		);
-		projectileStats.SetSelfDestruct(true);
-		projectileStats.SetInvunerable(true);
-		
+		StatsHolder projectileStats = EnemyFactory.Projectile(this.Damage,thisRadialPos.GetRadius(),thisRadialPos.GetAngle());
 		initEnemy.GetComponent<Enemy> ().SetStats (projectileStats);
 	}
 
