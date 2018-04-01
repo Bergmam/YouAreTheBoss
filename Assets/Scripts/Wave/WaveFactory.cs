@@ -52,6 +52,32 @@ public class WaveFactory
                 }
                 break;
 
+            case 7:
+                float angle = UnityEngine.Random.value * 360;
+                for(int i = 0; i < 4; i++){
+                    subWave = new SubWave(0.1f);
+                    stats = EnemyFactory.Rotator(true);
+                    stats.spawnAngle = angle + i * 2;
+                    stats.predefinedPosition = true;
+                    subWave.AddEnemy(stats);
+                    wave.Add(subWave);
+                }
+                subWave = new SubWave(2.0f);
+                    stats = EnemyFactory.Rotator(true);
+                    stats.spawnAngle = angle + 8;
+                    stats.predefinedPosition = true;
+                    subWave.AddEnemy(stats);
+                    wave.Add(subWave);
+                for(int i = 0; i < 5; i++){
+                    subWave = new SubWave(0.1f);
+                    stats = EnemyFactory.Rotator(false);
+                    stats.spawnAngle = (angle + 180) % 360 + i * 2;
+                    stats.predefinedPosition = true;
+                    subWave.AddEnemy(stats);
+                    wave.Add(subWave);
+                }
+                break;
+
             case 8:
                 subWave = new SubWave(0.0f);
                 for(int i = 0; i < 360; i += 45){
