@@ -11,4 +11,16 @@ public static class Parameters {
 	public static float PROJECTILE_SCALE = 0.3f;
 	public static Color PROJECTILE_COLOR = Color.black;
 	public static float ARENA_BOTTOM = -4.0f;
+
+	public static float SLOW_ATTACK_LIMIT = 2.5f;
+
+	public static Color AIM_DEFAULT_COLOR = new Color(0.0f,0.0f,0.0f,0.2f);
+
+	public static Color AIM_DAMAGE_COLOR = new Color(1.0f,0.0f,0.0f,0.7f);
+
+	public static Color[] COLOR_LIST = new Color[3] {Color.red, Color.blue, Color.green};
+	public static Color ENEMY_ATTACK_COLOR = Color.black;
+
+	public static float ENEMY_SPAWN_RADIUS = 5f;
+	public static int NUMBER_OF_ATTACKS = 4;
 }

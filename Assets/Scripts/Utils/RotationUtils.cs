@@ -17,10 +17,14 @@ public class RotationUtils
 	/// <param name="high">The high value for angle to be compared with.</param>
 	public static bool InCounterClockwiseLimits(float angle, float low, float high)
 	{
+        angle = MakePositiveAngle(angle);
+        low = MakePositiveAngle(low);
+        high = MakePositiveAngle(high);
+
 		bool zeroInLimits = high < low;
 		bool inLimitsAroundZero = zeroInLimits && (angle < high || angle > low);
 		bool inLimitsWithoutZero = !zeroInLimits && (angle > low && angle < high);
-		return inLimitsAroundZero || inLimitsWithoutZero;
+		return inLimitsAroundZero || inLimitsWithoutZero || low == high;
 	}	
 
 	/// <summary>
@@ -30,6 +34,9 @@ public class RotationUtils
 	/// <param name="high">The High angle.</param>
 	public static float MiddleOfRotations(float low, float high)
 	{
+        low = MakePositiveAngle(low);
+        high = MakePositiveAngle(high);
+
 		//High has to be highter than low. Need to check if high is equal to or has passed zero.
 		if (InCounterClockwiseLimits (0.0f, low, high) || high == 0)
 		{
@@ -101,20 +108,27 @@ public class RotationUtils
         return angle % 360;
     }
 
-    // public static float CoordinateToRotPos(Vector2 position)
-    // {
-    //     float x = position.x;
-    //     float y = position.y;
-    //     float angle;
+	public static Vector3 RadialPosToXY(RadialPosition radialPosition){
+        float angle = radialPosition.GetAngle ();
+        angle = MakePositiveAngle(angle);
+		float radius = radialPosition.GetRadius ();
+		float x = Mathf.Cos (Mathf.Deg2Rad * angle) * radius;
+        float y = Mathf.Sin (Mathf.Deg2Rad * angle) * radius;
+        if (Mathf.Abs(x) < 0.001)
+        {
+            x = 0;
+        }
+        if (Mathf.Abs(y) < 0.001)
+        {
+            y = 0;
+        }
+		return new Vector3 (x, y);
+	}
 
-    //     if (x >= 0 && y < 0) {
-    //         angle = Mathf.Atan2(x, -y);
-    //     } else if (x >= 0 && y >= 0) {
-    //         angle = Mathf.PI / 2 + Mathf.Atan2(y, x);
-    //     } else if (x < 0 && y >= 0) {
-    //         angle = Mathf.PI + Mathf.Atan2(-x, y);
-    //     } else {
-    //         angle = (3 * Mathf.PI) / 2 + Mathf.Atan2(-y, -x);
-    //     }
-    // } 
+	public static RadialPosition XYToRadialPos (Vector3 position){
+        float angle = Mathf.Rad2Deg * Mathf.Atan2(position.y,position.x);
+        float radius = new Vector2(position.x, position.y).magnitude;
+        angle = MakePositiveAngle (angle);
+		return new RadialPosition (radius, angle);
+	}
 }

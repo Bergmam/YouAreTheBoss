@@ -2,12 +2,25 @@
 
 public class StatsHolder {
 	public string Name;
-	public float MovementSpeed;
+    public float MovementSpeed;
+    public float angularSpeed;
 	public float Damage;
 	public float Range;
 	public float Health;
 	public float Scale;
 	public Color Color;
+	public bool predefinedPosition;
+	public float spawnAngle;
+	public float spawnRadius;
+	public bool selfDestruct;
+	public bool invunerable;
+	public float circlingSpeed;
+	public bool requiredKill;
+	public StatsHolder projectile;
+	public float attackDelay;
+
+	public float zigZagAngle;
+	public bool zigZag;
 
 	public StatsHolder(string name, 
 		float MovementSpeed, 
@@ -23,5 +36,18 @@ public class StatsHolder {
 		this.Health = Health;
 		this.Scale = Scale;
 		this.Color = Color;
+        this.angularSpeed = 0f;
+		this.predefinedPosition = false;
+		this.spawnRadius = Parameters.ENEMY_SPAWN_RADIUS;
+		this.requiredKill = true;
+		this.attackDelay = 0.5f;
+		this.zigZag = false;
+	}
+
+	public void SetRadialSpawnPosition(float spawnAngle, float spawnRadius)
+	{
+		this.predefinedPosition = true;
+		this.spawnAngle = spawnAngle;
+		this.spawnRadius = spawnRadius;
 	}
 }

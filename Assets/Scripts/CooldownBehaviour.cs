@@ -8,11 +8,11 @@ public class CooldownBehaviour : MonoBehaviour {
 	private Image image;
 	private float originalCooldownValue;
 	private float cooldown;
-	private Button parentButton;
+	private Toggle parentButton;
 
 	void Awake ()
 	{
-		this.parentButton = transform.parent.GetComponent<Button> ();
+		this.parentButton = transform.parent.GetComponent<Toggle> ();
 		this.image = GetComponent<Image> ();
 		if (this.image == null) {
 			Destroy (this);

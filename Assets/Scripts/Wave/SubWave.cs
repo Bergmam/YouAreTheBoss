@@ -30,4 +30,14 @@ public class SubWave {
 		}
 	}
 
+	public int RequiredKillEnemyCount()
+	{
+		int count = 0;
+		foreach(StatsHolder enemy in enemies){
+			if(enemy.requiredKill){
+				count++;
+			}
+		}
+		return count;
+	}
 }
