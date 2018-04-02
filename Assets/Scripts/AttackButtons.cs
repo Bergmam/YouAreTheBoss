@@ -37,9 +37,35 @@ public class AttackButtons : MonoBehaviour {
 	}
 
 	public void EnablePopUp(Button button) {
-		attackPopUp.SetActive(true);
-		Button yesButton = UnityUtils.RecursiveFind(attackPopUp.transform, "YesButton").GetComponent<Button>();
-		yesButton.onClick.AddListener( () => { OnPressButtonHandling(button); });
+		if (button.image.color == Color.white && clickedButtons.Count < 3) {
+			attackPopUp.SetActive(true);
+
+			int buttonNumber = Int32.Parse(button.transform.name.Replace("Attack ", ""));
+			BossAttack attack = AttackLists.allAttacks[buttonNumber];
+			UnityUtils.RecursiveFind(attackPopUp.transform, "AttackName").GetComponent<Text>().text = attack.name;
+
+			Text text = UnityUtils.RecursiveFind(attackPopUp.transform,  "AttackInfoText").GetComponent<Text>();
+			text.text = 
+				"Damage: " + attack.damage + "\n" +
+				"Speed: " + attack.frequency + "\n" + 
+				"Width: " + attack.angle * 2 + " degrees\n"; 
+			
+			if (attack.closeRadius == 0 && attack.farRadius < 2.5f) {
+				text.text += "Reach: Melee";
+			} else if (attack.closeRadius >= 2.0f) {
+				text.text += "Reach: Only ranged";
+			} else if (attack.closeRadius <= 1.0f && attack.farRadius >= 4.0f) {
+				text.text += "Reach: Melee & Ranged";
+			} else {
+				text.text += "Reach: Medium";
+			}
+
+			Button yesButton = UnityUtils.RecursiveFind(attackPopUp.transform, "YesButton").GetComponent<Button>();
+			yesButton.onClick.AddListener( () => { OnPressButtonHandling(button); });
+		} else {
+			OnPressButtonHandling(button);
+		}
+		
 	}
 
 	public void DisablePopUp() {
@@ -62,7 +88,7 @@ public class AttackButtons : MonoBehaviour {
 					colorTaken.RemoveAt(index);
 					colorTaken.Insert(index, new KeyValuePair<Color, bool>(keyVal.Key, true));
 					AttackLists.chosenAttacksArray[index] = AttackLists.allAttacks[buttonNumber];
-					break;
+					break; 
 				}
 			}
 			clickedButtons.Add(button);
