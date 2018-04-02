@@ -11,7 +11,13 @@ public class AttackButtons : MonoBehaviour {
 
 	Button playButton;
 
+	GameObject attackPopUp;
+
 	void Start() {
+		attackPopUp = GameObject.Find("AttackPopUp");
+		attackPopUp.SetActive(false);
+
+
 		playButton = GameObject.Find("PlayButton").GetComponent<Button>();
 		playButton.interactable = false;
 
@@ -30,7 +36,20 @@ public class AttackButtons : MonoBehaviour {
 		}
 	}
 
+	public void EnablePopUp(Button button) {
+		attackPopUp.SetActive(true);
+		Button yesButton = UnityUtils.RecursiveFind(attackPopUp.transform, "YesButton").GetComponent<Button>();
+		yesButton.onClick.AddListener( () => { OnPressButtonHandling(button); });
+	}
+
+	public void DisablePopUp() {
+		UnityUtils.RecursiveFind(attackPopUp.transform, "YesButton").GetComponent<Button>().onClick.RemoveAllListeners();
+		attackPopUp.SetActive(false);
+	}
+
 	public void OnPressButtonHandling(Button button) {
+		UnityUtils.RecursiveFind(attackPopUp.transform, "YesButton").GetComponent<Button>().onClick.RemoveAllListeners();
+		attackPopUp.SetActive(false);
 
 		int buttonNumber = Int32.Parse(button.transform.name.Replace("Attack ", ""));
 
