@@ -47,7 +47,7 @@ public class AttackButtons : MonoBehaviour {
 			Text text = UnityUtils.RecursiveFind(attackPopUp.transform,  "AttackInfoText").GetComponent<Text>();
 			text.text = 
 				"Damage: " + attack.damage + "\n" +
-				"Speed: " + attack.frequency + "\n" + 
+				"Cooldown: " + attack.frequency + "\n" + 
 				"Width: " + attack.angle * 2 + " degrees\n"; 
 			
 			if (attack.closeRadius == 0 && attack.farRadius < 2.5f) {
