@@ -24,8 +24,8 @@ public class RotationUtils
 		bool zeroInLimits = high < low;
 		bool inLimitsAroundZero = zeroInLimits && (angle < high || angle > low);
 		bool inLimitsWithoutZero = !zeroInLimits && (angle > low && angle < high);
-        bool lowEqualsHigh = Mathf.Abs(high-low) < 0.05f;
-        if(Mathf.Abs(high-low) > 0.05f && Mathf.Abs(high-low) < 5f){
+        bool lowEqualsHigh = Mathf.Abs(high-low) < 0.0001f;
+        if(Mathf.Abs(high-low) > 0.0001f && Mathf.Abs(high-low) < 0.05f){
             throw new System.Exception("An angle of size " + Mathf.Abs(high-low) + " was found!");
         }
 		return inLimitsAroundZero || inLimitsWithoutZero || lowEqualsHigh;
