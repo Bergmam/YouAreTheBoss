@@ -42,7 +42,8 @@ public class AttackButtons : MonoBehaviour {
 	}
 
 	public void EnablePopUp(Button button) {
-		if (button.image.color == Color.white && clickedButtons.Count < 3) {
+		Image panelImage = button.transform.parent.Find("Panel").GetComponent<Image>();
+		if (panelImage.color == Color.white && clickedButtons.Count < 3) {
 			foreach(Button relevantButton in relevantButtons) {
 				relevantButton.interactable = false;
 			}
@@ -92,16 +93,18 @@ public class AttackButtons : MonoBehaviour {
 
 		int buttonNumber = Int32.Parse(button.transform.name.Replace("Attack ", ""));
 
-		if (button.image.color == Color.white && clickedButtons.Count < 3) {
+		Image panelImage = button.transform.parent.Find("Panel").GetComponent<Image>();
+
+		if (panelImage.color == Color.white && clickedButtons.Count < 3) {
 		
 			foreach(KeyValuePair<Color, bool> keyVal in colorTaken){
 				if(!keyVal.Value){
-					button.image.color = keyVal.Key;
+					panelImage.color = keyVal.Key;
 					int index = colorTaken.IndexOf(keyVal);
 					colorTaken.RemoveAt(index);
 					colorTaken.Insert(index, new KeyValuePair<Color, bool>(keyVal.Key, true));
 					AttackLists.chosenAttacksArray[index] = AttackLists.allAttacks[buttonNumber];
-					break; 
+					break;
 				}
 			}
 			clickedButtons.Add(button);
@@ -114,7 +117,7 @@ public class AttackButtons : MonoBehaviour {
 				relevantButton.interactable = true;
 			}
 
-		} else if (button.image.color != Color.white) {
+		} else if (panelImage.color != Color.white) {
 
 			foreach(KeyValuePair<Color, bool> keyVal in colorTaken){
 				if (keyVal.Key == button.image.color) {
@@ -126,7 +129,7 @@ public class AttackButtons : MonoBehaviour {
 				}
 			}
 
-			clickedButtons[clickedButtons.IndexOf(button)].image.color = Color.white;
+			clickedButtons[clickedButtons.IndexOf(button)].transform.parent.GetComponent<Image>().color = Color.white;
 			clickedButtons.Remove(button);
 
 			if (clickedButtons.Count < 3) {
