@@ -11,7 +11,7 @@ public class WaveUnitsText : MonoBehaviour {
 
 		Text text = GetComponent<Text>();
 
-		waveSummary = Summarize(WaveFactory.GenerateWave(WaveNumber.waveNumber));
+		//waveSummary = Summarize(WaveFactory.GenerateWave(WaveNumber.waveNumber));
 
 		string enemyInfoText = "";
 		List<string> nameList = new List<string>();
@@ -26,29 +26,5 @@ public class WaveUnitsText : MonoBehaviour {
 		}
 		text.text = enemyInfoText.ToUpper();
 		
-	}
-
-	public Dictionary<string, int> Summarize(List<SubWave> wave)
-	{
-		Dictionary<string, int> summary = new Dictionary<string, int>();
-		foreach(SubWave subWave in wave)
-		{
-			foreach(StatsHolder enemyStats in subWave.GetEnemies())
-			{
-				foreach(KeyValuePair<string, bool> attribute in enemyStats.GetAttributes()){
-					if(attribute.Value){
-						if(!summary.ContainsKey(attribute.Key)){
-							summary.Add(attribute.Key, 1);
-						}
-						else
-						{
-							summary[attribute.Key]++;
-						}
-					}
-				}
-			}
-		}
-		
-		return summary;
 	}
 }
