@@ -23,7 +23,7 @@ public class EnemySpawner : MonoBehaviour {
 		{
 			delay -= Time.deltaTime;
 		}
-		else
+		else if (currentWave != null)
 		{
 			if (currentSubWaveNumber < currentWave.Count) // Spawn all subwaves of a wave, one at a time with delay between. 
 			{
