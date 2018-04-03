@@ -120,7 +120,7 @@ public class AttackButtons : MonoBehaviour {
 		} else if (panelImage.color != Color.white) {
 
 			foreach(KeyValuePair<Color, bool> keyVal in colorTaken){
-				if (keyVal.Key == button.image.color) {
+				if (keyVal.Key == panelImage.color) {
 					int index = colorTaken.IndexOf(keyVal);
 					colorTaken.RemoveAt(index);
 					colorTaken.Insert(index, new KeyValuePair<Color, bool>(keyVal.Key, false));
@@ -129,7 +129,7 @@ public class AttackButtons : MonoBehaviour {
 				}
 			}
 
-			clickedButtons[clickedButtons.IndexOf(button)].transform.parent.GetComponent<Image>().color = Color.white;
+			clickedButtons[clickedButtons.IndexOf(button)].transform.parent.Find("Panel").GetComponent<Image>().color = Color.white;
 			clickedButtons.Remove(button);
 
 			if (clickedButtons.Count < 3) {
