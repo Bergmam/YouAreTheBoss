@@ -23,4 +23,8 @@ public static class Parameters {
 
 	public static float ENEMY_SPAWN_RADIUS = 5f;
 	public static int NUMBER_OF_ATTACKS = 4;
+
+	public static float STRONG_ENEMY_MIN_DAMAGE = 2.0f;
+	public static float FAST_ENEMY_MIN_SPEED = 3.0f;
+	public static float DURABLE_ENEMY_MIN_HEALTH = 200f;
 }
