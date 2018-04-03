@@ -14,6 +14,8 @@ public class AttackButtons : MonoBehaviour {
 	GameObject attackPopUp;
 	List<Button> relevantButtons = new List<Button>();
 
+	Color whiteNoAlpha = new Color(1, 1, 1, 0);
+
 	void Start() {
 		attackPopUp = GameObject.Find("AttackPopUp");
 		attackPopUp.SetActive(false);
@@ -43,7 +45,7 @@ public class AttackButtons : MonoBehaviour {
 
 	public void EnablePopUp(Button button) {
 		Image panelImage = button.transform.parent.Find("Panel").GetComponent<Image>();
-		if (panelImage.color == Color.white && clickedButtons.Count < 3) {
+		if (panelImage.color == whiteNoAlpha && clickedButtons.Count < 3) {
 			foreach(Button relevantButton in relevantButtons) {
 				relevantButton.interactable = false;
 			}
@@ -95,7 +97,7 @@ public class AttackButtons : MonoBehaviour {
 
 		Image panelImage = button.transform.parent.Find("Panel").GetComponent<Image>();
 
-		if (panelImage.color == Color.white && clickedButtons.Count < 3) {
+		if (panelImage.color == whiteNoAlpha && clickedButtons.Count < 3) {
 		
 			foreach(KeyValuePair<Color, bool> keyVal in colorTaken){
 				if(!keyVal.Value){
@@ -117,7 +119,7 @@ public class AttackButtons : MonoBehaviour {
 				relevantButton.interactable = true;
 			}
 
-		} else if (panelImage.color != Color.white) {
+		} else if (panelImage.color != whiteNoAlpha) {
 
 			foreach(KeyValuePair<Color, bool> keyVal in colorTaken){
 				if (keyVal.Key == panelImage.color) {
@@ -129,7 +131,7 @@ public class AttackButtons : MonoBehaviour {
 				}
 			}
 
-			clickedButtons[clickedButtons.IndexOf(button)].transform.parent.Find("Panel").GetComponent<Image>().color = Color.white;
+			clickedButtons[clickedButtons.IndexOf(button)].transform.parent.Find("Panel").GetComponent<Image>().color = new Color(1, 1, 1, 0);
 			clickedButtons.Remove(button);
 
 			if (clickedButtons.Count < 3) {
