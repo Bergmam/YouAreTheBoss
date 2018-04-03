@@ -12,13 +12,18 @@ public class AttackButtons : MonoBehaviour {
 	Button playButton;
 
 	GameObject attackPopUp;
+	List<Button> relevantButtons = new List<Button>();
 
 	void Start() {
 		attackPopUp = GameObject.Find("AttackPopUp");
 		attackPopUp.SetActive(false);
 
+		for(int i = 0; i <= 3; i++) {
+			relevantButtons.Add(GameObject.Find("Attack " + i).GetComponent<Button>());
+		}
 
 		playButton = GameObject.Find("PlayButton").GetComponent<Button>();
+		relevantButtons.Add(playButton);
 		playButton.interactable = false;
 
 		foreach(Color color in Parameters.COLOR_LIST){
@@ -38,6 +43,10 @@ public class AttackButtons : MonoBehaviour {
 
 	public void EnablePopUp(Button button) {
 		if (button.image.color == Color.white && clickedButtons.Count < 3) {
+			foreach(Button relevantButton in relevantButtons) {
+				relevantButton.interactable = false;
+			}
+
 			attackPopUp.SetActive(true);
 
 			int buttonNumber = Int32.Parse(button.transform.name.Replace("Attack ", ""));
@@ -70,6 +79,10 @@ public class AttackButtons : MonoBehaviour {
 
 	public void DisablePopUp() {
 		UnityUtils.RecursiveFind(attackPopUp.transform, "YesButton").GetComponent<Button>().onClick.RemoveAllListeners();
+		foreach(Button relevantButton in relevantButtons) {
+			relevantButton.interactable = true;
+		}
+
 		attackPopUp.SetActive(false);
 	}
 
@@ -95,6 +108,10 @@ public class AttackButtons : MonoBehaviour {
 
 			if (!playButton.interactable && clickedButtons.Count == 3) {
 				playButton.interactable = true;
+			}
+
+			foreach(Button relevantButton in relevantButtons) {
+				relevantButton.interactable = true;
 			}
 
 		} else if (button.image.color != Color.white) {
