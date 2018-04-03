@@ -57,7 +57,12 @@ public class AttackButtons : MonoBehaviour {
 			UnityUtils.RecursiveFind(attackPopUp.transform, "AttackName").GetComponent<Text>().text = attack.name;
 
 			Text text = UnityUtils.RecursiveFind(attackPopUp.transform,  "AttackInfoText").GetComponent<Text>();
-			text.text = 
+			if (attack.frequency >= Parameters.SLOW_ATTACK_LIMIT) {
+				text.text = "Type: Active\n";
+			} else {
+				text.text = "Type: Passive\n";
+			}
+			text.text += 
 				"Damage: " + attack.damage + "\n" +
 				"Cooldown: " + attack.frequency + "\n" + 
 				"Width: " + attack.angle * 2 + " degrees\n"; 
