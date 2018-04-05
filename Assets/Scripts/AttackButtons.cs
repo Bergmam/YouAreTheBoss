@@ -88,7 +88,9 @@ public class AttackButtons : MonoBehaviour {
 	public void DisablePopUp() {
 		UnityUtils.RecursiveFind(attackPopUp.transform, "YesButton").GetComponent<Button>().onClick.RemoveAllListeners();
 		foreach(Button relevantButton in relevantButtons) {
-			relevantButton.interactable = true;
+			if (relevantButton.name != "PlayButton") {
+				relevantButton.interactable = true;
+			}
 		}
 
 		attackPopUp.SetActive(false);
@@ -121,7 +123,9 @@ public class AttackButtons : MonoBehaviour {
 			}
 
 			foreach(Button relevantButton in relevantButtons) {
-				relevantButton.interactable = true;
+				if (relevantButton.name != "PlayButton") {
+					relevantButton.interactable = true;
+				}
 			}
 
 		} else if (panelImage.color != whiteNoAlpha) {
