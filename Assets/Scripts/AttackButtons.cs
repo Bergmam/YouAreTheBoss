@@ -16,7 +16,22 @@ public class AttackButtons : MonoBehaviour {
 
 	Color whiteNoAlpha = new Color(1, 1, 1, 0);
 
+	GameObject attackButtonPrefab;
+
 	void Start() {
+		attackButtonPrefab = Resources.Load("Prefabs/AttackButton", typeof(GameObject)) as GameObject;
+		for(int i = 1; i <= AttackLists.allAttacks.Count; i++){
+			GameObject instantiatedButtonPrefab = Instantiate(attackButtonPrefab, transform);
+			//instantiatedButtonPrefab.transform.SetParent(transform);
+			instantiatedButtonPrefab.name = "Attack " + (i-1) + " Object";
+			GameObject buttonObject = UnityUtils.RecursiveContains(instantiatedButtonPrefab.transform, "Attack")[1];
+			buttonObject.name = "Attack " + (i-1);
+			Button button = buttonObject.GetComponent<Button>();
+			button.onClick.AddListener(() =>
+				gameObject.GetComponent<AttackButtons>().EnablePopUp(button));
+			button.transform.Find("Text").GetComponent<Text>().text = i.ToString();
+		}
+
 		attackPopUp = GameObject.Find("AttackPopUp");
 		attackPopUp.SetActive(false);
 
