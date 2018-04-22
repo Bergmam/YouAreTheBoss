@@ -23,7 +23,9 @@ public class AttackButtons : MonoBehaviour {
 	void Start() {
 		int buttonIndex = AttackLists.allAttacks.Count - 1;
 		attackButtonPrefab = Resources.Load("Prefabs/AttackButton", typeof(GameObject)) as GameObject;
+		print("===============");
 		for(int i = 1; i <= AttackLists.allAttacks.Count; i++){
+			print("creating attack butotn: " + i);
 			CreateAttackButton(i);
 		}
 
@@ -33,7 +35,16 @@ public class AttackButtons : MonoBehaviour {
 
 		// Handle pop-up for adding extra moves
 		upgradePopUp = GameObject.Find("UpgradePopUp");
+
+		// If we are on a certain wave number and have upgrade attacks left that we can choose from
 		if (WaveNumber.waveNumber % Parameters.ATTACK_UPGRADE_WAVE_NUMBER == 0 && WaveNumber.waveNumber != 0 && AttackLists.choseableUpgradeAttacks.Count >= 2) {
+			// Create list of all available indexes be able to remove indices instead of the actual attacks
+			List<int> choseableIndices = new List<int>();
+			int i = 0;
+			foreach(BossAttack attack in AttackLists.choseableUpgradeAttacks){
+				choseableIndices.Add(i);
+				i++;
+			}
 			DisableButtons();
 
 			GameObject attackButton1 = UnityUtils.RecursiveFind(upgradePopUp.transform, "Attack1Button").gameObject;
@@ -42,27 +53,24 @@ public class AttackButtons : MonoBehaviour {
 			GameObject attackText2 = UnityUtils.RecursiveFind(upgradePopUp.transform, "Attack2Name").gameObject;
 
 			// Get index of random attack from choseableUpgradeAttacks
-			int index = UnityEngine.Random.Range(0, AttackLists.choseableUpgradeAttacks.Count - 1);
-			//AttackLists.chosenUpgradeAttacks.Add(AttackLists.choseableUpgradeAttacks[index]);
-			AttackLists.allAttacks.Add(AttackLists.choseableUpgradeAttacks[index]);
+			int randomNumber = UnityEngine.Random.Range(0, choseableIndices.Count);
+			int index = choseableIndices[randomNumber];
+			// Remove from indexarray so that we do not pick the same attack twice
+			choseableIndices.Remove(randomNumber);
 			attackText1.GetComponent<Text>().text = AttackLists.choseableUpgradeAttacks[index].name;
 			SetButtonText(attackButton1.transform.Find("Text").GetComponent<Text>(), AttackLists.choseableUpgradeAttacks[index]);
 			attackButton1.GetComponent<Button>().onClick.AddListener(() => {
 				ChooseUpgrade(AttackLists.choseableUpgradeAttacks[index]);
 			});
-			// Remove the attack from choseableUpgradeAttacks so the other button do not get the same attack
-			// TODO: DONT REMOVE THE ATTACK, PICK FROM INDEX INSTEAD
-		//	AttackLists.choseableUpgradeAttacks.RemoveAt(index);
-			
+
 			// Get new index of attack,
-			index = UnityEngine.Random.Range(0, AttackLists.choseableUpgradeAttacks.Count - 1);
+			randomNumber = UnityEngine.Random.Range(0, choseableIndices.Count);
+			index = choseableIndices[randomNumber];
 			attackText2.GetComponent<Text>().text = AttackLists.choseableUpgradeAttacks[index].name;
 			SetButtonText(attackButton2.transform.Find("Text").GetComponent<Text>(), AttackLists.choseableUpgradeAttacks[index]);
-			// TODO: DONT REMOVE THE ATTACK, PICK FROM INDEX INSTEAD		
 			attackButton2.GetComponent<Button>().onClick.AddListener(() => {
 				ChooseUpgrade(AttackLists.choseableUpgradeAttacks[index]);
 			});
-			//AttackLists.choseableUpgradeAttacks.RemoveAt(index);
 
 		} else {
 			upgradePopUp.SetActive(false);
@@ -92,18 +100,16 @@ public class AttackButtons : MonoBehaviour {
 
 	void CreateAttackButton(int i) {
 		GameObject instantiatedButtonPrefab = Instantiate(attackButtonPrefab, transform);
-			instantiatedButtonPrefab.name = "Attack " + (i-1) + " Object";
-			GameObject buttonObject = UnityUtils.RecursiveContains(instantiatedButtonPrefab.transform, "Attack")[1];
-			buttonObject.name = "Attack " + (i-1);
-			Button button = buttonObject.GetComponent<Button>();
-			button.onClick.AddListener(() =>
-				gameObject.GetComponent<AttackButtons>().EnablePopUp(button));
-			button.transform.Find("Text").GetComponent<Text>().text = i.ToString();
-			highestButtonIndex = i;
+		instantiatedButtonPrefab.name = "Attack " + (i-1) + " Object";
+		GameObject buttonObject = UnityUtils.RecursiveContains(instantiatedButtonPrefab.transform, "Attack")[1];
+		buttonObject.name = "Attack " + (i-1);
+		Button button = buttonObject.GetComponent<Button>();
+		button.onClick.AddListener(() => gameObject.GetComponent<AttackButtons>().EnablePopUp(button));
+		button.transform.Find("Text").GetComponent<Text>().text = i.ToString();
+		highestButtonIndex = i;
 	}
 
 	public void ChooseUpgrade(BossAttack attack){
-	//	AttackLists.chosenUpgradeAttacks.Add(attack);
 		if (!AttackLists.allAttacks.Contains(attack)) {
 			AttackLists.allAttacks.Add(attack);
 		}
