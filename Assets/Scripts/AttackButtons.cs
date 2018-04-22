@@ -27,17 +27,13 @@ public class AttackButtons : MonoBehaviour {
 			CreateAttackButton(i);
 		}
 
-		for(int i = buttonIndex; i <= AttackLists.chosenUpgradeAttacks.Count - 1 + buttonIndex; i++){
-			CreateAttackButton(i);
-		}
-
-		for(int i = 0; i <= 3; i++) {
+		for(int i = 0; i < highestButtonIndex; i++) {
 			relevantButtons.Add(GameObject.Find("Attack " + i).GetComponent<Button>());
 		}
 
 		// Handle pop-up for adding extra moves
 		upgradePopUp = GameObject.Find("UpgradePopUp");
-		if (WaveNumber.waveNumber % Parameters.ATTACK_UPGRADE_WAVE_NUMBER == 0 && WaveNumber.waveNumber != 0) {
+		if (WaveNumber.waveNumber % Parameters.ATTACK_UPGRADE_WAVE_NUMBER == 0 && WaveNumber.waveNumber != 0 && AttackLists.choseableUpgradeAttacks.Count >= 2) {
 			DisableButtons();
 
 			GameObject attackButton1 = UnityUtils.RecursiveFind(upgradePopUp.transform, "Attack1Button").gameObject;
@@ -47,7 +43,8 @@ public class AttackButtons : MonoBehaviour {
 
 			// Get index of random attack from choseableUpgradeAttacks
 			int index = UnityEngine.Random.Range(0, AttackLists.choseableUpgradeAttacks.Count - 1);
-			AttackLists.chosenUpgradeAttacks.Add(AttackLists.choseableUpgradeAttacks[index]);
+			//AttackLists.chosenUpgradeAttacks.Add(AttackLists.choseableUpgradeAttacks[index]);
+			AttackLists.allAttacks.Add(AttackLists.choseableUpgradeAttacks[index]);
 			attackText1.GetComponent<Text>().text = AttackLists.choseableUpgradeAttacks[index].name;
 			SetButtonText(attackButton1.transform.Find("Text").GetComponent<Text>(), AttackLists.choseableUpgradeAttacks[index]);
 			attackButton1.GetComponent<Button>().onClick.AddListener(() => {
@@ -55,17 +52,17 @@ public class AttackButtons : MonoBehaviour {
 			});
 			// Remove the attack from choseableUpgradeAttacks so the other button do not get the same attack
 			// TODO: DONT REMOVE THE ATTACK, PICK FROM INDEX INSTEAD
-			AttackLists.choseableUpgradeAttacks.RemoveAt(index);
+		//	AttackLists.choseableUpgradeAttacks.RemoveAt(index);
 			
 			// Get new index of attack,
 			index = UnityEngine.Random.Range(0, AttackLists.choseableUpgradeAttacks.Count - 1);
 			attackText2.GetComponent<Text>().text = AttackLists.choseableUpgradeAttacks[index].name;
 			SetButtonText(attackButton2.transform.Find("Text").GetComponent<Text>(), AttackLists.choseableUpgradeAttacks[index]);
-			// TODO: DONT REMOVE THE ATTACK, PICK FROM INDEX INSTEAD
-			AttackLists.choseableUpgradeAttacks.RemoveAt(index);
+			// TODO: DONT REMOVE THE ATTACK, PICK FROM INDEX INSTEAD		
 			attackButton2.GetComponent<Button>().onClick.AddListener(() => {
 				ChooseUpgrade(AttackLists.choseableUpgradeAttacks[index]);
 			});
+			//AttackLists.choseableUpgradeAttacks.RemoveAt(index);
 
 		} else {
 			upgradePopUp.SetActive(false);
@@ -83,7 +80,7 @@ public class AttackButtons : MonoBehaviour {
 		}
 
 		// If we have previously chosen some attacks and entered the fighting scene
-		if (AttackLists.pressedButtonNameList.Count > 0){
+		if (AttackLists.pressedButtonNameList.Count > 0 && !upgradePopUp.activeSelf){
 			playButton.interactable = true;
 			foreach(string buttonName in AttackLists.pressedButtonNameList)
 			{
@@ -106,7 +103,10 @@ public class AttackButtons : MonoBehaviour {
 	}
 
 	public void ChooseUpgrade(BossAttack attack){
-		AttackLists.chosenUpgradeAttacks.Add(attack);
+	//	AttackLists.chosenUpgradeAttacks.Add(attack);
+		if (!AttackLists.allAttacks.Contains(attack)) {
+			AttackLists.allAttacks.Add(attack);
+		}
 		CreateAttackButton(highestButtonIndex + 1);
 		DisableUpgradePopUp();
 	}
