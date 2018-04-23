@@ -23,9 +23,7 @@ public class AttackButtons : MonoBehaviour {
 	void Start() {
 		int buttonIndex = AttackLists.allAttacks.Count - 1;
 		attackButtonPrefab = Resources.Load("Prefabs/AttackButton", typeof(GameObject)) as GameObject;
-		print("===============");
 		for(int i = 1; i <= AttackLists.allAttacks.Count; i++){
-			print("creating attack butotn: " + i);
 			CreateAttackButton(i);
 		}
 
