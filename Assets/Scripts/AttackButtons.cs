@@ -187,10 +187,6 @@ public class AttackButtons : MonoBehaviour {
 			}
 			clickedButtons.Add(button);
 
-			if (!playButton.interactable && clickedButtons.Count == 3) {
-				playButton.interactable = true;
-			}
-			
 			if (!upgradePopUp.activeSelf) {
 				foreach(Button relevantButton in relevantButtons) {
 					if (relevantButton.name != "PlayButton") {
@@ -198,7 +194,15 @@ public class AttackButtons : MonoBehaviour {
 					}
 				}
 			}
-			
+
+			if (!playButton.interactable && clickedButtons.Count == 3) {
+				playButton.interactable = true;
+				foreach(Button relevantButton in relevantButtons){
+					if (!clickedButtons.Contains(relevantButton) && relevantButton != playButton) {
+						relevantButton.interactable = false;
+					}
+				}
+			}		
 
 		} else if (panelImage.color != whiteNoAlpha) {
 
@@ -216,6 +220,11 @@ public class AttackButtons : MonoBehaviour {
 			clickedButtons.Remove(button);
 
 			if (clickedButtons.Count < 3) {
+				foreach(Button relevantButton in relevantButtons){
+					if (relevantButton != playButton) {
+						relevantButton.interactable = true;
+					}
+				}
 				playButton.interactable = false;
 			}
 
