@@ -93,6 +93,12 @@ public class AttackButtons : MonoBehaviour {
 				Button actualButton = GameObject.Find(buttonName).GetComponent<Button>();
 				OnPressButtonHandling(actualButton);
 			}
+
+			foreach(Button relevantButton in relevantButtons){
+				if (!AttackLists.pressedButtonNameList.Contains(relevantButton.name) && relevantButton != playButton) {
+					relevantButton.interactable = false;
+				}
+			}
 		}
 	}
 
