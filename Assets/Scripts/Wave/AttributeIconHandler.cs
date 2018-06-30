@@ -14,20 +14,24 @@ public class AttributeIconHandler : MonoBehaviour
     private float maxScale = 1.0f;
     private Dictionary<string, string> attributeSpritePathDict = new Dictionary<string, string>()
     {
-        {"durable", "Art/UI_Icon_Plus"}
+        {"durable", "Art/UI_Icon_Plus"},
+        {"strong", "Art/UI_Icon_Plus"},
+        {"mele", "Art/UI_Icon_Plus"},
+        {"unknown", "Art/UI_Icon_Plus"}
     };
 
-    void Start()
+    public void SetAttributeAndMagnitude(string attribute, int magnitude)
     {
         this.icon = gameObject.GetComponent<Image>();
-        this.initialize("durable", 20);
-    }
-
-    public void initialize(string attribute, int magnitude)
-    {
         magnitude = Mathf.Min(magnitude, maxMagnitude);
         magnitude = Mathf.Max(magnitude, 0);
-        Sprite sprite = Resources.Load<Sprite>(attributeSpritePathDict[attribute]);
+        Sprite sprite;
+        if(attributeSpritePathDict.ContainsKey(attribute))
+        {
+            sprite = Resources.Load<Sprite>(attributeSpritePathDict[attribute]);
+        } else {
+            sprite = Resources.Load<Sprite>(attributeSpritePathDict["unknown"]);
+        }
         this.icon.sprite = sprite;
         float scale = minScale + ((maxScale - minScale) * (float)magnitude / (float)maxMagnitude);
         transform.localScale = new Vector3(scale, scale, scale);
