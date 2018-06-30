@@ -23,4 +23,6 @@ public static class Parameters {
 
 	public static float ENEMY_SPAWN_RADIUS = 5f;
 	public static int NUMBER_OF_ATTACKS = 4;
+
+	public static int ATTACK_UPGRADE_WAVE_NUMBER = 5;
 }
