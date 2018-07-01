@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class WaveSummary : MonoBehaviour {
 
@@ -8,20 +9,26 @@ public class WaveSummary : MonoBehaviour {
 
 		//Summarize current wave
 		List<SubWave> currentWave = WaveFactory.GenerateWave (WaveNumber.waveNumber);
-
-		// TODO: Sort based on value (magnitude) to make sure largets is placed first in the grid view.
 		Dictionary<string, int> waveSummary = Summarize(currentWave);
 
+		// Sort summary based on value (magnitude) to make sure largets is placed first in the grid view.
+		List<KeyValuePair<string,int>> waveSummaryList = waveSummary.ToList();
+		waveSummaryList.Sort((pair1,pair2) => pair2.Value.CompareTo(pair1.Value));
+
 		//Spawn prefab for each attribute > 0
-		foreach(KeyValuePair<string, int> waveAttribute in waveSummary)
+		foreach(KeyValuePair<string, int> waveAttribute in waveSummaryList)
 		{
 			string attribute = waveAttribute.Key;
 			int magnitude = waveAttribute.Value;
 			if(magnitude > 0){
+
+				// Place summary icons in grid view.
 				GameObject preInitIcon = Resources.Load ("Prefabs/WaveAttributeIcon", typeof(GameObject)) as GameObject;
 				GameObject icon = Instantiate (preInitIcon);
 				icon.transform.name = attribute + "Icon";
 				icon.transform.SetParent(transform, false);
+
+				// Select correct image for each summary icon panel and scale the image.
 				AttributeIconHandler attributeHandler = icon.GetComponent<AttributeIconHandler>();
 				attributeHandler.SetAttributeAndMagnitude(attribute, magnitude);
 			}
