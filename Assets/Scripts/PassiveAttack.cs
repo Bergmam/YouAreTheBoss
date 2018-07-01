@@ -23,7 +23,12 @@ public class PassiveAttack : MonoBehaviour {
 	CooldownBehaviour currentCooldownBehaviour;
 	private ColorModifier aimColorModifier;
 
+	// Handle camera shaking
+	CameraShake camShake;
+
 	void Start () {
+
+		camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
 		radialFillControl = GameObject.FindObjectOfType<RadialFillControl> ();
 		attackMaskControl = GameObject.FindObjectOfType<AttackMaskControl> ();
 		int dictIndex = 1;
@@ -64,6 +69,7 @@ public class PassiveAttack : MonoBehaviour {
 		Color zeroAlphaColor = color;
 		zeroAlphaColor.a = 0.0f;
 		object[] obj = GameObject.FindObjectsOfType(typeof (GameObject));
+		camShake.Shake(0.05f, 0.05f);
 		foreach (Enemy enemy in GameObject.FindObjectsOfType(typeof (Enemy))){
 			if (enemy.isInAttackArea(unitCircleRotation - this.currentAttack.angle, 
 					unitCircleRotation + this.currentAttack.angle, 

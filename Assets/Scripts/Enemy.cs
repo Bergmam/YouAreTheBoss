@@ -33,6 +33,9 @@ public class Enemy : MonoBehaviour {
 	private float zigZagAngleHigh;
 	private bool zigZag;
 
+	// Handle camera shaking
+	CameraShake camShake;
+
 	void Awake()
 	{
 		this.enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
@@ -42,6 +45,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 	void Start () {
+		camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
 		bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>(); // Should all units know of the hero's health?
 	}
 
@@ -92,6 +96,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 	void doDamageToBoss() {
+		camShake.Shake(0.1f, 0.1f);
 		this.colorModifier.FadeToDelected(this.attackFrequency / 3f);
 		GameObject hitParticle = Instantiate(this.hitParticle, transform.position / 2, transform.rotation);
 		var main = hitParticle.GetComponent<ParticleSystem>().main;
