@@ -11,16 +11,19 @@ public class AttributeIconHandler : MonoBehaviour
 
     // TODO: Adjust these values
     private int maxMagnitude = 20;
-    private float minScale = 0.25f;
+    private float minScale = 0.3f;
     private float maxScale = 1.0f;
 
     private Dictionary<string, string> attributeSpritePathDict = new Dictionary<string, string>()
     {
-        // TODO: Replace with correct icons
+        {"strong", "Art/UI_Icon_Skull"},
+        {"fast", "Art/UI_Icon_FastForward"},
+        {"rotating", "Art/UI_Icon_Reload"},
+        {"ranged", "Art/UI_Icon_Archer"},
         {"durable", "Art/UI_Icon_Plus"},
-        {"strong", "Art/UI_Icon_Plus"},
-        {"mele", "Art/UI_Icon_Plus"},
-        {"unknown", "Art/UI_Icon_Plus"}
+        {"mele", "Art/UI_Icon_Attack"},
+        {"self_destruct", "Art/UI_Icon_Bomb"},
+        {"unknown", "Art/UI_Icon_Question"}
     };
 
     public void SetAttributeAndMagnitude(string attribute, int magnitude)
