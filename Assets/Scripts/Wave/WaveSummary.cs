@@ -8,38 +8,22 @@ public class WaveSummary : MonoBehaviour {
 
 		//Summarize current wave
 		List<SubWave> currentWave = WaveFactory.GenerateWave (WaveNumber.waveNumber);
-		Dictionary<string, int> waveSummary = Summarize(currentWave);
 
-		float nextPositionX = 0.1f;
-		float nextPositionY = 1.0f;
+		// TODO: Sort based on value (magnitude) to make sure largets is placed first in the grid view.
+		Dictionary<string, int> waveSummary = Summarize(currentWave);
 
 		//Spawn prefab for each attribute > 0
 		foreach(KeyValuePair<string, int> waveAttribute in waveSummary)
 		{
-			print(waveAttribute.Key + ": " + waveAttribute.Value);
 			string attribute = waveAttribute.Key;
 			int magnitude = waveAttribute.Value;
 			if(magnitude > 0){
 				GameObject preInitIcon = Resources.Load ("Prefabs/WaveAttributeIcon", typeof(GameObject)) as GameObject;
-				GameObject icon = Instantiate (preInitIcon, transform);
+				GameObject icon = Instantiate (preInitIcon);
 				icon.transform.name = attribute + "Icon";
-
-				RectTransform iconRectTransform = icon.GetComponent<RectTransform>();
-				iconRectTransform.anchorMin = new Vector2(nextPositionX, nextPositionY);
-				iconRectTransform.anchorMax = new Vector2(nextPositionX, nextPositionY);
-				iconRectTransform.offsetMin = new Vector2(0f, 0f);
-				iconRectTransform.offsetMax = new Vector2(0f, 0f);
-				iconRectTransform.sizeDelta = new Vector2(100f, 100f);
-
+				icon.transform.SetParent(transform, false);
 				AttributeIconHandler attributeHandler = icon.GetComponent<AttributeIconHandler>();
 				attributeHandler.SetAttributeAndMagnitude(attribute, magnitude);
-
-				// Position prefabs	
-			}
-			nextPositionX += 0.1f;
-			if(nextPositionX >= 0.9f){
-				nextPositionY -= 0.1f;
-				nextPositionX = 0.1f;
 			}
 		}
 	}
