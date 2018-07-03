@@ -89,4 +89,13 @@ public class SubWave {
 	public void Merge(SubWave otherwave) {
 		this.enemies.AddRange(otherwave.enemies);
 	}
+
+	public void SpreadOut() {
+		float randomAngle = UnityEngine.Random.value * 360;
+		foreach(StatsHolder enemy in this.enemies) {
+			enemy.spawnAngle = randomAngle;
+			UnityEngine.MonoBehaviour.print(enemy.spawnAngle);
+			randomAngle = (randomAngle + (360 / this.enemies.Count)) % 360;
+		}
+	}
 }
