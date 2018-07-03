@@ -96,7 +96,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 	void doDamageToBoss() {
-		camShake.Shake(0.1f, 0.1f);
+		camShake.Shake(0.05f, 0.1f);
 		this.colorModifier.FadeToDelected(this.attackFrequency / 3f);
 		GameObject hitParticle = Instantiate(this.hitParticle, transform.position / 2, transform.rotation);
 		var main = hitParticle.GetComponent<ParticleSystem>().main;
