@@ -70,4 +70,23 @@ public class SubWave {
 			enemy.Scale *= scaleFactor;
 		}
 	}
+
+	public void MultiplyNumberOfEnemies(int times){
+		List<StatsHolder> newEnemiesList = new List<StatsHolder>();
+		foreach(StatsHolder enemy in this.enemies) {
+			newEnemiesList.Add(enemy);
+
+			for(int i = 1; i < times; i++){
+				StatsHolder clone = enemy.Clone();
+				clone.spawnAngle = (clone.spawnAngle + 15) % 360;
+				newEnemiesList.Add(enemy.Clone());
+			}
+			
+		}
+		this.enemies = newEnemiesList;
+	}
+
+	public void Merge(SubWave otherwave) {
+		this.enemies.AddRange(otherwave.enemies);
+	}
 }

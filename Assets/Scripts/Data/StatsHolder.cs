@@ -84,4 +84,31 @@ public class StatsHolder {
 		attributes.Add("self_destruct", this.selfDestruct);
 		return attributes;
 	}
+
+	public StatsHolder Clone(){
+		StatsHolder clone = new StatsHolder(this.Name, 
+			this.MovementSpeed, 
+			this.Damage, 
+			this.Range, 
+			this.Health, 
+			this.Scale, 
+			this.Color);
+		clone.predefinedPosition = this.predefinedPosition;
+		clone.spawnAngle = this.spawnAngle;
+		clone.spawnRadius = this.spawnRadius;
+		clone.selfDestruct = this.selfDestruct;
+		clone.invunerable = this.invunerable;
+		clone.angularSpeed = this.angularSpeed;
+		clone.circlingSpeed = this.circlingSpeed;
+		clone.requiredKill = this.requiredKill;
+		if (this.projectile != null){
+			clone.projectile = this.projectile.Clone();
+		}
+		clone.projectile = this.projectile;
+		clone.attackDelay = this.attackDelay;
+		clone.zigZagAngle = this.zigZagAngle;
+		clone.zigZag = this.zigZag;
+		return clone;
+
+	}
 }
