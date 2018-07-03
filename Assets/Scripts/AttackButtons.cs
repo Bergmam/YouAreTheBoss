@@ -103,7 +103,8 @@ public class AttackButtons : MonoBehaviour {
 	}
 
 	void CreateAttackButton(int i) {
-		GameObject instantiatedButtonPrefab = Instantiate(attackButtonPrefab, transform);
+		GameObject instantiatedButtonPrefab = Instantiate(attackButtonPrefab);
+		instantiatedButtonPrefab.transform.SetParent(transform, false);
 		instantiatedButtonPrefab.name = "Attack " + (i-1) + " Object";
 		GameObject buttonObject = UnityUtils.RecursiveContains(instantiatedButtonPrefab.transform, "Attack")[1];
 		buttonObject.name = "Attack " + (i-1);
