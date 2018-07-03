@@ -40,4 +40,34 @@ public class SubWave {
 		}
 		return count;
 	}
+
+	public void ScaleSubWaveDamage(float scaleFactor) {
+		foreach(StatsHolder enemy in this.enemies) {
+			enemy.Damage *= scaleFactor;
+		}
+	}
+
+	public void ScaleSubWaveHealth(float scaleFactor) {
+		foreach(StatsHolder enemy in this.enemies) {
+			enemy.Health *= scaleFactor;
+		}
+	}
+
+	public void ScaleSubWaveSpeed(float scaleFactor) {
+		foreach(StatsHolder enemy in this.enemies) {
+			enemy.MovementSpeed *= scaleFactor;
+		}
+	}
+
+	public void ScaleSubWaveAngularSpeed(float scaleFactor) {
+		foreach(StatsHolder enemy in this.enemies) {
+			enemy.angularSpeed *= scaleFactor;
+		}
+	}
+
+	public void ScaleSubWaveSize(float scaleFactor) {
+		foreach(StatsHolder enemy in this.enemies) {
+			enemy.Scale *= scaleFactor;
+		}
+	}
 }
