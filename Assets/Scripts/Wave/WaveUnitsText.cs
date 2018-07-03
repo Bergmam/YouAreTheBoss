@@ -6,25 +6,17 @@ using UnityEngine.UI;
 public class WaveUnitsText : MonoBehaviour {
 
 	// Use this for initialization
-	Dictionary<string, int> enemyTypeToAmount = new Dictionary<string, int>();
+	Dictionary<string, int> waveSummary = new Dictionary<string, int>();
 	void Start () {
 
 		Text text = GetComponent<Text>();
 
-		foreach(SubWave subWave in WaveFactory.GenerateWave(WaveNumber.waveNumber)){
-			foreach(StatsHolder statsHolder in subWave.GetEnemies()){
-				if (!enemyTypeToAmount.ContainsKey(statsHolder.Name)){
-					enemyTypeToAmount.Add(statsHolder.Name, 1);
-				} else {
-					enemyTypeToAmount[statsHolder.Name]++;// enemyTypeToAmount[statsHolder.Name] + 1);
-				}
-			}
-		}
+		//waveSummary = Summarize(WaveFactory.GenerateWave(WaveNumber.waveNumber));
 
 		string enemyInfoText = "";
 		List<string> nameList = new List<string>();
 
-		foreach(KeyValuePair<string, int> entry in enemyTypeToAmount){
+		foreach(KeyValuePair<string, int> entry in waveSummary){
 			nameList.Add(entry.Key + ": " + entry.Value + "\n");
 		}
 
