@@ -24,6 +24,7 @@ public class PassiveAttack : MonoBehaviour {
 	private ColorModifier aimColorModifier;
 
 	void Start () {
+
 		radialFillControl = GameObject.FindObjectOfType<RadialFillControl> ();
 		attackMaskControl = GameObject.FindObjectOfType<AttackMaskControl> ();
 		int dictIndex = 1;
