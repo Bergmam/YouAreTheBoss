@@ -58,4 +58,29 @@ public class Wave
         this.subWaves[timeStampJ] = tmp;
     }
 
+    public float GetDuration()
+    {
+        return this.GetTimeStamp(this.subWaves.Count - 1);
+    }
+
+    public void Append(Wave other)
+    {
+        this.Merge(other, this.GetDuration());
+    }
+
+    public void Merge(Wave other)
+    {
+        this.Merge(other, 0f);
+    }
+
+    public void Merge(Wave other, float offset)
+    {
+        foreach (KeyValuePair<float, SubWave> timeStampAndSubWave in other.subWaves)
+        {
+            float timeStamp = timeStampAndSubWave.Key;
+            SubWave subWave = timeStampAndSubWave.Value;
+            this.AddSubWave(subWave, timeStamp + offset);
+        }
+    }
+
 }

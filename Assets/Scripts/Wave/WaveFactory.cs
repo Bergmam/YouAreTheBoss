@@ -8,8 +8,6 @@ public class WaveFactory
 
     public static Wave GenerateWave(int numberOfEnemies)
     {
-numberOfEnemies = 5;
-
         float timeStamp = 0f;
         Wave wave = new Wave();
         SubWave subWave;
