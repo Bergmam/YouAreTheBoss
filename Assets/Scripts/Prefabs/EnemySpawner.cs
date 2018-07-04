@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -8,8 +9,8 @@ public class EnemySpawner : MonoBehaviour
     GameObject preInitEnemy;
     int numberOfEnemies;
     Wave currentWave;
-    int currentSubWaveNumber;
-    float delay;
+    int nextSubWaveNumber;
+    float currentTime;
     private WaveHandler waveHandler;
 
     void Awake()
@@ -20,18 +21,20 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        if (delay > 0) // Delay used to wait for the duration of each subwave until next one is spawned.
+        if (currentWave != null)
         {
-            delay -= Time.deltaTime;
-        }
-        else if (currentWave != null)
-        {
-            if (currentSubWaveNumber < currentWave.Count()) // Spawn all subwaves of a wave, one at a time with delay between. 
+            if (nextSubWaveNumber >= 0 && nextSubWaveNumber < currentWave.Count())
             {
-                SubWave subWave = currentWave.GetSubWave(currentSubWaveNumber);
-                SpawnSubWave(subWave);
-                delay = subWave.GetDuration();
-                currentSubWaveNumber++;
+                if (currentTime < currentWave.GetTimeStamp(nextSubWaveNumber))
+                {
+                    currentTime += Time.deltaTime;
+                }
+                else
+                {
+                    SubWave subWave = currentWave.GetSubWave(nextSubWaveNumber);
+                    SpawnSubWave(subWave);
+                    nextSubWaveNumber++;
+                }
             }
         }
     }
@@ -39,8 +42,8 @@ public class EnemySpawner : MonoBehaviour
     public void SpawnWave(Wave wave)
     {
         this.numberOfEnemies = 0;
-        this.currentSubWaveNumber = 0;
-        this.delay = 0;
+        this.nextSubWaveNumber = 0;
+        this.currentTime = 0;
         this.currentWave = wave;
     }
 

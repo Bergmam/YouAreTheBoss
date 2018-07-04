@@ -1,30 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Wave
 {
+    private SortedDictionary<float, SubWave> subWaves;
 
     public Wave()
     {
-        this.subWaves = new List<SubWave>();
+        this.subWaves = new SortedDictionary<float, SubWave>();
     }
 
-    private List<SubWave> subWaves;
-
-    public List<SubWave> GetSubWaves()
+    public SortedDictionary<float, SubWave> GetSubWaves()
     {
         return this.subWaves;
     }
 
-    public void SetSubwaves(List<SubWave> subWaves)
+    public void SetSubwaves(SortedDictionary<float, SubWave> subWaves)
     {
         this.subWaves = subWaves;
     }
 
     public SubWave GetSubWave(int index)
     {
-        return this.subWaves[index];
+        return this.subWaves.ToList()[index].Value;
+    }
+
+    public float GetTimeStamp(int index)
+    {
+        return this.subWaves.ToList()[index].Key;
     }
 
     public int Count()
@@ -32,16 +37,25 @@ public class Wave
         return this.subWaves.Count;
     }
 
-    public void AddSubWave(SubWave subWave)
+    public void AddSubWave(SubWave subWave, float timeStamp)
     {
-        this.subWaves.Add(subWave);
+        if (this.subWaves.ContainsKey(timeStamp))
+        {
+            this.subWaves[timeStamp].Merge(subWave);
+        }
+        else
+        {
+            this.subWaves[timeStamp] = subWave;
+        }
     }
 
     public void SwapSubWaves(int i, int j)
     {
-        SubWave tmp = this.subWaves[i];
-        this.subWaves[i] = this.subWaves[j];
-        this.subWaves[j] = tmp;
+        float timeStampI = GetTimeStamp(i);
+        float timeStampJ = GetTimeStamp(j);
+        SubWave tmp = this.subWaves[timeStampI];
+        this.subWaves[timeStampI] = this.subWaves[timeStampJ];
+        this.subWaves[timeStampJ] = tmp;
     }
 
 }

@@ -41,8 +41,9 @@ public class WaveSummary : MonoBehaviour
     public Dictionary<string, int> Summarize(Wave wave)
     {
         Dictionary<string, int> summary = new Dictionary<string, int>();
-        foreach (SubWave subWave in wave.GetSubWaves())
+        foreach (KeyValuePair<float, SubWave> timeStampSubWave in wave.GetSubWaves())
         {
+            SubWave subWave = timeStampSubWave.Value;
             foreach (StatsHolder enemyStats in subWave.GetEnemies())
             {
                 foreach (KeyValuePair<string, bool> attribute in enemyStats.GetAttributes())
