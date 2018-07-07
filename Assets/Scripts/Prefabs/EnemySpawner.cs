@@ -1,74 +1,79 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour {
+public class EnemySpawner : MonoBehaviour
+{
 
-	GameObject preInitEnemy;
-	int numberOfEnemies;
-	List<SubWave> currentWave;
-	int currentSubWaveNumber;
-	float delay;
-	private WaveHandler waveHandler;
+    GameObject preInitEnemy;
+    int numberOfEnemies;
+    Wave currentWave;
+    int nextSubWaveNumber;
+    float currentTime;
+    private WaveHandler waveHandler;
 
-	void Awake()
-	{
-		this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
-		preInitEnemy = Resources.Load ("Prefabs/Enemy", typeof(GameObject)) as GameObject;
-	}
+    void Awake()
+    {
+        this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
+        preInitEnemy = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject;
+    }
 
-	void Update()
-	{
-		if (delay > 0) // Delay used to wait for the duration of each subwave until next one is spawned.
-		{
-			delay -= Time.deltaTime;
-		}
-		else if (currentWave != null)
-		{
-			if (currentSubWaveNumber < currentWave.Count) // Spawn all subwaves of a wave, one at a time with delay between. 
-			{
-				SubWave subWave = currentWave [currentSubWaveNumber];
-				SpawnSubWave (subWave);
-				delay = subWave.GetDuration ();
-				currentSubWaveNumber++;
-			}
-		}
-	}
+    void Update()
+    {
+        if (currentWave != null)
+        {
+            if (nextSubWaveNumber >= 0 && nextSubWaveNumber < currentWave.CountSubWaves())
+            {
+                if (currentTime < currentWave.GetTimeStamp(nextSubWaveNumber))
+                {
+                    currentTime += Time.deltaTime;
+                }
+                else
+                {
+                    SubWave subWave = currentWave.GetSubWave(nextSubWaveNumber);
+                    SpawnSubWave(subWave);
+                    nextSubWaveNumber++;
+                }
+            }
+        }
+    }
 
-	public void SpawnWave(List<SubWave> wave)
-	{
-		this.numberOfEnemies = 0;
-		this.currentSubWaveNumber = 0;
-		this.delay = 0;
-		this.currentWave = wave;
-	}
+    public void SpawnWave(Wave wave)
+    {
+        this.numberOfEnemies = 0;
+        this.nextSubWaveNumber = 0;
+        this.currentTime = 0;
+        this.currentWave = wave;
+    }
 
-	// Spawn all enemies of a subwave.
-	public void SpawnSubWave(SubWave subWave)
-	{
-		foreach (StatsHolder enemy in subWave.GetEnemies())
-		{
-			InstantiateEnemyPrefab (enemy);
-		}
-	}
+    // Spawn all enemies of a subwave.
+    public void SpawnSubWave(SubWave subWave)
+    {
+        foreach (StatsHolder enemy in subWave.GetEnemies())
+        {
+            InstantiateEnemyPrefab(enemy);
+        }
+    }
 
-	public void InstantiateEnemyPrefab(StatsHolder stats)
-	{
-		GameObject initEnemy = Instantiate (preInitEnemy);
-		if(!stats.predefinedPosition)
-		{
-			stats.spawnAngle = Random.value * 360;
-		}
-		
-		initEnemy.GetComponent<Enemy> ().SetStats (
+    public void InstantiateEnemyPrefab(StatsHolder stats)
+    {
+        GameObject initEnemy = Instantiate(preInitEnemy);
+        if (!stats.predefinedPosition)
+        {
+            stats.spawnAngle = Random.value * 360;
+        }
+
+        initEnemy.GetComponent<Enemy>().SetStats(
             stats
-		);
+        );
 
-		if(stats.requiredKill){
-			waveHandler.NofifyRequiredKillUnitSpawned();
-		}
+        if (stats.requiredKill)
+        {
+            waveHandler.NofifyRequiredKillUnitSpawned();
+        }
 
-		initEnemy.name = stats.Name + numberOfEnemies;
-		numberOfEnemies++;
-	}
+        initEnemy.name = stats.Name + numberOfEnemies;
+        numberOfEnemies++;
+    }
 }
