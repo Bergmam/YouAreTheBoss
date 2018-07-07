@@ -32,9 +32,19 @@ public class Wave
         return this.subWaves.ToList()[index].Key;
     }
 
-    public int Count()
+    public int CountSubWaves()
     {
         return this.subWaves.Count;
+    }
+
+    public int CountEnemies()
+    {
+        int nbrOfEnemies = 0;
+        foreach (KeyValuePair<float, SubWave> timeStampAndSubWave in this.subWaves)
+        {
+            nbrOfEnemies += timeStampAndSubWave.Value.GetEnemies().Count;
+        }
+        return nbrOfEnemies;
     }
 
     public void AddSubWave(SubWave subWave, float timeStamp)
@@ -81,6 +91,33 @@ public class Wave
             SubWave subWave = timeStampAndSubWave.Value;
             this.AddSubWave(subWave, timeStamp + offset);
         }
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        Wave other = (Wave)obj;
+
+        if (other.subWaves.Count != this.subWaves.Count)
+        {
+            return false;
+        }
+
+        return this.subWaves.ToList().SequenceEqual(other.subWaves.ToList());
+    }
+
+    public override int GetHashCode()
+    {
+        int hashCode = 0;
+        foreach (KeyValuePair<float, SubWave> timeStampAndSubWave in this.subWaves)
+        {
+            hashCode += (int)(timeStampAndSubWave.Key * timeStampAndSubWave.Value.GetHashCode());
+        }
+        return hashCode;
     }
 
 }

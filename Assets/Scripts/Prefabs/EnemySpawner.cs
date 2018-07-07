@@ -23,7 +23,7 @@ public class EnemySpawner : MonoBehaviour
     {
         if (currentWave != null)
         {
-            if (nextSubWaveNumber >= 0 && nextSubWaveNumber < currentWave.Count())
+            if (nextSubWaveNumber >= 0 && nextSubWaveNumber < currentWave.CountSubWaves())
             {
                 if (currentTime < currentWave.GetTimeStamp(nextSubWaveNumber))
                 {

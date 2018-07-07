@@ -209,9 +209,9 @@ public class WaveFactory
         timeStamp += 0.5f;
         //Shuffle the order of the subwaves within the wave.
         System.Random rng = new System.Random((int)DateTime.Now.Ticks);
-        for (int i = 0; i < wave.Count(); i++)
+        for (int i = 0; i < wave.CountSubWaves(); i++)
         {
-            int j = rng.Next(0, wave.Count());
+            int j = rng.Next(0, wave.CountSubWaves());
             wave.SwapSubWaves(i, j);
         }
 
