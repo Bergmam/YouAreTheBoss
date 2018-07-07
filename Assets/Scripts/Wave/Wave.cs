@@ -7,6 +7,8 @@ public class Wave
 {
     private SortedDictionary<float, SubWave> subWaves;
 
+    public static float STANDARD_WAVE_DURATION = 10.0f;
+
     public Wave()
     {
         this.subWaves = new SortedDictionary<float, SubWave>();
@@ -75,7 +77,7 @@ public class Wave
 
     public void Append(Wave other)
     {
-        this.Merge(other, this.GetDuration());
+        this.Merge(other, this.GetDuration() + STANDARD_WAVE_DURATION);
     }
 
     public void Merge(Wave other)
