@@ -68,6 +68,13 @@ public class WaveTests
         Assert.AreNotEqual(waveA.GetHashCode(), waveC.GetHashCode());
     }
 
+    [Test]
+    public void TestGetEnemies()
+    {
+        this.waveA.Merge(this.waveB);
+        Assert.AreEqual(this.waveA.GetEnemies(), this.expextedMergeWaveAB.GetEnemies());
+    }
+
     public SubWave GenerateTestSubWave()
     {
         SubWave subWave = new SubWave();

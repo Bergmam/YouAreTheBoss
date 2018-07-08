@@ -92,7 +92,6 @@ public class SubWave
             for (int i = 1; i < times; i++)
             {
                 StatsHolder clone = enemy.Clone();
-                clone.spawnAngle = (clone.spawnAngle + 15) % 360;
                 newEnemiesList.Add(enemy.Clone());
             }
 
@@ -111,8 +110,17 @@ public class SubWave
         foreach (StatsHolder enemy in this.enemies)
         {
             enemy.spawnAngle = randomAngle;
-            UnityEngine.MonoBehaviour.print(enemy.spawnAngle);
+            enemy.predefinedPosition = true;
             randomAngle = (randomAngle + (360 / this.enemies.Count)) % 360;
+        }
+    }
+
+    public void Shift(float degrees)
+    {
+        foreach (StatsHolder enemy in this.enemies)
+        {
+            enemy.predefinedPosition = true;
+            enemy.spawnAngle = (enemy.spawnAngle + degrees) % 360;
         }
     }
 
@@ -135,5 +143,15 @@ public class SubWave
             hashCode += (enemy.GetHashCode()) % 153;
         }
         return hashCode;
+    }
+
+    public SubWave Clone()
+    {
+        SubWave clone = new SubWave();
+        foreach (StatsHolder enemy in enemies)
+        {
+            clone.AddEnemy(enemy.Clone());
+        }
+        return clone;
     }
 }

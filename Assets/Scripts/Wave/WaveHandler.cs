@@ -17,7 +17,7 @@ public class WaveHandler : MonoBehaviour
 
     void Start()
     {
-        Wave wave = WaveFactory.GenerateWave(WaveNumber.waveNumber);
+        Wave wave = CurrentWave.wave;
         requiredKillEnemiesInWave = 0;
         foreach (KeyValuePair<float, SubWave> timeStampSubWave in wave.GetSubWaves())
         {
