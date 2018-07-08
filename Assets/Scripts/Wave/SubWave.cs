@@ -115,6 +115,15 @@ public class SubWave
         }
     }
 
+    public void Shift(float degrees)
+    {
+        foreach (StatsHolder enemy in this.enemies)
+        {
+            enemy.predefinedPosition = true;
+            enemy.spawnAngle = (enemy.spawnAngle + degrees) % 360;
+        }
+    }
+
     public override bool Equals(object obj)
     {
         if (obj == null || GetType() != obj.GetType())
@@ -134,5 +143,15 @@ public class SubWave
             hashCode += (enemy.GetHashCode()) % 153;
         }
         return hashCode;
+    }
+
+    public SubWave Clone()
+    {
+        SubWave clone = new SubWave();
+        foreach (StatsHolder enemy in enemies)
+        {
+            clone.AddEnemy(enemy.Clone());
+        }
+        return clone;
     }
 }

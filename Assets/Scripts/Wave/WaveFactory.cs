@@ -8,12 +8,12 @@ public class WaveFactory
 
     private static List<Func<int, Wave>> waveComponents = new List<Func<int, Wave>>()
     {
-        //RotatingWorm,
-        //RangedSpawner,
-        //ClosingRotatingCircle,
+        RotatingWorm,
+        RangedSpawner,
+        ClosingRotatingCircle,
         TwoStandardRings,
-        //RangedShooters,
-        //OneZigZag
+        RangedShooters,
+        OneZigZag
     };
 
     public static Wave GenerateWave(int level)
@@ -129,20 +129,16 @@ public class WaveFactory
     {
         Wave wave = new Wave();
         SubWave subWaveA = new SubWave();
-        SubWave subWaveB = new SubWave();
         for (int i = 0; i < difficulty; i++)
         {
             if (i % 2 == 0)
             {
                 subWaveA.AddEnemy(EnemyFactory.StandardEnemy());
             }
-            else
-            {
-                subWaveB.AddEnemy(EnemyFactory.StandardEnemy());
-            }
         }
         subWaveA.SpreadOut();
-        subWaveB.SpreadOut();
+        SubWave subWaveB = subWaveA.Clone();
+        subWaveB.Shift((180 / subWaveB.GetEnemies().Count) % 360);
         wave.AddSubWave(subWaveA, 0.0f);
         wave.AddSubWave(subWaveB, 2.0f);
         return wave;
