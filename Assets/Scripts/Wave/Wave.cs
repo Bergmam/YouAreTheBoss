@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,7 +8,7 @@ public class Wave
 {
     private SortedDictionary<float, SubWave> subWaves;
 
-    public static float STANDARD_WAVE_DURATION = 10.0f;
+    public static float STANDARD_WAVE_DURATION = 7.5f;
 
     public Wave()
     {
@@ -70,14 +71,28 @@ public class Wave
         this.subWaves[timeStampJ] = tmp;
     }
 
+    internal void Shuffle()
+    {
+        System.Random rng = new System.Random((int)DateTime.Now.Ticks);
+        for (int i = 0; i < CountSubWaves(); i++)
+        {
+            int j = (int)Mathf.Round(UnityEngine.Random.Range(0, CountSubWaves()));
+            SwapSubWaves(i, j);
+        }
+    }
+
     public float GetDuration()
     {
-        return this.GetTimeStamp(this.subWaves.Count - 1);
+        if (this.subWaves.Count == 0)
+        {
+            return 0.0f;
+        }
+        return this.GetTimeStamp(this.subWaves.Count - 1) + STANDARD_WAVE_DURATION;
     }
 
     public void Append(Wave other)
     {
-        this.Merge(other, this.GetDuration() + STANDARD_WAVE_DURATION);
+        this.Merge(other, this.GetDuration());
     }
 
     public void Merge(Wave other)
