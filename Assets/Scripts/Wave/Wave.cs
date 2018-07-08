@@ -50,6 +50,17 @@ public class Wave
         return nbrOfEnemies;
     }
 
+    public List<StatsHolder> GetEnemies()
+    {
+        List<StatsHolder> enemies = new List<StatsHolder>();
+        foreach (KeyValuePair<float, SubWave> timeStampAndSubWave in this.subWaves)
+        {
+            enemies.AddRange(timeStampAndSubWave.Value.GetEnemies());
+        }
+        return enemies;
+    }
+
+
     public void AddSubWave(SubWave subWave, float timeStamp)
     {
         if (this.subWaves.ContainsKey(timeStamp))

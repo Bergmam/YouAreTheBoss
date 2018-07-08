@@ -9,15 +9,17 @@ public class WaveSummary : MonoBehaviour
     void Start()
     {
 
-        //Summarize current wave
-        Wave currentWave = WaveFactory.GenerateWave(WaveNumber.waveNumber);
+        // Summarize current wave
+        CurrentWave.wave = WaveFactory.GenerateWave(WaveNumber.waveNumber);
+        Wave currentWave = CurrentWave.wave;
+
         Dictionary<string, int> waveSummary = Summarize(currentWave);
 
         // Sort summary based on value (magnitude) to make sure largets is placed first in the grid view.
         List<KeyValuePair<string, int>> waveSummaryList = waveSummary.ToList();
         waveSummaryList.Sort((pair1, pair2) => pair2.Value.CompareTo(pair1.Value));
 
-        //Spawn prefab for each attribute > 0
+        // Spawn prefab for each attribute > 0
         foreach (KeyValuePair<string, int> waveAttribute in waveSummaryList)
         {
             string attribute = waveAttribute.Key;
@@ -41,23 +43,19 @@ public class WaveSummary : MonoBehaviour
     public Dictionary<string, int> Summarize(Wave wave)
     {
         Dictionary<string, int> summary = new Dictionary<string, int>();
-        foreach (KeyValuePair<float, SubWave> timeStampSubWave in wave.GetSubWaves())
+        foreach (StatsHolder enemyStats in wave.GetEnemies())
         {
-            SubWave subWave = timeStampSubWave.Value;
-            foreach (StatsHolder enemyStats in subWave.GetEnemies())
+            foreach (KeyValuePair<string, bool> attribute in enemyStats.GetAttributes())
             {
-                foreach (KeyValuePair<string, bool> attribute in enemyStats.GetAttributes())
+                if (attribute.Value)
                 {
-                    if (attribute.Value)
+                    if (!summary.ContainsKey(attribute.Key))
                     {
-                        if (!summary.ContainsKey(attribute.Key))
-                        {
-                            summary.Add(attribute.Key, 1);
-                        }
-                        else
-                        {
-                            summary[attribute.Key]++;
-                        }
+                        summary.Add(attribute.Key, 1);
+                    }
+                    else
+                    {
+                        summary[attribute.Key]++;
                     }
                 }
             }
