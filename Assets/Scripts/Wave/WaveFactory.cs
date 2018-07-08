@@ -6,176 +6,170 @@ using System;
 public class WaveFactory
 {
 
-    public static List<SubWave> GenerateWave(int numberOfEnemies){
-        List<SubWave> wave = new List<SubWave> ();
-        SubWave subWave;
-        StatsHolder stats;
-        switch(numberOfEnemies){
+    private static List<Func<int, Wave>> waveComponents = new List<Func<int, Wave>>()
+    {
+        RotatingWorm,
+        RangedSpawner,
+        ClosingRotatingCircle,
+        TwoStandardRings,
+        RangedShooters,
+        OneZigZag
+    };
 
+    public static Wave GenerateWave(int level)
+    {
+        switch (level)
+        {
+            case 0:
+                return FirstWave();
+            case 1:
+                return SecondWave();
+            case 2:
+                return ThirdWave();
             case 3:
-                for(int i = 0; i < 360; i += 45){
-                    subWave = new SubWave(2.0f);
-                    stats = EnemyFactory.StandardEnemy();
-                    stats.spawnAngle = i;
-                    stats.predefinedPosition = true;
-                    subWave.AddEnemy(stats);
-                    wave.Add(subWave);
-                }
-                break;
-
-            case 5:
-                SubWave bigEnemySubWave = new SubWave(0.0f);
-                StatsHolder bigEnemy = EnemyFactory.SlowEnemy();
-                bigEnemy.predefinedPosition = true;
-                bigEnemy.spawnAngle = 225f;
-                bigEnemySubWave.AddEnemy(bigEnemy);
-                wave.Add(bigEnemySubWave);
-                for(int i = 0; i < 20; i++){
-                    StatsHolder minon1 = EnemyFactory.Minion();
-                    minon1.spawnAngle = 65f;
-                    minon1.predefinedPosition = true;
-                    StatsHolder minon2 = EnemyFactory.Minion();
-                    minon2.spawnAngle = 45f;
-                    minon2.predefinedPosition = true;
-                    StatsHolder minon3 = EnemyFactory.Minion();
-                    minon3.spawnAngle = 25f;
-                    minon3.predefinedPosition = true;
-                    SubWave sub1 = new SubWave(3.0f);
-                    sub1.AddEnemy(minon1);
-                    wave.Add(sub1);
-                    SubWave sub2 = new SubWave(3.0f);
-                    sub2.AddEnemy(minon2);
-                    wave.Add(sub2);
-                    SubWave sub3 = new SubWave(3.0f);
-                    sub3.AddEnemy(minon3);
-                    wave.Add(sub3);
-                }
-                break;
-
-            case 7:
-                float angle = UnityEngine.Random.value * 360;
-                for(int i = 0; i < 4; i++){
-                    subWave = new SubWave(0.1f);
-                    stats = EnemyFactory.Rotator(true);
-                    stats.spawnAngle = angle + i * 2;
-                    stats.predefinedPosition = true;
-                    subWave.AddEnemy(stats);
-                    wave.Add(subWave);
-                }
-                subWave = new SubWave(2.0f);
-                    stats = EnemyFactory.Rotator(true);
-                    stats.spawnAngle = angle + 8;
-                    stats.predefinedPosition = true;
-                    subWave.AddEnemy(stats);
-                    wave.Add(subWave);
-                for(int i = 0; i < 5; i++){
-                    subWave = new SubWave(0.1f);
-                    stats = EnemyFactory.Rotator(false);
-                    stats.spawnAngle = (angle + 180) % 360 + i * 2;
-                    stats.predefinedPosition = true;
-                    subWave.AddEnemy(stats);
-                    wave.Add(subWave);
-                }
-                break;
-
-            case 8:
-                subWave = new SubWave(0.0f);
-                for(int i = 0; i < 360; i += 45){
-                    stats = EnemyFactory.Rotator(true);
-                    stats.spawnAngle = i;
-                    stats.predefinedPosition = true;
-                    subWave.AddEnemy(stats);
-                }
-                wave.Add(subWave);
-                break;
-
-            case 11:
-                subWave = new SubWave(2.0f);
-                stats = EnemyFactory.RangedSpawner();
-                subWave.AddEnemy(stats);
-                wave.Add(subWave);
-                break;
-
+                return FourthWave();
             default:
-                wave = AutoGenerateWave(numberOfEnemies);
-                break;
+                Wave wave = new Wave();
+                while (level > 3)
+                {
+                    wave.Merge(RandomWaveComponent(level));
+                    level -= 5;
+                }
+                return wave;
         }
+    }
 
+    private static Wave RandomWaveComponent(int difficulty)
+    {
+        int randomIndex = (int)Mathf.Round(UnityEngine.Random.Range(0, waveComponents.Count));
+        return waveComponents[randomIndex](difficulty);
+    }
+
+    private static Wave FirstWave()
+    {
+        Wave wave = new Wave();
+        SubWave subWave = new SubWave();
+        subWave.AddEnemy(EnemyFactory.StandardEnemy());
+        wave.AddSubWave(subWave, 0.0f);
         return wave;
     }
 
-	public static List<SubWave> AutoGenerateWave(int numberOfEnemies)
-	{
-        bool clockwise = false;
-        List<SubWave> wave = new List<SubWave> ();
 
-        while(numberOfEnemies > 0){
-            if (numberOfEnemies % 10 == 0)
-            {
-                SubWave subWave = new SubWave(0.5f);
-                subWave.AddEnemy(EnemyFactory.SlowEnemy());
-                wave.Add(subWave);
-            }
-            else if(numberOfEnemies % 9 == 0){
-                SubWave subWave = new SubWave(0.5f);  // 
-                subWave.AddEnemy(EnemyFactory.StandardEnemy());
-                wave.Add(subWave);
-            }
-            else if(numberOfEnemies % 8 == 0){
-                SubWave subWave = new SubWave(0.5f);
-                subWave.AddEnemy(EnemyFactory.RangedCirclingEnemy(clockwise));
-                clockwise = !clockwise;
-                wave.Add(subWave);
-            }
-            else if(numberOfEnemies % 7 == 0){
-                SubWave subWave = new SubWave(0.5f);
-                subWave.AddEnemy(EnemyFactory.ZigZag());
-                wave.Add(subWave);
-            }
-            else if(numberOfEnemies % 6 == 0){
-                SubWave subWave = new SubWave(0.5f);
-                subWave.AddEnemy(EnemyFactory.FastEnemy());
-                wave.Add(subWave);
-            }
-            else if(numberOfEnemies % 5 == 0){
-                SubWave subWave = new SubWave(0.5f);
-                subWave.AddEnemy(EnemyFactory.Rotator(clockwise));
-                clockwise = !clockwise;
-                wave.Add(subWave);
-            }
-            else if(numberOfEnemies % 4 == 0){
-                SubWave subWave = new SubWave(0.5f);
-                subWave.AddEnemy(EnemyFactory.RangedCirclingEnemy(clockwise));
-                clockwise = !clockwise;
-                wave.Add(subWave);
-            }
-            else if(numberOfEnemies % 3 == 0){
-                SubWave subWave = new SubWave(0.5f);
-                subWave.AddEnemy(EnemyFactory.SmallBomber());
-                wave.Add(subWave);
-            }
-            else {
-                SubWave subWave = new SubWave(0.5f);
-                subWave.AddEnemy(EnemyFactory.FastEnemy());
-                wave.Add(subWave);
-            }
-                
-            numberOfEnemies--;
+    private static Wave SecondWave()
+    {
+        Wave wave = FirstWave();
+        wave.Merge(FirstWave());
+        return wave;
+    }
+
+    private static Wave ThirdWave()
+    {
+        Wave wave = new Wave();
+        SubWave subWave = new SubWave();
+        StatsHolder enemy = EnemyFactory.RandomBasicEnemy();
+        subWave.AddEnemy(enemy);
+        subWave.AddEnemy(enemy);
+        wave.AddSubWave(subWave, 0.0f);
+        return wave;
+    }
+
+    private static Wave FourthWave()
+    {
+        Wave wave = ThirdWave();
+        wave.Append(ThirdWave());
+        return wave;
+    }
+
+    public static Wave RotatingWorm(int difficulty)
+    {
+        bool clockwise = UnityEngine.Random.value >= 0.5;
+        int direction = clockwise ? -2 : 2;
+        Wave wave = new Wave();
+        float timeStamp = 0f;
+        float angle = UnityEngine.Random.value * 360;
+        for (int i = 0; i < 5; i++)
+        {
+            SubWave subWave = new SubWave();
+            StatsHolder stats = EnemyFactory.Rotator(clockwise);
+            stats.spawnAngle = angle + i * direction;
+            stats.predefinedPosition = true;
+            subWave.AddEnemy(stats);
+            wave.AddSubWave(subWave, timeStamp);
+            timeStamp += 0.1f;
         }
-        SubWave lastSubWave = new SubWave(0.5f);  // 
-        lastSubWave.AddEnemy(EnemyFactory.StandardEnemy());
-        wave.Add(lastSubWave);
-		//Shuffle the order of the subwaves within the wave.
-		System.Random rng = new System.Random ((int)DateTime.Now.Ticks);
-		for (int i = 0; i < wave.Count; i++)
-		{
-			int j = rng.Next (0, wave.Count);
-			SubWave tmp = wave [i];
-			wave [i] = wave [j];
-			wave [j] = tmp;
-		}
+        return wave;
+    }
 
-		return wave;
-	}
+    public static Wave RangedSpawner(int difficulty)
+    {
+        Wave wave = new Wave();
+        SubWave subWave = new SubWave();
+        StatsHolder stats = EnemyFactory.RangedSpawner();
+        subWave.AddEnemy(stats);
+        wave.AddSubWave(subWave, 0.0f);
+        return wave;
+    }
+
+    public static Wave ClosingRotatingCircle(int difficulty)
+    {
+        Wave wave = new Wave();
+        SubWave subWave = new SubWave();
+        for (int i = 0; i < difficulty; i++)
+        {
+            StatsHolder stats = EnemyFactory.Rotator(true);
+            stats.predefinedPosition = true;
+            subWave.AddEnemy(stats);
+        }
+        subWave.SpreadOut();
+        wave.AddSubWave(subWave, 0.0f);
+        return wave;
+    }
+
+    public static Wave TwoStandardRings(int difficulty)
+    {
+        Wave wave = new Wave();
+        SubWave subWaveA = new SubWave();
+        for (int i = 0; i < difficulty; i++)
+        {
+            if (i % 2 == 0)
+            {
+                subWaveA.AddEnemy(EnemyFactory.StandardEnemy());
+            }
+        }
+        subWaveA.SpreadOut();
+        SubWave subWaveB = subWaveA.Clone();
+        subWaveB.Shift((180 / subWaveB.GetEnemies().Count) % 360);
+        wave.AddSubWave(subWaveA, 0.0f);
+        wave.AddSubWave(subWaveB, 2.0f);
+        return wave;
+    }
+
+    public static Wave RangedShooters(int difficulty)
+    {
+        Wave wave = new Wave();
+        float timeStamp = 0.0f;
+        for (int i = 0; i < difficulty; i++)
+        {
+            SubWave subWave = new SubWave();
+            subWave.AddEnemy(EnemyFactory.RangedCirclingEnemy());
+            wave.AddSubWave(subWave, timeStamp);
+            timeStamp += 0.5f;
+        }
+        return wave;
+    }
+
+    public static Wave OneZigZag(int difficulty)
+    {
+        Wave wave = new Wave();
+        SubWave subWave = new SubWave();
+        subWave.AddEnemy(EnemyFactory.ZigZag());
+        subWave.ScaleSubWaveSpeed(0.5f);
+        subWave.ScaleSubWaveSize(1.5f);
+        subWave.ScaleSubWaveHealth(difficulty);
+        subWave.ScaleSubWaveAngularSpeed(((float)difficulty) / 5);
+        subWave.ScaleSubWaveDamage(((float)difficulty) / 5);
+        wave.AddSubWave(subWave, 0.0f);
+        return wave;
+    }
 }
 
