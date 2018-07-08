@@ -57,6 +57,7 @@ public class AttackButtons : MonoBehaviour {
 			choseableIndices.Remove(randomNumber);
 			attackText1.GetComponent<Text>().text = AttackLists.choseableUpgradeAttacks[index].name;
 			SetButtonText(attackButton1.transform.Find("Text").GetComponent<Text>(), AttackLists.choseableUpgradeAttacks[index]);
+			playAttackPreview(upgradePopUp.transform, AttackLists.choseableUpgradeAttacks[index],  "BossAttackPreview1");
 			attackButton1.GetComponent<Button>().onClick.AddListener(() => {
 				ChooseUpgrade(AttackLists.choseableUpgradeAttacks[index]);
 			});
@@ -66,6 +67,7 @@ public class AttackButtons : MonoBehaviour {
 			index = choseableIndices[randomNumber];
 			attackText2.GetComponent<Text>().text = AttackLists.choseableUpgradeAttacks[index].name;
 			SetButtonText(attackButton2.transform.Find("Text").GetComponent<Text>(), AttackLists.choseableUpgradeAttacks[index]);
+			playAttackPreview(upgradePopUp.transform, AttackLists.choseableUpgradeAttacks[index], "BossAttackPreview2");
 			attackButton2.GetComponent<Button>().onClick.AddListener(() => {
 				ChooseUpgrade(AttackLists.choseableUpgradeAttacks[index]);
 			});
@@ -141,7 +143,7 @@ public class AttackButtons : MonoBehaviour {
 
 			Text text = UnityUtils.RecursiveFind(attackPopUp.transform,  "AttackInfoText").GetComponent<Text>();
 			SetButtonText(text, attack);
-
+			playAttackPreview(attackPopUp.transform, attack,  "BossAttackPreview");
 			Button yesButton = UnityUtils.RecursiveFind(attackPopUp.transform, "YesButton").GetComponent<Button>();
 			yesButton.onClick.AddListener( () => { OnPressButtonHandling(button); });
 		} else {
@@ -246,24 +248,30 @@ public class AttackButtons : MonoBehaviour {
 	}
 
 	public void SetButtonText(Text text, BossAttack attack) {
-		if (attack.frequency >= Parameters.SLOW_ATTACK_LIMIT) {
-				text.text = "Type: Active\n";
-		} else {
-			text.text = "Type: Passive\n";
-		}
-		text.text += 
-			"Damage: " + attack.damage + "\n" +
-			"Cooldown: " + attack.frequency + "\n" + 
-			"Width: " + attack.angle * 2 + " degrees\n"; 
+		// if (attack.frequency >= Parameters.SLOW_ATTACK_LIMIT) {
+		// 		text.text = "Type: Active\n";
+		// } else {
+		// 	text.text = "Type: Passive\n";
+		// }
+		// text.text += 
+		// 	"Damage: " + attack.damage + "\n" +
+		// 	"Cooldown: " + attack.frequency + "\n" + 
+		// 	"Width: " + attack.angle * 2 + " degrees\n"; 
 
-		if (attack.closeRadius == 0 && attack.farRadius < 2.5f) {
-			text.text += "Reach: Melee";
-		} else if (attack.closeRadius >= 2.0f) {
-			text.text += "Reach: Only ranged";
-		} else if (attack.closeRadius <= 1.0f && attack.farRadius >= 4.0f) {
-			text.text += "Reach: Melee & Ranged";
-		} else {
-			text.text += "Reach: Medium";
-		}
+		// if (attack.closeRadius == 0 && attack.farRadius < 2.5f) {
+		// 	text.text += "Reach: Melee";
+		// } else if (attack.closeRadius >= 2.0f) {
+		// 	text.text += "Reach: Only ranged";
+		// } else if (attack.closeRadius <= 1.0f && attack.farRadius >= 4.0f) {
+		// 	text.text += "Reach: Melee & Ranged";
+		// } else {
+		// 	text.text += "Reach: Medium";
+		// }
+		text.text = "Damage: " + attack.damage + "\n";
+	}
+
+	private void playAttackPreview(Transform popupTransform, BossAttack attack, string previewName) {
+		Transform bossAttackPreview = UnityUtils.RecursiveFind(popupTransform, previewName);
+		bossAttackPreview.GetComponent<PlayAttackOnBoss>().setAttack(attack);
 	}
 }
