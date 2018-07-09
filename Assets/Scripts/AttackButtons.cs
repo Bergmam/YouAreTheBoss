@@ -23,7 +23,7 @@ public class AttackButtons : MonoBehaviour {
 	void Start() {
 		int buttonIndex = AttackLists.allAttacks.Count - 1;
 		attackButtonPrefab = Resources.Load("Prefabs/AttackButton", typeof(GameObject)) as GameObject;
-		for(int i = 1; i <= AttackLists.allAttacks.Count; i++){
+		for(int i = 0; i < AttackLists.allAttacks.Count; i++){
 			CreateAttackButton(i);
 		}
 
@@ -107,12 +107,15 @@ public class AttackButtons : MonoBehaviour {
 	void CreateAttackButton(int i) {
 		GameObject instantiatedButtonPrefab = Instantiate(attackButtonPrefab);
 		instantiatedButtonPrefab.transform.SetParent(transform, false);
-		instantiatedButtonPrefab.name = "Attack " + (i-1) + " Object";
+		instantiatedButtonPrefab.name = "Attack " + (i) + " Object";
 		GameObject buttonObject = UnityUtils.RecursiveContains(instantiatedButtonPrefab.transform, "Attack")[1];
-		buttonObject.name = "Attack " + (i-1);
+		buttonObject.name = "Attack " + (i);
 		Button button = buttonObject.GetComponent<Button>();
 		button.onClick.AddListener(() => gameObject.GetComponent<AttackButtons>().EnablePopUp(button));
-		button.transform.Find("Text").GetComponent<Text>().text = i.ToString();
+		BossAttack attack = AttackLists.allAttacks[i];
+		Transform imageTransform = button.transform.Find("Image");
+		Image image = imageTransform.GetComponent<Image>();
+		image.sprite = Resources.Load<Sprite>(AttackLists.GetAssetString(attack.name));
 		highestButtonIndex = i;
 	}
 
