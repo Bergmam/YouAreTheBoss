@@ -14,41 +14,39 @@ public class AttackButtons : MonoBehaviour
 
     GameObject attackPopUp;
     GameObject upgradePopUp;
-    List<Button> relevantButtons = new List<Button>();
+    List<Button> attackButtons = new List<Button>();
 
     Color whiteNoAlpha = new Color(1, 1, 1, 0);
 
     GameObject attackButtonPrefab;
-    int highestButtonIndex = 0;
+
+    void Awake()
+    {
+        this.attackPopUp = GameObject.Find("AttackPopUp");
+        this.playButton = GameObject.Find("PlayButton").GetComponent<Button>();
+        this.attackButtonPrefab = Resources.Load("Prefabs/AttackButton", typeof(GameObject)) as GameObject;
+        this.upgradePopUp = GameObject.Find("UpgradePopUp");
+    }
 
     void Start()
     {
-        int buttonIndex = AttackLists.allAttacks.Count - 1;
-        attackButtonPrefab = Resources.Load("Prefabs/AttackButton", typeof(GameObject)) as GameObject;
+        attackPopUp.SetActive(false);
+        playButton.interactable = false;
+        upgradePopUp.SetActive(false);
+
         for (int i = 0; i < AttackLists.allAttacks.Count; i++)
         {
-            CreateAttackButton(i);
+            BossAttack attack = AttackLists.allAttacks[i];
+            CreateAttackButton(i, attack);
         }
-
-        for (int i = 0; i < highestButtonIndex; i++)
-        {
-            relevantButtons.Add(GameObject.Find("Attack " + i).GetComponent<Button>());
-        }
-
-        // Handle pop-up for adding extra moves
-        upgradePopUp = GameObject.Find("UpgradePopUp");
 
         // If we are on a certain wave number and have upgrade attacks left that we can choose from
-        if (WaveNumber.waveNumber % Parameters.ATTACK_UPGRADE_WAVE_NUMBER == 0 && WaveNumber.waveNumber != 0 && AttackLists.choseableUpgradeAttacks.Count >= 2)
+        bool onUpgradeWave = WaveNumber.waveNumber % Parameters.ATTACK_UPGRADE_WAVE_NUMBER == 0 && WaveNumber.waveNumber != 0;
+        bool attackUpgradesLeft = AttackLists.choseableUpgradeAttacks.Count >= 2;
+        if (onUpgradeWave && attackUpgradesLeft)
         {
-            // Create list of all available indexes be able to remove indices instead of the actual attacks
-            List<int> choseableIndices = new List<int>();
-            int i = 0;
-            foreach (BossAttack attack in AttackLists.choseableUpgradeAttacks)
-            {
-                choseableIndices.Add(i);
-                i++;
-            }
+            upgradePopUp.SetActive(true);
+
             DisableButtons();
 
             GameObject attackButton1 = UnityUtils.RecursiveFind(upgradePopUp.transform, "Attack1Button").gameObject;
@@ -57,41 +55,33 @@ public class AttackButtons : MonoBehaviour
             GameObject attackText2 = UnityUtils.RecursiveFind(upgradePopUp.transform, "Attack2Name").gameObject;
 
             // Get index of random attack from choseableUpgradeAttacks
-            int randomNumber = UnityEngine.Random.Range(0, choseableIndices.Count);
-            int index = choseableIndices[randomNumber];
-            // Remove from indexarray so that we do not pick the same attack twice
-            choseableIndices.Remove(randomNumber);
-            attackText1.GetComponent<Text>().text = AttackLists.choseableUpgradeAttacks[index].name;
-            SetButtonText(attackButton1.transform.Find("Text").GetComponent<Text>(), AttackLists.choseableUpgradeAttacks[index]);
-            playAttackPreview(upgradePopUp.transform, AttackLists.choseableUpgradeAttacks[index], "BossAttackPreview1");
+            int index = UnityEngine.Random.Range(0, AttackLists.choseableUpgradeAttacks.Count);
+
+            BossAttack attack = AttackLists.choseableUpgradeAttacks[index];
+            attackText1.GetComponent<Text>().text = attack.name;
+            attackButton1.transform.Find("Text").GetComponent<Text>().text = "Damage: " + attack.damage + "\n";
+            playAttackPreview(upgradePopUp.transform, attack, "BossAttackPreview1");
             attackButton1.GetComponent<Button>().onClick.AddListener(() =>
             {
-                ChooseUpgrade(AttackLists.choseableUpgradeAttacks[index]);
+                ChooseUpgrade(attack);
             });
 
             // Get new index of attack,
-            randomNumber = UnityEngine.Random.Range(0, choseableIndices.Count);
-            index = choseableIndices[randomNumber];
-            attackText2.GetComponent<Text>().text = AttackLists.choseableUpgradeAttacks[index].name;
-            SetButtonText(attackButton2.transform.Find("Text").GetComponent<Text>(), AttackLists.choseableUpgradeAttacks[index]);
-            playAttackPreview(upgradePopUp.transform, AttackLists.choseableUpgradeAttacks[index], "BossAttackPreview2");
+            int previousIndex = index;
+            while (index == previousIndex)
+            {
+                index = UnityEngine.Random.Range(0, AttackLists.choseableUpgradeAttacks.Count);
+            }
+            attack = AttackLists.choseableUpgradeAttacks[index];
+            attackText2.GetComponent<Text>().text = attack.name;
+            attackButton2.transform.Find("Text").GetComponent<Text>().text = "Damage: " + attack.damage + "\n";
+            playAttackPreview(upgradePopUp.transform, attack, "BossAttackPreview2");
             attackButton2.GetComponent<Button>().onClick.AddListener(() =>
             {
-                ChooseUpgrade(AttackLists.choseableUpgradeAttacks[index]);
+                ChooseUpgrade(attack);
             });
 
         }
-        else
-        {
-            upgradePopUp.SetActive(false);
-        }
-
-        attackPopUp = GameObject.Find("AttackPopUp");
-        attackPopUp.SetActive(false);
-
-        playButton = GameObject.Find("PlayButton").GetComponent<Button>();
-        relevantButtons.Add(playButton);
-        playButton.interactable = false;
 
         foreach (Color color in Parameters.COLOR_LIST)
         {
@@ -108,30 +98,29 @@ public class AttackButtons : MonoBehaviour
                 OnPressButtonHandling(actualButton);
             }
 
-            foreach (Button relevantButton in relevantButtons)
+            foreach (Button attackButton in attackButtons)
             {
-                if (!AttackLists.pressedButtonNameList.Contains(relevantButton.name) && relevantButton != playButton)
+                if (!AttackLists.pressedButtonNameList.Contains(attackButton.name))
                 {
-                    relevantButton.interactable = false;
+                    attackButton.interactable = false;
                 }
             }
         }
     }
 
-    void CreateAttackButton(int i)
+    void CreateAttackButton(int i, BossAttack attack)
     {
         GameObject instantiatedButtonPrefab = Instantiate(attackButtonPrefab);
         instantiatedButtonPrefab.transform.SetParent(transform, false);
-        instantiatedButtonPrefab.name = "Attack " + (i) + " Object";
-        GameObject buttonObject = UnityUtils.RecursiveContains(instantiatedButtonPrefab.transform, "Attack")[1];
-        buttonObject.name = "Attack " + (i);
+        instantiatedButtonPrefab.name = "Attack" + (i) + " Object";
+        Transform buttonObject = UnityUtils.RecursiveFind(instantiatedButtonPrefab.transform, "Attack0");
+        buttonObject.name = "Attack" + (i);
         Button button = buttonObject.GetComponent<Button>();
-        button.onClick.AddListener(() => gameObject.GetComponent<AttackButtons>().EnablePopUp(button));
-        BossAttack attack = AttackLists.allAttacks[i];
+        attackButtons.Add(button);
+        button.onClick.AddListener(() => this.EnablePopUp(button));
         Transform imageTransform = button.transform.Find("Image");
         Image image = imageTransform.GetComponent<Image>();
         image.sprite = Resources.Load<Sprite>(AttackLists.GetAssetString(attack.name));
-        highestButtonIndex = i;
     }
 
     public void ChooseUpgrade(BossAttack attack)
@@ -140,16 +129,17 @@ public class AttackButtons : MonoBehaviour
         {
             AttackLists.allAttacks.Add(attack);
         }
-        CreateAttackButton(highestButtonIndex + 1);
+        CreateAttackButton(attackButtons.Count, attack);
         DisableUpgradePopUp();
     }
 
     public void DisableButtons()
     {
-        foreach (Button relevantButton in relevantButtons)
+        foreach (Button attackButton in attackButtons)
         {
-            relevantButton.interactable = false;
+            attackButton.interactable = false;
         }
+        this.playButton.interactable = false;
     }
 
     public void EnablePopUp(Button button)
@@ -161,12 +151,12 @@ public class AttackButtons : MonoBehaviour
 
             attackPopUp.SetActive(true);
 
-            int buttonNumber = Int32.Parse(button.transform.name.Replace("Attack ", ""));
+            int buttonNumber = Int32.Parse(button.transform.name.Replace("Attack", ""));
             BossAttack attack = AttackLists.allAttacks[buttonNumber];
             UnityUtils.RecursiveFind(attackPopUp.transform, "AttackName").GetComponent<Text>().text = attack.name;
 
             Text text = UnityUtils.RecursiveFind(attackPopUp.transform, "AttackInfoText").GetComponent<Text>();
-            SetButtonText(text, attack);
+            text.text = "Damage: " + attack.damage + "\n";
             playAttackPreview(attackPopUp.transform, attack, "BossAttackPreview");
             Button yesButton = UnityUtils.RecursiveFind(attackPopUp.transform, "YesButton").GetComponent<Button>();
             yesButton.onClick.AddListener(() => { OnPressButtonHandling(button); });
@@ -178,30 +168,26 @@ public class AttackButtons : MonoBehaviour
 
     }
 
+    private void enableAttackButtons()
+    {
+        foreach (Button attackButton in attackButtons)
+        {
+            attackButton.interactable = true;
+        }
+    }
+
     public void DisableUpgradePopUp()
     {
         UnityUtils.RecursiveFind(upgradePopUp.transform, "Attack1Button").GetComponent<Button>().onClick.RemoveAllListeners();
         UnityUtils.RecursiveFind(upgradePopUp.transform, "Attack2Button").GetComponent<Button>().onClick.RemoveAllListeners();
-        foreach (Button relevantButton in relevantButtons)
-        {
-            if (relevantButton.name != "PlayButton")
-            {
-                relevantButton.interactable = true;
-            }
-        }
+        enableAttackButtons();
         upgradePopUp.SetActive(false);
     }
 
     public void DisablePopUp()
     {
         UnityUtils.RecursiveFind(attackPopUp.transform, "YesButton").GetComponent<Button>().onClick.RemoveAllListeners();
-        foreach (Button relevantButton in relevantButtons)
-        {
-            if (relevantButton.name != "PlayButton")
-            {
-                relevantButton.interactable = true;
-            }
-        }
+        enableAttackButtons();
 
         attackPopUp.SetActive(false);
     }
@@ -211,7 +197,7 @@ public class AttackButtons : MonoBehaviour
         UnityUtils.RecursiveFind(attackPopUp.transform, "YesButton").GetComponent<Button>().onClick.RemoveAllListeners();
         attackPopUp.SetActive(false);
 
-        int buttonNumber = Int32.Parse(button.transform.name.Replace("Attack ", ""));
+        int buttonNumber = Int32.Parse(button.transform.name.Replace("Attack", ""));
 
         Image panelImage = button.transform.parent.Find("Panel").GetComponent<Image>();
 
@@ -234,23 +220,17 @@ public class AttackButtons : MonoBehaviour
 
             if (!upgradePopUp.activeSelf)
             {
-                foreach (Button relevantButton in relevantButtons)
-                {
-                    if (relevantButton.name != "PlayButton")
-                    {
-                        relevantButton.interactable = true;
-                    }
-                }
+                enableAttackButtons();
             }
 
             if (!playButton.interactable && clickedButtons.Count == 3)
             {
                 playButton.interactable = true;
-                foreach (Button relevantButton in relevantButtons)
+                foreach (Button attackButton in attackButtons)
                 {
-                    if (!clickedButtons.Contains(relevantButton) && relevantButton != playButton)
+                    if (!clickedButtons.Contains(attackButton))
                     {
-                        relevantButton.interactable = false;
+                        attackButton.interactable = false;
                     }
                 }
             }
@@ -276,13 +256,7 @@ public class AttackButtons : MonoBehaviour
 
             if (clickedButtons.Count < 3)
             {
-                foreach (Button relevantButton in relevantButtons)
-                {
-                    if (relevantButton != playButton)
-                    {
-                        relevantButton.interactable = true;
-                    }
-                }
+                enableAttackButtons();
                 playButton.interactable = false;
             }
 
@@ -296,30 +270,6 @@ public class AttackButtons : MonoBehaviour
         {
             AttackLists.pressedButtonNameList.Add(button.transform.name);
         }
-    }
-
-    public void SetButtonText(Text text, BossAttack attack)
-    {
-        // if (attack.frequency >= Parameters.SLOW_ATTACK_LIMIT) {
-        // 		text.text = "Type: Active\n";
-        // } else {
-        // 	text.text = "Type: Passive\n";
-        // }
-        // text.text += 
-        // 	"Damage: " + attack.damage + "\n" +
-        // 	"Cooldown: " + attack.frequency + "\n" + 
-        // 	"Width: " + attack.angle * 2 + " degrees\n"; 
-
-        // if (attack.closeRadius == 0 && attack.farRadius < 2.5f) {
-        // 	text.text += "Reach: Melee";
-        // } else if (attack.closeRadius >= 2.0f) {
-        // 	text.text += "Reach: Only ranged";
-        // } else if (attack.closeRadius <= 1.0f && attack.farRadius >= 4.0f) {
-        // 	text.text += "Reach: Melee & Ranged";
-        // } else {
-        // 	text.text += "Reach: Medium";
-        // }
-        text.text = "Damage: " + attack.damage + "\n";
     }
 
     private void playAttackPreview(Transform popupTransform, BossAttack attack, string previewName)

@@ -12,24 +12,25 @@ public class PlayAttackOnBoss : MonoBehaviour
     BossAttack currentAttack;
     CooldownBehaviour currentCooldownBehaviour;
 
+    void Awake()
+    {
+        this.radialFillControl = UnityUtils.RecursiveFind(transform, "Mask").GetComponent<RadialFillControl>();
+        this.attackMaskControl = UnityUtils.RecursiveFind(transform, "Mask").GetComponent<AttackMaskControl>();
+        Transform aim = UnityUtils.RecursiveFind(transform, "Image");
+        this.aimColorModifier = aim.GetComponent<ColorModifier>();
+    }
+
     // Use this for initialization
     void Start()
     {
-
-        radialFillControl = UnityUtils.RecursiveFind(transform, "Mask").GetComponent<RadialFillControl>();
-        attackMaskControl =  UnityUtils.RecursiveFind(transform, "Mask").GetComponent<AttackMaskControl>();
-
-        Transform aim = UnityUtils.RecursiveFind(transform, "Image");
-        this.aimColorModifier = aim.GetComponent<ColorModifier>();
         aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
         aimColorModifier.SetSelectedColor(Parameters.AIM_DAMAGE_COLOR);
-
         UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>().color = Parameters.AIM_DEFAULT_COLOR;
     }
 
     public void setAttack(BossAttack attack)
     {
-		CancelInvoke();
+        CancelInvoke();
         // Set the current attack to be the new attack
         this.currentAttack = attack;
 
@@ -47,31 +48,34 @@ public class PlayAttackOnBoss : MonoBehaviour
         InvokeRepeating("doAttack", 0, this.currentAttack.frequency);
     }
 
-	void doAttack() { 
-		Color color = UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>().color;
-		color.a = 0.0f;
+    void doAttack()
+    {
+        Color color = UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>().color;
+        color.a = 0.0f;
 
         float unitCircleRotation = RotationUtils.MakePositiveAngle(transform.eulerAngles.z + 90);
 
-		Color zeroAlphaColor = color;
-		zeroAlphaColor.a = 0.0f;
-		object[] obj = GameObject.FindObjectsOfType(typeof (GameObject));
-		foreach (Enemy enemy in GameObject.FindObjectsOfType(typeof (Enemy))){
-			if (enemy.isInAttackArea(unitCircleRotation - this.currentAttack.angle, 
-					unitCircleRotation + this.currentAttack.angle, 
-					this.currentAttack.closeRadius, 
-					this.currentAttack.farRadius)){
-				enemy.applyDamageTo(this.currentAttack.damage);
-			}
-		}
+        Color zeroAlphaColor = color;
+        zeroAlphaColor.a = 0.0f;
+        object[] obj = GameObject.FindObjectsOfType(typeof(GameObject));
+        foreach (Enemy enemy in GameObject.FindObjectsOfType(typeof(Enemy)))
+        {
+            if (enemy.isInAttackArea(unitCircleRotation - this.currentAttack.angle,
+                    unitCircleRotation + this.currentAttack.angle,
+                    this.currentAttack.closeRadius,
+                    this.currentAttack.farRadius))
+            {
+                enemy.applyDamageTo(this.currentAttack.damage);
+            }
+        }
 
-		// For now, change color of boss when he is attacking
-		// TODO: Change when areas of damage is implemented
-	 	gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+        // For now, change color of boss when he is attacking
+        // TODO: Change when areas of damage is implemented
+        gameObject.GetComponent<SpriteRenderer>().color = Color.red;
 
-		this.aimColorModifier.FadeToSelected(this.currentAttack.frequency);
-		gameObject.GetComponent<SpriteRenderer>().color = Color.white;
-		
-		//StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Color.white, 0.5f));
-	}
+        this.aimColorModifier.FadeToSelected(this.currentAttack.frequency);
+        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+
+        //StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Color.white, 0.5f));
+    }
 }
