@@ -114,7 +114,7 @@ public class PassiveAttack : MonoBehaviour {
 			attackMaskControl.SetSize (this.currentAttack.closeRadius, this.currentAttack.farRadius);
 		}
 
-		GameObject currentAttackButton = GameObject.Find ("Passive " + attackNumber);
+		GameObject currentAttackButton = GameObject.Find ("Passive" + attackNumber + "Button");
 		if (currentAttackButton != null) {
 			this.currentCooldownBehaviour = currentAttackButton.GetComponentInChildren<CooldownBehaviour> ();
 			if (this.currentCooldownBehaviour != null) {
@@ -136,5 +136,10 @@ public class PassiveAttack : MonoBehaviour {
 		if (this.currentActiveAttack.Equals(this.currentAttack)) {
 			setAttack(previousAttackNumber);
 		}
+	}
+
+	public BossAttack GetAttack(int number)
+	{
+		return this.attackDict[number];
 	}
 }
