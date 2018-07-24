@@ -9,19 +9,19 @@ public class AttackLists
 
     public static bool listsInitalized = false;
     public static List<BossAttack> allAttacks = new List<BossAttack>(){
-        new BossAttack("Melee", 30, 0, 2.0f, 50, 1.2f),
-        new BossAttack("Sniper", 5, 0, 5.0f, 300, 5.0f),
-        new BossAttack("Ranged", 30, 2.0f, 5.0f, 50, 1.2f),
-        new BossAttack("Small Donut", 180, 0, 1.5f, 10, 0.3f)
+        new BossAttack("Melee", 30, 0.0f, 0.4f, 50, 1.2f),
+        new BossAttack("Sniper", 5, 0.0f, 1.0f, 300, 0.1f),
+        new BossAttack("Ranged", 30, 0.4f, 1.0f, 50, 1.2f),
+        new BossAttack("Small Donut", 180, 0.0f, 0.3f, 10, 0.3f)
     };
 
     public static BossAttack[] chosenAttacksArray = new BossAttack[Parameters.NUMBER_OF_ATTACKS];
 
     public static List<BossAttack> choseableUpgradeAttacks = new List<BossAttack>(){
-        new BossAttack("Big Donut", 180, 2.0f, 5.0f, 10, 0.3f),
-        new BossAttack("Small Donut Nuke", 180, 0, 1.5f, 400, 10.0f),
-        new BossAttack("Big Donut Nuke", 180, 2.5f, 5.0f, 400, 10),
-        new BossAttack("Thin Melee", 15, 0, 2.0f, 80, 1.2f)
+        new BossAttack("Big Donut", 180, 0.4f, 1.0f, 10, 0.3f),
+        new BossAttack("Small Donut Nuke", 180, 0.0f, 0.3f, 400, 10.0f),
+        new BossAttack("Big Donut Nuke", 180, 0.5f, 1.0f, 400, 10),
+        new BossAttack("Thin Melee", 15, 0.0f, 0.4f, 80, 1.2f)
     };
 
     public static List<BossAttack> chosenUpgradeAttacks = new List<BossAttack>();

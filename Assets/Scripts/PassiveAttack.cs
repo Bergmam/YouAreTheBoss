@@ -7,22 +7,18 @@ public class PassiveAttack : MonoBehaviour
 {
 
     float fadeTime = 0;
-
     BossAttack currentAttack;
-
     BossAttack currentActiveAttack;
-
     BossAttack previousAttack;
     int previousAttackNumber;
     int currentAttackNumber;
-
     Dictionary<int, BossAttack> attackDict = new Dictionary<int, BossAttack>();
-
     RadialFillControl radialFillControl;
     AttackMaskControl attackMaskControl;
-
     CooldownBehaviour currentCooldownBehaviour;
     private ColorModifier aimColorModifier;
+    private float MIN_ATTACK_RADIUS = 0.5f;
+    private float MAX_ATTACK_RADIUS = 2.8f;
 
     void Awake()
     {
@@ -78,12 +74,14 @@ public class PassiveAttack : MonoBehaviour
         Color zeroAlphaColor = color;
         zeroAlphaColor.a = 0.0f;
         object[] obj = GameObject.FindObjectsOfType(typeof(GameObject));
+        float attackCloseRadius = this.MIN_ATTACK_RADIUS + this.currentAttack.closeRadiusScale * (this.MAX_ATTACK_RADIUS - this.MIN_ATTACK_RADIUS);
+        float attackFarRadius = this.MIN_ATTACK_RADIUS + this.currentAttack.farRadiusScale * (this.MAX_ATTACK_RADIUS - this.MIN_ATTACK_RADIUS);
         foreach (Enemy enemy in GameObject.FindObjectsOfType(typeof(Enemy)))
         {
             if (enemy.isInAttackArea(unitCircleRotation - this.currentAttack.angle,
                     unitCircleRotation + this.currentAttack.angle,
-                    this.currentAttack.closeRadius,
-                    this.currentAttack.farRadius))
+                    attackCloseRadius,
+                    attackFarRadius))
             {
                 enemy.applyDamageTo(this.currentAttack.damage);
             }
@@ -129,7 +127,7 @@ public class PassiveAttack : MonoBehaviour
 
         if (attackMaskControl != null)
         {
-            attackMaskControl.SetSize(this.currentAttack.closeRadius, this.currentAttack.farRadius);
+            attackMaskControl.SetSize(this.currentAttack.closeRadiusScale, this.currentAttack.farRadiusScale);
         }
 
         GameObject currentAttackButton = GameObject.Find("Passive" + attackNumber + "Button");

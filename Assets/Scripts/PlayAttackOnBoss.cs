@@ -42,7 +42,7 @@ public class PlayAttackOnBoss : MonoBehaviour
 
         if (attackMaskControl != null)
         {
-            attackMaskControl.SetSize(this.currentAttack.closeRadius, this.currentAttack.farRadius);
+            attackMaskControl.SetSize(this.currentAttack.closeRadiusScale, this.currentAttack.farRadiusScale);
         }
 
         InvokeRepeating("doAttack", 0, this.currentAttack.frequency);
@@ -62,8 +62,8 @@ public class PlayAttackOnBoss : MonoBehaviour
         {
             if (enemy.isInAttackArea(unitCircleRotation - this.currentAttack.angle,
                     unitCircleRotation + this.currentAttack.angle,
-                    this.currentAttack.closeRadius,
-                    this.currentAttack.farRadius))
+                    this.currentAttack.closeRadiusScale,
+                    this.currentAttack.farRadiusScale))
             {
                 enemy.applyDamageTo(this.currentAttack.damage);
             }
