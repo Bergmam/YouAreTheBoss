@@ -10,7 +10,7 @@ public class AttackLists
     public static bool listsInitalized = false;
     public static List<BossAttack> allAttacks = new List<BossAttack>(){
         new BossAttack("Melee", 30, 0.0f, 0.4f, 50, 1.2f),
-        new BossAttack("Sniper", 5, 0.0f, 1.0f, 300, 0.1f),
+        new BossAttack("Sniper", 5, 0.0f, 1.0f, 300, 5.0f),
         new BossAttack("Ranged", 30, 0.4f, 1.0f, 50, 1.2f),
         new BossAttack("Small Donut", 180, 0.0f, 0.3f, 10, 0.3f)
     };
