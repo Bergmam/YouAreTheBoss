@@ -33,7 +33,7 @@ public class PassiveAttack : MonoBehaviour
 
 
         int dictIndex = 1;
-        foreach (BossAttack attack in AttackLists.chosenAttacksArray)
+        foreach (BossAttack attack in AttackLists.selectedAttacks)
         {
             if (attack != null)
             {

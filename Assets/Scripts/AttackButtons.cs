@@ -31,35 +31,35 @@ public class AttackButtons : MonoBehaviour
         playButton.interactable = false;
         upgradePopUp.SetActive(false);
 
-        for (int i = 0; i < AttackLists.allAttacks.Count; i++)
+        for (int i = 0; i < AttackLists.GetNumberOfSelectableAttacks(); i++)
         {
-            BossAttack attack = AttackLists.allAttacks[i];
+            BossAttack attack = AttackLists.GetSelectableAttack(i);
             CreateAttackButton(i, attack);
         }
 
         // If we have previously chosen some attacks and entered the fighting scene
-        AttackLists.chosenAttacksArray
-        .Where(attack => attack != null)
-        .ToList()
-        .ForEach(attack => SelectAttackButton(attackButtons[attack.name]));
+        AttackLists.selectedAttacks
+            .Where(attack => attack != null)
+            .ToList()
+            .ForEach(attack => SelectAttackButton(attackButtons[attack.name]));
 
         // If we are on a certain wave number and have upgrade attacks left that we can choose from
         bool onUpgradeWave = WaveNumber.waveNumber % Parameters.ATTACK_UPGRADE_WAVE_NUMBER == 0 && WaveNumber.waveNumber != 0;
-        bool attackUpgradesLeft = AttackLists.choseableUpgradeAttacks.Count >= 2;
+        bool attackUpgradesLeft = AttackLists.chooseableUpgradeAttacks.Count >= 2;
         if (onUpgradeWave && attackUpgradesLeft)
         {
             upgradePopUp.SetActive(true);
             DisableButtons();
 
-            // Get index of random attack from choseableUpgradeAttacks
-            int index = UnityEngine.Random.Range(0, AttackLists.choseableUpgradeAttacks.Count);
+            // Get index of random attack from chooseableUpgradeAttacks
+            int index = UnityEngine.Random.Range(0, AttackLists.chooseableUpgradeAttacks.Count);
             SetUpgradePopUpAttack(1, index);
 
             // Get another, different index
             int previousIndex = index;
             while (index == previousIndex)
             {
-                index = UnityEngine.Random.Range(0, AttackLists.choseableUpgradeAttacks.Count);
+                index = UnityEngine.Random.Range(0, AttackLists.chooseableUpgradeAttacks.Count);
             }
             SetUpgradePopUpAttack(2, index);
             this.playButton.interactable = false;
@@ -70,7 +70,7 @@ public class AttackButtons : MonoBehaviour
     {
         GameObject attackButton = UnityUtils.RecursiveFind(upgradePopUp.transform, "Attack" + upgradePopUpAttackNumber + "Button").gameObject;
         GameObject attackText = UnityUtils.RecursiveFind(upgradePopUp.transform, "Attack" + upgradePopUpAttackNumber + "Name").gameObject;
-        BossAttack attack = AttackLists.choseableUpgradeAttacks[upgradeAttacksIndex];
+        BossAttack attack = AttackLists.chooseableUpgradeAttacks[upgradeAttacksIndex];
         attackText.GetComponent<Text>().text = attack.name;
         attackButton.transform.Find("Text").GetComponent<Text>().text = "Damage: " + attack.damage;
         playAttackPreview(upgradePopUp.transform, attack, "BossAttackPreview" + upgradePopUpAttackNumber);
@@ -97,10 +97,7 @@ public class AttackButtons : MonoBehaviour
 
     public void ChooseUpgrade(BossAttack attack)
     {
-        if (!AttackLists.allAttacks.Contains(attack))
-        {
-            AttackLists.allAttacks.Add(attack);
-        }
+        AttackLists.ChooseUpgradeAttack(attack);
         CreateAttackButton(attackButtons.Count, attack);
         DisableUpgradePopUp();
         this.playButton.interactable = true;
@@ -119,7 +116,7 @@ public class AttackButtons : MonoBehaviour
             DisableButtons();
             attackPopUp.SetActive(true);
             int buttonNumber = Int32.Parse(button.transform.name.Replace("Attack", ""));
-            BossAttack attack = AttackLists.allAttacks[buttonNumber];
+            BossAttack attack = AttackLists.GetSelectableAttack(buttonNumber);
             UnityUtils.RecursiveFind(attackPopUp.transform, "AttackName").GetComponent<Text>().text = attack.name;
             Text text = UnityUtils.RecursiveFind(attackPopUp.transform, "AttackInfoText").GetComponent<Text>();
             text.text = "Damage: " + attack.damage + "\n";
@@ -169,7 +166,7 @@ public class AttackButtons : MonoBehaviour
             panelImage.color = firstUnusedColor;
             usedColors.Add(firstUnusedColor);
             int index = Array.IndexOf(Parameters.COLOR_LIST, firstUnusedColor);
-            AttackLists.chosenAttacksArray[index] = AttackLists.allAttacks[buttonNumber];
+            AttackLists.selectedAttacks[index] = AttackLists.GetSelectableAttack(buttonNumber);
             clickedButtons.Add(button);
             if (!playButton.interactable && clickedButtons.Count >= 3)
             {
@@ -192,7 +189,7 @@ public class AttackButtons : MonoBehaviour
         int buttonNumber = Int32.Parse(button.transform.name.Replace("Attack", ""));
         Image panelImage = button.transform.parent.Find("Panel").GetComponent<Image>();
         int index = Array.IndexOf(Parameters.COLOR_LIST, panelImage.color);
-        AttackLists.chosenAttacksArray[index] = null;
+        AttackLists.selectedAttacks[index] = null;
         this.usedColors.Remove(panelImage.color);
         panelImage.color = whiteNoAlpha;
         clickedButtons.Remove(button);

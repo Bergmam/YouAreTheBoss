@@ -1,23 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AttackLists
 {
+    public static void ResetUpgradedAttacks()
+    {
+        chosenUpgradeAttacks.ForEach(attack => chooseableUpgradeAttacks.Add(attack));
+        chosenUpgradeAttacks.Clear();
+        selectedAttacks = new BossAttack[Parameters.NUMBER_OF_ATTACKS];
+    }
 
-    public static bool listsInitalized = false;
-    public static List<BossAttack> allAttacks = new List<BossAttack>(){
+    public static void ChooseUpgradeAttack(BossAttack attack)
+    {
+        chosenUpgradeAttacks.Add(attack);
+        chooseableUpgradeAttacks.Remove(attack);
+    }
+
+    public static BossAttack GetSelectableAttack(int index)
+    {
+        // Make indexes larger than the number of default attacks start from zero but pick from upgrade attacks instead.
+        if (index < defaultAttacks.Count)
+        {
+            return defaultAttacks[index];
+        }
+        else
+        {
+            return chosenUpgradeAttacks[index - defaultAttacks.Count];
+        }
+    }
+
+    internal static int GetNumberOfSelectableAttacks()
+    {
+        return defaultAttacks.Count + chosenUpgradeAttacks.Count;
+    }
+
+    public static List<BossAttack> defaultAttacks = new List<BossAttack>(){
         new BossAttack("Melee", 30, 0.0f, 0.4f, 50, 1.2f),
         new BossAttack("Sniper", 5, 0.0f, 1.0f, 300, 5.0f),
         new BossAttack("Ranged", 30, 0.4f, 1.0f, 50, 1.2f),
         new BossAttack("Small Donut", 180, 0.0f, 0.3f, 10, 0.3f)
     };
 
-    public static BossAttack[] chosenAttacksArray = new BossAttack[Parameters.NUMBER_OF_ATTACKS];
+    public static BossAttack[] selectedAttacks = new BossAttack[Parameters.NUMBER_OF_ATTACKS];
 
-    public static List<BossAttack> choseableUpgradeAttacks = new List<BossAttack>(){
+    public static List<BossAttack> chooseableUpgradeAttacks = new List<BossAttack>(){
         new BossAttack("Big Donut", 180, 0.4f, 1.0f, 10, 0.3f),
         new BossAttack("Small Donut Nuke", 180, 0.0f, 0.3f, 400, 10.0f),
         new BossAttack("Big Donut Nuke", 180, 0.5f, 1.0f, 400, 10),
@@ -44,11 +72,6 @@ public class AttackLists
     public static string GetAssetString(string name)
     {
         return nameAssetNameDictionary[name];
-    }
-
-    public static string GetAssetString(int index)
-    {
-        return nameAssetNameDictionary.ToList()[index].Value;
     }
 
 }
