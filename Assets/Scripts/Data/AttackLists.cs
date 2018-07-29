@@ -37,19 +37,22 @@ public class AttackLists
     }
 
     public static List<BossAttack> defaultAttacks = new List<BossAttack>(){
-        new BossAttack("Melee", 30, 0.0f, 0.4f, 50, 1.2f),
-        new BossAttack("Sniper", 5, 0.0f, 1.0f, 300, 5.0f),
-        new BossAttack("Ranged", 30, 0.4f, 1.0f, 50, 1.2f),
-        new BossAttack("Small Donut", 180, 0.0f, 0.3f, 10, 0.3f)
+        new BossAttack("Melee", 30, 0.0f, 0.4f, 35, 1.0f),
+        new BossAttack("Sniper", 5, 0.0f, 1.0f, 300, 4.8f),
+        new BossAttack("Ranged", 30, 0.4f, 1.0f, 35, 1.0f),
+        new BossAttack("Small Donut", 120, 0.0f, 0.4f, 20, 0.2f)
     };
 
     public static BossAttack[] selectedAttacks = new BossAttack[Parameters.NUMBER_OF_ATTACKS];
 
     public static List<BossAttack> chooseableUpgradeAttacks = new List<BossAttack>(){
-        new BossAttack("Big Donut", 180, 0.4f, 1.0f, 10, 0.3f),
-        new BossAttack("Small Donut Nuke", 180, 0.0f, 0.3f, 400, 10.0f),
-        new BossAttack("Big Donut Nuke", 180, 0.5f, 1.0f, 400, 10),
-        new BossAttack("Thin Melee", 15, 0.0f, 0.4f, 80, 1.2f)
+        new BossAttack("Lazer", 1, 0.0f, 1.0f, 10, 0.1f),
+        new BossAttack("Touch of Death", 2, 0.9f, 1.0f, 300, 0.08f),
+        new BossAttack("Small Donut Nuke", 180, 0.0f, 0.3f, 400, 9f),
+        new BossAttack("Big Donut Nuke", 180, 0.5f, 0.7f, 400, 9),
+        new BossAttack("Thin Melee", 15, 0.0f, 0.4f, 50, 1.0f),
+        new BossAttack("Swipe", 75, 0.0f, 0.45f, 100, 1.8f),
+        new BossAttack("Ranged Donut", 120, 0.5f, 0.7f, 20, 0.2f)
     };
 
     public static List<BossAttack> chosenUpgradeAttacks = new List<BossAttack>();
@@ -58,15 +61,15 @@ public class AttackLists
         {"Melee", "Art/zodiac/aquarius-water-container-symbol"},
         {"Sniper", "Art/zodiac/aries-symbol"},
         {"Ranged", "Art/zodiac/capricorn-1"},
-        {"Small Donut", "Art/zodiac/crab-symbol-for-zodiac-cancer-sign"},
+        {"Lazer", "Art/zodiac/crab-symbol-for-zodiac-cancer-sign"},
         {"Big Donut", "Art/zodiac/gemini-male-twins-zodiac-sign-symbol"},
         {"Small Donut Nuke", "Art/zodiac/leo-zodiac-symbol-of-lion-head-from-side-view"},
         {"Big Donut Nuke", "Art/zodiac/libra-balanced-scale-symbol"},
         {"Thin Melee", "Art/zodiac/pisces-astrological-sign-symbol-of-two-fishes"},
-        {"sagittarius", "Art/zodiac/sagittarius-zodiac-symbol"},
-        {"scorpio", "Art/zodiac/scorpio"},
-        {"taurus", "Art/zodiac/taurus-astrological-sign-symbol"},
-        {"virgo", "Art/zodiac/virgo-zodiac-symbol"}
+        {"Touch of Death", "Art/zodiac/sagittarius-zodiac-symbol"},
+        {"Small Donut", "Art/zodiac/scorpio"},
+        {"Ranged Donut", "Art/zodiac/taurus-astrological-sign-symbol"},
+        {"Swipe", "Art/zodiac/virgo-zodiac-symbol"}
     };
 
     public static string GetAssetString(string name)

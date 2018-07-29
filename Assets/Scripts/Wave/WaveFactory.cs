@@ -13,7 +13,7 @@ public class WaveFactory
         ClosingRotatingCircle,
         TwoStandardRings,
         RangedShooters,
-        OneZigZag
+        TwoZigZags
     };
 
     public static Wave GenerateWave(int level)
@@ -30,7 +30,7 @@ public class WaveFactory
                 return FourthWave();
             default:
                 Wave wave = new Wave();
-                while (level > 3)
+                while (level > 0)
                 {
                     wave.Merge(RandomWaveComponent(level));
                     level -= 5;
@@ -76,7 +76,7 @@ public class WaveFactory
     private static Wave FourthWave()
     {
         Wave wave = ThirdWave();
-        wave.Append(ThirdWave());
+        wave.Merge(ThirdWave(), 3.0f);
         return wave;
     }
 
@@ -169,6 +169,28 @@ public class WaveFactory
         subWave.ScaleSubWaveAngularSpeed(((float)difficulty) / 5);
         subWave.ScaleSubWaveDamage(((float)difficulty) / 5);
         wave.AddSubWave(subWave, 0.0f);
+        return wave;
+    }
+
+    public static Wave TwoZigZags(int difficulty)
+    {
+        float angle = UnityEngine.Random.value * 360;
+        Wave wave = new Wave();
+        for (int i = 0; i < (difficulty / 3) + 2; i++)
+        {
+            SubWave subWave = new SubWave();
+            StatsHolder zigZag1 = EnemyFactory.ZigZag(true);
+            StatsHolder zigZag2 = EnemyFactory.ZigZag(false);
+            zigZag1.zigZagAngle = 20;
+            zigZag2.zigZagAngle = 20;
+            zigZag1.predefinedPosition = true;
+            zigZag2.predefinedPosition = true;
+            zigZag1.spawnAngle = angle;
+            zigZag2.spawnAngle = angle;
+            subWave.AddEnemy(zigZag1);
+            subWave.AddEnemy(zigZag2);
+            wave.AddSubWave(subWave, i * 0.7f);
+        }
         return wave;
     }
 }

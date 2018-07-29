@@ -12,7 +12,6 @@ public class EnemyFactory
 		FastEnemy,
 		Rotator,
 		RangedCirclingEnemy,
-		SmallBomber,
 		ZigZag
     };
 
@@ -58,7 +57,7 @@ public class EnemyFactory
 
     public static StatsHolder FastEnemy()
     {
-        return new StatsHolder("Ranged", 2.0f, 1.0f, 2.5f, 50.0f, 0.5f, Color.yellow);
+        return new StatsHolder("Ranged", 2.0f, 1.0f, 2.0f, 50.0f, 0.5f, Color.yellow);
     }
 
     public static StatsHolder RangedCirclingEnemy(bool clockwise)
@@ -78,7 +77,7 @@ public class EnemyFactory
     public static StatsHolder RangedCirclingEnemy()
     {
 		bool clockwise = UnityEngine.Random.value >= 0.5;
-        StatsHolder stats = new StatsHolder("Shooting Shark", 3.0f, 1.0f, 2.5f, 50.0f, 1.2f, new Color(1.0f, 0.0f, 1.0f, 1.0f));
+        StatsHolder stats = new StatsHolder("Shooting Shark", 3.0f, 1.0f, 2.0f, 50.0f, 1.2f, new Color(1.0f, 0.0f, 1.0f, 1.0f));
         if (clockwise)
         {
             stats.circlingSpeed = -30f;
@@ -146,8 +145,17 @@ public class EnemyFactory
 
     public static StatsHolder ZigZag()
     {
-        StatsHolder stats = new StatsHolder("ZigZag", 0.5f, 2.5f, 1.0f, 100.0f, 1.0f, Color.white);
+        StatsHolder stats = new StatsHolder("ZigZag", 0.8f, 2.5f, 1.0f, 100.0f, 1.0f, Color.white);
         stats.angularSpeed = 70f;
+        stats.zigZag = true;
+        stats.zigZagAngle = 90;
+        return stats;
+    }
+
+    public static StatsHolder ZigZag(bool clockwise)
+    {
+        StatsHolder stats = new StatsHolder("ZigZag", 0.8f, 2.5f, 1.0f, 100.0f, 1.0f, Color.white);
+        stats.angularSpeed = clockwise ? -30 : 30;
         stats.zigZag = true;
         stats.zigZagAngle = 90;
         return stats;
