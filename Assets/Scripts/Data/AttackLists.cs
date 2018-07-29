@@ -40,7 +40,7 @@ public class AttackLists
         new BossAttack("Melee", 30, 0.0f, 0.4f, 35, 1.0f),
         new BossAttack("Sniper", 5, 0.0f, 1.0f, 300, 4.8f),
         new BossAttack("Ranged", 30, 0.4f, 1.0f, 35, 1.0f),
-        new BossAttack("Small Donut", 120, 0.0f, 0.4f, 20, 0.2f)
+        new BossAttack("Small Donut", 120, 0.0f, 0.4f, 15, 0.4f)
     };
 
     public static BossAttack[] selectedAttacks = new BossAttack[Parameters.NUMBER_OF_ATTACKS];
