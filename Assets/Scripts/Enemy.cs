@@ -47,6 +47,7 @@ public class Enemy : MonoBehaviour {
 	void Start () {
 		camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
 		bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>(); // Should all units know of the hero's health?
+		transform.Find("Sprite").rotation = Quaternion.LookRotation (Vector3.forward, -transform.position);
 	}
 
 	void Update () {
