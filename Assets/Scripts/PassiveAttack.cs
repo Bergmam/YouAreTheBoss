@@ -19,6 +19,7 @@ public class PassiveAttack : MonoBehaviour
     private ColorModifier aimColorModifier;
     private float MIN_ATTACK_RADIUS = 0.5f;
     private float MAX_ATTACK_RADIUS = 2.8f;
+    private bool aimingActiveAttack = false;
 
     void Awake()
     {
@@ -96,7 +97,8 @@ public class PassiveAttack : MonoBehaviour
             currentCooldownBehaviour.RestartCooldown();
         }
 
-        this.aimColorModifier.FadeToSelected(this.currentAttack.frequency);
+        this.aimColorModifier.FadeToSelected(0.0f);
+        this.aimColorModifier.FadeToDeselected(this.currentAttack.frequency);
 
         StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Color.white, 0.5f));
     }
@@ -109,7 +111,7 @@ public class PassiveAttack : MonoBehaviour
 
         // If the new attack is slow, and this is not the first attack we are doing,
         // save the attack as a reference to the previous attack
-        if (newAttack.frequency > Parameters.SLOW_ATTACK_LIMIT && this.currentAttack != null)
+        if (newAttack.frequency > Parameters.SLOW_ATTACK_LIMIT && this.currentAttack != null && !aimingActiveAttack)
         {
             this.previousAttack = this.currentAttack;
             this.previousAttackNumber = this.currentAttackNumber;
@@ -122,6 +124,7 @@ public class PassiveAttack : MonoBehaviour
         // Set fill and mask for the attack area
         if (radialFillControl != null)
         {
+            this.aimColorModifier.FadeToSelected(0.0f);
             radialFillControl.SetMirroredFill((int)this.currentAttack.angle);
         }
 
@@ -129,6 +132,15 @@ public class PassiveAttack : MonoBehaviour
         {
             attackMaskControl.SetSize(this.currentAttack.closeRadiusScale, this.currentAttack.farRadiusScale);
         }
+
+
+        if (newAttack.frequency > Parameters.SLOW_ATTACK_LIMIT && this.currentAttack != null && !aimingActiveAttack)
+        {
+            this.aimingActiveAttack = true;
+            return;
+        }
+        this.aimingActiveAttack = false;
+
 
         GameObject currentAttackButton = GameObject.Find("Passive" + attackNumber + "Button");
         if (currentAttackButton != null)

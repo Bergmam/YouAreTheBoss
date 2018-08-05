@@ -52,7 +52,7 @@ public class ColorModifier : MonoBehaviour {
 		this.fadeToSelected = true;
 	}
 
-	public void FadeToDelected(float duration)
+	public void FadeToDeselected(float duration)
 	{
 		Select();
 		this.countDownStartTime = duration;
