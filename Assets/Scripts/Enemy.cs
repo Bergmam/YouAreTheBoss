@@ -16,6 +16,8 @@ public class Enemy : MonoBehaviour {
 
 	private float MaxHealth = 100.0f;
 
+	public bool SetForDeath = false;
+
 	private float Scale = 1.0f;
 	private float circlingSpeed;
 
@@ -33,21 +35,23 @@ public class Enemy : MonoBehaviour {
 	private float zigZagAngleHigh;
 	private bool zigZag;
 
+	private Transform sprite;
+
 	// Handle camera shaking
 	CameraShake camShake;
 
 	void Awake()
 	{
 		this.enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
-		Transform sprite = transform.Find("Sprite");
-		this.colorModifier = sprite.GetComponent<ColorModifier>();
+		this.sprite = transform.Find("Sprite");
+		this.colorModifier = this.sprite.GetComponent<ColorModifier>();
 		this.hitParticle = Resources.Load("Prefabs/hitParticleSystem", typeof(GameObject)) as GameObject;
 	}
 
 	void Start () {
 		camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
 		bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>(); // Should all units know of the hero's health?
-		transform.Find("Sprite").rotation = Quaternion.LookRotation (Vector3.forward, -transform.position);
+		transform.Find("Sprite").rotation = Quaternion.LookRotation (Vector3.forward, Vector3.zero - transform.position);
 	}
 
 	void Update () {
@@ -93,17 +97,20 @@ public class Enemy : MonoBehaviour {
 				InvokeRepeating ("spawnProjectile", 0, this.attackFrequency);
 			}
 		}
+		transform.Find("Sprite").rotation = Quaternion.LookRotation (Vector3.forward, Vector3.zero - transform.position);
 
 	}
 
 	void doDamageToBoss() {
-		camShake.Shake(0.05f, 0.1f);
-		this.colorModifier.FadeToDelected(this.attackFrequency / 3f);
-		GameObject hitParticle = Instantiate(this.hitParticle, transform.position / 2, transform.rotation);
-		var main = hitParticle.GetComponent<ParticleSystem>().main;
-		main.startColor = new Color(0.3f, 0.082f, 0.3945f, 0.6f);
-		Destroy(hitParticle, hitParticle.GetComponent<ParticleSystem>().main.duration);
-		bossHealth.bossTakeDamage(Damage);
+		if (!SetForDeath){
+			camShake.Shake(0.05f, 0.1f);
+			this.colorModifier.FadeToDelected(this.attackFrequency / 3f);
+			GameObject hitParticle = Instantiate(this.hitParticle, transform.position / 2, transform.rotation);
+			var main = hitParticle.GetComponent<ParticleSystem>().main;
+			main.startColor = new Color(0.3f, 0.082f, 0.3945f, 0.6f);
+			Destroy(hitParticle, hitParticle.GetComponent<ParticleSystem>().main.duration);
+			bossHealth.bossTakeDamage(Damage);
+		}
 	}
 
 	/// <summary>
@@ -214,6 +221,13 @@ public class Enemy : MonoBehaviour {
 			Destroy (healthBarTransform.gameObject);
 		}
 
+		SetForDeath = true;
+		var renderer = this.sprite.gameObject.GetComponent<Renderer>();
+		//renderer.material = Resources.Load("Materials/MAT_Dissolve", typeof(Material)) as Material;
+		Invoke("DestroyGO", 0);
+	}
+
+	private void DestroyGO(){
 		Destroy(gameObject);
 	}
 
