@@ -20,6 +20,10 @@ public class PassiveAttack : MonoBehaviour
     private float MIN_ATTACK_RADIUS = 0.5f;
     private float MAX_ATTACK_RADIUS = 2.8f;
     private bool aimingActiveAttack = false;
+    private GameObject backgroundFade;
+    GameObject currentAttackButton;
+    Color currentAttackButtonOriginalColor;
+    private CameraShake camShake;
 
     void Awake()
     {
@@ -27,6 +31,9 @@ public class PassiveAttack : MonoBehaviour
         this.attackMaskControl = GameObject.FindObjectOfType<AttackMaskControl>();
         Transform aim = UnityUtils.RecursiveFind(transform, "Image");
         this.aimColorModifier = aim.GetComponent<ColorModifier>();
+        this.backgroundFade = GameObject.Find("BackgroundFade");
+        this.backgroundFade.SetActive(false);
+        camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
     }
 
     void Start()
@@ -45,7 +52,7 @@ public class PassiveAttack : MonoBehaviour
 
         if (attackDict[1].frequency < Parameters.SLOW_ATTACK_LIMIT)
         {
-            setAttack(1);
+            SetAttack(1);
         }
         else
         {
@@ -53,7 +60,7 @@ public class PassiveAttack : MonoBehaviour
             {
                 if (keyVal.Value.frequency < Parameters.SLOW_ATTACK_LIMIT)
                 {
-                    setAttack(keyVal.Key);
+                    SetAttack(keyVal.Key);
                     break;
                 }
             }
@@ -65,7 +72,7 @@ public class PassiveAttack : MonoBehaviour
         UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>().color = Parameters.AIM_DEFAULT_COLOR;
     }
 
-    void doAttack()
+    void DoAttack()
     {
         Color color = UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>().color;
         color.a = 0.0f;
@@ -100,10 +107,21 @@ public class PassiveAttack : MonoBehaviour
         this.aimColorModifier.FadeToSelected(0.0f);
         this.aimColorModifier.FadeToDeselected(this.currentAttack.frequency);
 
+        if (this.aimingActiveAttack)
+        {
+            this.camShake.Shake(0.1f, 0.2f);
+            this.currentAttackButton.transform.parent.GetComponent<Image>().color = this.currentAttackButtonOriginalColor;
+        }
+        foreach (Transform child in GameObject.Find("BossButtons").transform)
+        {
+            child.Find("Overlay").GetComponent<Image>().color = new Color(0, 0, 0, 0.0f);
+        }
+        this.aimingActiveAttack = false;
+        this.backgroundFade.SetActive(false);
         StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Color.white, 0.5f));
     }
 
-    public void setAttack(int attackNumber)
+    public void SetAttack(int attackNumber)
     {
         CancelInvoke();
 
@@ -133,16 +151,30 @@ public class PassiveAttack : MonoBehaviour
             attackMaskControl.SetSize(this.currentAttack.closeRadiusScale, this.currentAttack.farRadiusScale);
         }
 
+        this.currentAttackButton = GameObject.Find("Passive" + attackNumber + "Button");
 
         if (newAttack.frequency > Parameters.SLOW_ATTACK_LIMIT && this.currentAttack != null && !aimingActiveAttack)
         {
+            this.currentAttackButtonOriginalColor = this.currentAttackButton.transform.parent.GetComponent<Image>().color;
+            gameObject.GetComponent<SpriteRenderer>().color = Color.magenta;
+            this.currentAttackButton.transform.parent.GetComponent<Image>().color = Color.magenta;
+            this.backgroundFade.SetActive(true);
+            Color aimColor = Color.magenta;
+            aimColor.a = 0.6f;
+            this.aimColorModifier.SetColor(aimColor);
+            foreach (Transform child in GameObject.Find("BossButtons").transform)
+            {
+                if (!child.name.Contains(currentAttackNumber.ToString()))
+                {
+                    child.Find("Overlay").GetComponent<Image>().color = new Color(0, 0, 0, 0.2f);
+                }
+            }
             this.aimingActiveAttack = true;
+
             return;
         }
-        this.aimingActiveAttack = false;
 
 
-        GameObject currentAttackButton = GameObject.Find("Passive" + attackNumber + "Button");
         if (currentAttackButton != null)
         {
             this.currentCooldownBehaviour = currentAttackButton.GetComponentInChildren<CooldownBehaviour>();
@@ -152,7 +184,7 @@ public class PassiveAttack : MonoBehaviour
             }
         }
 
-        InvokeRepeating("doAttack", 0, this.currentAttack.frequency);
+        InvokeRepeating("DoAttack", 0, this.currentAttack.frequency);
 
         // If the current attack is slow, wait a little and set back to the previous attack
         if (this.currentAttack.frequency > Parameters.SLOW_ATTACK_LIMIT)
@@ -167,12 +199,20 @@ public class PassiveAttack : MonoBehaviour
         yield return new WaitForSeconds(time);
         if (this.currentActiveAttack.Equals(this.currentAttack))
         {
-            setAttack(previousAttackNumber);
+            SetAttack(previousAttackNumber);
         }
     }
 
     public BossAttack GetAttack(int number)
     {
         return this.attackDict[number];
+    }
+
+    void Update()
+    {
+        if (this.aimingActiveAttack)
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = Color.magenta;
+        }
     }
 }
