@@ -78,7 +78,7 @@ public class PassiveAttack : MonoBehaviour
         float attackFarRadius = this.MIN_ATTACK_RADIUS + this.currentAttack.farRadiusScale * (this.MAX_ATTACK_RADIUS - this.MIN_ATTACK_RADIUS);
         foreach (Enemy enemy in GameObject.FindObjectsOfType(typeof(Enemy)))
         {
-            if (enemy.isInAttackArea(unitCircleRotation - this.currentAttack.angle,
+            if (!enemy.SetForDeath && enemy.isInAttackArea(unitCircleRotation - this.currentAttack.angle,
                     unitCircleRotation + this.currentAttack.angle,
                     attackCloseRadius,
                     attackFarRadius))

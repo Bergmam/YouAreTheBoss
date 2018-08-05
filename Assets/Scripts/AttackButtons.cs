@@ -13,6 +13,8 @@ public class AttackButtons : MonoBehaviour
     Button playButton;
     GameObject attackPopUp;
     GameObject upgradePopUp;
+
+    GameObject infoButton;
     private Dictionary<string, Button> attackButtons = new Dictionary<string, Button>();
     private static Color whiteNoAlpha = new Color(1, 1, 1, 0);
     GameObject attackButtonPrefab;
@@ -20,6 +22,7 @@ public class AttackButtons : MonoBehaviour
     void Awake()
     {
         this.attackPopUp = GameObject.Find("AttackPopUp");
+        this.infoButton = GameObject.Find("InfoButton");
         this.playButton = GameObject.Find("PlayButton").GetComponent<Button>();
         this.attackButtonPrefab = Resources.Load("Prefabs/AttackButton", typeof(GameObject)) as GameObject;
         this.upgradePopUp = GameObject.Find("UpgradePopUp");
@@ -48,6 +51,7 @@ public class AttackButtons : MonoBehaviour
         bool attackUpgradesLeft = AttackLists.chooseableUpgradeAttacks.Count >= 2;
         if (onUpgradeWave && attackUpgradesLeft)
         {
+            infoButton.GetComponent<Button>().interactable = false;
             upgradePopUp.SetActive(true);
             DisableButtons();
 
@@ -114,6 +118,7 @@ public class AttackButtons : MonoBehaviour
         if (!clickedButtons.Contains(button) && clickedButtons.Count < 3)
         {
             DisableButtons();
+            infoButton.GetComponent<Button>().interactable = false;
             attackPopUp.SetActive(true);
             int buttonNumber = Int32.Parse(button.transform.name.Replace("Attack", ""));
             BossAttack attack = AttackLists.GetSelectableAttack(buttonNumber);
@@ -143,6 +148,7 @@ public class AttackButtons : MonoBehaviour
         EnableAttackButtons();
         DisableUnclickedButtons();
         upgradePopUp.SetActive(false);
+        infoButton.GetComponent<Button>().interactable = false;
     }
 
     public void DisablePopUp()
@@ -151,6 +157,7 @@ public class AttackButtons : MonoBehaviour
         EnableAttackButtons();
 
         attackPopUp.SetActive(false);
+        infoButton.GetComponent<Button>().interactable = true;
     }
 
     public void SelectAttackButton(Button button)

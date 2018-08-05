@@ -57,17 +57,6 @@ public class PlayAttackOnBoss : MonoBehaviour
 
         Color zeroAlphaColor = color;
         zeroAlphaColor.a = 0.0f;
-        object[] obj = GameObject.FindObjectsOfType(typeof(GameObject));
-        foreach (Enemy enemy in GameObject.FindObjectsOfType(typeof(Enemy)))
-        {
-            if (enemy.isInAttackArea(unitCircleRotation - this.currentAttack.angle,
-                    unitCircleRotation + this.currentAttack.angle,
-                    this.currentAttack.closeRadiusScale,
-                    this.currentAttack.farRadiusScale))
-            {
-                enemy.applyDamageTo(this.currentAttack.damage);
-            }
-        }
 
         // For now, change color of boss when he is attacking
         // TODO: Change when areas of damage is implemented
