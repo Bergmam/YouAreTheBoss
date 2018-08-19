@@ -154,7 +154,7 @@ public class PassiveAttack : MonoBehaviour
 
         this.currentAttackButton = GameObject.Find("Passive" + attackNumber + "Button");
 
-        if (newAttack.frequency > Parameters.SLOW_ATTACK_LIMIT && this.currentAttack != null && !aimingActiveAttack)
+        if (newAttack.frequency > Parameters.SLOW_ATTACK_LIMIT && !aimingActiveAttack)
         {
             this.currentAttackButtonOriginalColor = this.currentAttackButton.transform.parent.GetComponent<Image>().color;
             gameObject.GetComponent<SpriteRenderer>().color = Color.magenta;
@@ -177,6 +177,10 @@ public class PassiveAttack : MonoBehaviour
             this.aimingActiveAttack = true;
 
             return;
+        }
+        else if (newAttack.frequency <= Parameters.SLOW_ATTACK_LIMIT && aimingActiveAttack)
+        {
+            this.aimingActiveAttack = false;
         }
 
 
