@@ -115,6 +115,7 @@ public class PassiveAttack : MonoBehaviour
         foreach (Transform child in GameObject.Find("BossButtons").transform)
         {
             child.Find("Overlay").GetComponent<Image>().color = new Color(0, 0, 0, 0.0f);
+            child.Find("Highlight").GetComponent<Image>().color = new Color(0, 0, 0, 0.0f);
         }
         this.aimingActiveAttack = false;
         this.backgroundFade.SetActive(false);
@@ -157,7 +158,7 @@ public class PassiveAttack : MonoBehaviour
         {
             this.currentAttackButtonOriginalColor = this.currentAttackButton.transform.parent.GetComponent<Image>().color;
             gameObject.GetComponent<SpriteRenderer>().color = Color.magenta;
-            this.currentAttackButton.transform.parent.GetComponent<Image>().color = Color.magenta;
+            this.currentAttackButton.transform.parent.GetComponent<Image>().color = new Color(1.0f, 0.3f, 1.0f, 1.0f);
             this.backgroundFade.SetActive(true);
             Color aimColor = Color.magenta;
             aimColor.a = 0.6f;
@@ -167,6 +168,10 @@ public class PassiveAttack : MonoBehaviour
                 if (!child.name.Contains(currentAttackNumber.ToString()))
                 {
                     child.Find("Overlay").GetComponent<Image>().color = new Color(0, 0, 0, 0.2f);
+                }
+                else
+                {
+                    child.Find("Highlight").GetComponent<Image>().color = Color.magenta;
                 }
             }
             this.aimingActiveAttack = true;
