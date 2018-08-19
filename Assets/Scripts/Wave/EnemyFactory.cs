@@ -91,7 +91,7 @@ public class EnemyFactory
 
     public static StatsHolder StandardEnemy()
     {
-        return new StatsHolder("Standard Enemy", 1.0f, 2.5f, 1.0f, 100.0f, 1.0f, Color.white);
+        return new StatsHolder("Standard Enemy", 1.0f, 2.5f, 1.0f, 100.0f, 1.0f, Color.green);
     }
 
     public static StatsHolder Projectile(float damage)

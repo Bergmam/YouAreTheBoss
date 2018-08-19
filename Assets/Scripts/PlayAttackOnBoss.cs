@@ -63,7 +63,7 @@ public class PlayAttackOnBoss : MonoBehaviour
         gameObject.GetComponent<SpriteRenderer>().color = Color.red;
 
         this.aimColorModifier.FadeToSelected(this.currentAttack.frequency);
-        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 0.89f, 1);
 
         //StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Color.white, 0.5f));
     }

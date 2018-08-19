@@ -21,7 +21,7 @@ public class BackgroundRotater : MonoBehaviour {
 		rotator3 = GameObject.Find("Rotator 3");
 		rotators.Add(rotator3);
 
-		Color randomColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.8f, 1f, 0.28f, 0.28f);
+		Color randomColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.8f, 1f, 0.6f, 0.6f);
 
 		foreach(GameObject rotator in rotators){
 			rotatorSpeeds[rotator.name] = UnityEngine.Random.Range(-0.4f, 0.4f);

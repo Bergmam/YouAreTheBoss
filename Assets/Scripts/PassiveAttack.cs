@@ -119,7 +119,7 @@ public class PassiveAttack : MonoBehaviour
         }
         this.aimingActiveAttack = false;
         this.backgroundFade.SetActive(false);
-        StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Color.white, 0.5f));
+        StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), new Color(0, 0.89f, 1), 0.5f));
     }
 
     public void SetAttack(int attackNumber)
