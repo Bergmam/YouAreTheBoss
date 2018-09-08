@@ -26,7 +26,7 @@ public class BossHealth : MonoBehaviour
         bossHealthBar = GameObject.Find("BossHealthBar").GetComponent<ProgressBarBehaviour>();
     }
 
-    public void bossTakeDamage(float damage)
+    public bool bossTakeDamage(float damage)
     {
         BossHealthVal = BossHealthVal - damage;
         bossHealthBar.UpdateFill(BossHealthVal / 100.0f);
@@ -45,6 +45,11 @@ public class BossHealth : MonoBehaviour
             this.scoreLabel.SetActive(false);
             this.bossButtons.SetActive(false);
             ((WaveHandler)GameObject.FindObjectOfType(typeof(WaveHandler))).clearWave();
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 

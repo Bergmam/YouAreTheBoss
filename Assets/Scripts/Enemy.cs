@@ -111,13 +111,16 @@ public class Enemy : MonoBehaviour
     {
         if (!SetForDeath)
         {
-            camShake.Shake(0.05f, 0.1f);
-            this.colorModifier.FadeToDeselected(this.attackFrequency / 3f);
-            GameObject hitParticle = Instantiate(this.hitParticle, transform.position / 2, transform.rotation);
-            var main = hitParticle.GetComponent<ParticleSystem>().main;
-            main.startColor = new Color(0.3f, 0.082f, 0.3945f, 0.6f);
-            Destroy(hitParticle, hitParticle.GetComponent<ParticleSystem>().main.duration);
-            bossHealth.bossTakeDamage(Damage);
+            bool killingBlow = bossHealth.bossTakeDamage(Damage);
+            if (!killingBlow)
+            {
+                camShake.Shake(0.05f, 0.1f);
+                this.colorModifier.FadeToDeselected(this.attackFrequency / 3f);
+                GameObject hitParticle = Instantiate(this.hitParticle, transform.position / 2, transform.rotation);
+                var main = hitParticle.GetComponent<ParticleSystem>().main;
+                main.startColor = new Color(0.3f, 0.082f, 0.3945f, 0.6f);
+                Destroy(hitParticle, hitParticle.GetComponent<ParticleSystem>().main.duration);
+            }
         }
     }
 
