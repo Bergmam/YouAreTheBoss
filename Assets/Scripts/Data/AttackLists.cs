@@ -58,18 +58,18 @@ public class AttackLists
     public static List<BossAttack> chosenUpgradeAttacks = new List<BossAttack>();
     private static Dictionary<string, string> nameAssetNameDictionary = new Dictionary<string, string>()
     {
-        {"Melee", "Art/zodiac/aquarius-water-container-symbol"},
-        {"Sniper", "Art/zodiac/aries-symbol"},
-        {"Ranged", "Art/zodiac/capricorn-1"},
-        {"Lazer", "Art/zodiac/crab-symbol-for-zodiac-cancer-sign"},
-        {"Big Donut", "Art/zodiac/gemini-male-twins-zodiac-sign-symbol"},
-        {"Small Donut Nuke", "Art/zodiac/leo-zodiac-symbol-of-lion-head-from-side-view"},
-        {"Big Donut Nuke", "Art/zodiac/libra-balanced-scale-symbol"},
-        {"Thin Melee", "Art/zodiac/pisces-astrological-sign-symbol-of-two-fishes"},
-        {"Touch of Death", "Art/zodiac/sagittarius-zodiac-symbol"},
-        {"Small Donut", "Art/zodiac/scorpio"},
-        {"Ranged Donut", "Art/zodiac/taurus-astrological-sign-symbol"},
-        {"Swipe", "Art/zodiac/virgo-zodiac-symbol"}
+        {"Melee", "Art/starsigns/aquarius"},
+        {"Sniper", "Art/starsigns/aries"},
+        {"Ranged", "Art/starsigns/capricorn"},
+        {"Lazer", "Art/starsigns/crab"},
+        {"Big Donut", "Art/starsigns/gemini"},
+        {"Small Donut Nuke", "Art/starsigns/lion"},
+        {"Big Donut Nuke", "Art/starsigns/libra"},
+        {"Thin Melee", "Art/starsigns/pisces"},
+        {"Touch of Death", "Art/starsigns/sagititarius"},
+        {"Small Donut", "Art/starsigns/scorpio"},
+        {"Ranged Donut", "Art/starsigns/taurus"},
+        {"Swipe", "Art/starsigns/virgo"}
     };
 
     public static string GetAssetString(string name)
