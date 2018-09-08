@@ -49,4 +49,14 @@ public class WaveHandler : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
         SceneHandler.SwitchScene("Main Menu Scene");
     }
+
+    public void clearWave()
+    {
+        this.gameOver = true;
+        this.enemySpawner.SpawnWave(null);
+        foreach (Enemy enemy in GameObject.FindObjectsOfType(typeof(Enemy)))
+        {
+            GameObject.Destroy(enemy.gameObject);
+        }
+    }
 }

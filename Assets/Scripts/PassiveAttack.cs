@@ -24,6 +24,7 @@ public class PassiveAttack : MonoBehaviour
     GameObject currentAttackButton;
     Color currentAttackButtonOriginalColor;
     private CameraShake camShake;
+    private GameObject bossButtons;
 
     void Awake()
     {
@@ -33,6 +34,7 @@ public class PassiveAttack : MonoBehaviour
         this.aimColorModifier = aim.GetComponent<ColorModifier>();
         this.backgroundFade = GameObject.Find("BackgroundFade");
         this.backgroundFade.SetActive(false);
+        this.bossButtons = GameObject.Find("BossButtons");
         camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
     }
 
@@ -112,7 +114,7 @@ public class PassiveAttack : MonoBehaviour
             this.camShake.Shake(0.1f, 0.2f);
             this.currentAttackButton.transform.parent.GetComponent<Image>().color = this.currentAttackButtonOriginalColor;
         }
-        foreach (Transform child in GameObject.Find("BossButtons").transform)
+        foreach (Transform child in bossButtons.transform)
         {
             child.Find("Overlay").GetComponent<Image>().color = new Color(0, 0, 0, 0.0f);
             child.Find("Highlight").GetComponent<Image>().color = new Color(0, 0, 0, 0.0f);
