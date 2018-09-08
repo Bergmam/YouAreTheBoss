@@ -7,6 +7,16 @@ public class BossHealth : MonoBehaviour
 
     public float BossHealthVal = 100.0f;
     ProgressBarBehaviour bossHealthBar;
+    private GameObject gameOverPanel;
+    private GameObject scoreLabel;
+
+    void Awake()
+    {
+        this.gameOverPanel = GameObject.Find("GameOverPanel");
+        this.scoreLabel = GameObject.Find("ScoreLabel");
+        this.gameOverPanel.SetActive(false);
+        this.scoreLabel.SetActive(true);
+    }
 
     void Start()
     {
@@ -28,9 +38,17 @@ public class BossHealth : MonoBehaviour
             {
                 WaveNumber.highScore = WaveNumber.waveNumber;
             }
-            WaveNumber.waveNumber = 0;
-            AttackLists.ResetUpgradedAttacks();
-            SceneHandler.SwitchScene("Main Menu Scene");
+            this.gameOverPanel.SetActive(true);
+            this.scoreLabel.SetActive(false);
         }
+    }
+
+    public void playAgain()
+    {
+        this.gameOverPanel.SetActive(false);
+        this.scoreLabel.SetActive(true);
+        WaveNumber.waveNumber = 0;
+        AttackLists.ResetUpgradedAttacks();
+        SceneHandler.SwitchScene("Main Menu Scene");
     }
 }
