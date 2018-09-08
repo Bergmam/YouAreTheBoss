@@ -40,6 +40,7 @@ public class BossHealth : MonoBehaviour
             }
             this.gameOverPanel.SetActive(true);
             this.scoreLabel.SetActive(false);
+            ((WaveHandler)GameObject.FindObjectOfType(typeof(WaveHandler))).clearWave();
         }
     }
 
