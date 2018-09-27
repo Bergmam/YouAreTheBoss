@@ -36,7 +36,7 @@ public class StatsHolder
         this.MovementSpeed = MovementSpeed;
         this.Damage = Damage;
         this.Range = Range;
-        this.Health = Health;
+        this.Health = Health * Parameters.HEALTH_SCALE;
         this.Scale = Scale;
         this.Color = Color;
         this.angularSpeed = 0f;

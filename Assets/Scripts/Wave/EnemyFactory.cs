@@ -91,7 +91,7 @@ public class EnemyFactory
 
     public static StatsHolder StandardEnemy()
     {
-        return new StatsHolder("Standard Enemy", 1.0f, 2.5f, 1.0f, 100.0f, 1.0f, Color.green);
+        return new StatsHolder("Standard Enemy", 0.8f, 2.5f, 1.0f, 100.0f, 1.0f, Color.green);
     }
 
     public static StatsHolder Projectile(float damage)
@@ -129,8 +129,8 @@ public class EnemyFactory
 
     public static StatsHolder RangedSpawner()
     {
-        StatsHolder stats = new StatsHolder("Mad Spawner", 10.0f, 1.0f, 3.0f, 400.0f, 3.0f, Color.grey);
-        stats.attackDelay = 0.6f;
+        StatsHolder stats = new StatsHolder("Mad Spawner", 4.0f, 1.0f, 3.0f, 400.0f, 3.0f, Color.grey);
+        stats.attackDelay = 1.0f;
         stats.projectile = RangedCirclingMinon();
         return stats;
     }

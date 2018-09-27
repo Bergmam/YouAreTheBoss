@@ -8,8 +8,6 @@ public class Wave
 {
     private SortedDictionary<float, SubWave> subWaves;
 
-    public static float STANDARD_WAVE_DURATION = 7.5f;
-
     public Wave()
     {
         this.subWaves = new SortedDictionary<float, SubWave>();
@@ -98,7 +96,7 @@ public class Wave
         {
             return 0.0f;
         }
-        return this.GetTimeStamp(this.subWaves.Count - 1) + STANDARD_WAVE_DURATION;
+        return this.GetTimeStamp(this.subWaves.Count - 1) + Parameters.STANDARD_WAVE_DURATION;
     }
 
     public void Append(Wave other)

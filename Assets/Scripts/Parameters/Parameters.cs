@@ -28,4 +28,8 @@ public static class Parameters {
 	public static float FAST_ENEMY_MIN_SPEED = 3.0f;
 	public static float DURABLE_ENEMY_MIN_HEALTH = 200f;
 	public static int ATTACK_UPGRADE_WAVE_NUMBER = 5;
+
+	public static float STANDARD_WAVE_DURATION = 4.5f;
+
+	public static float HEALTH_SCALE = 0.7f;
 }

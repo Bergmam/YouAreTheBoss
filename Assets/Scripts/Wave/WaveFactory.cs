@@ -8,12 +8,14 @@ public class WaveFactory
 
     private static List<Func<int, Wave>> waveComponents = new List<Func<int, Wave>>()
     {
+        OppositeSides,
         RotatingWorm,
         RangedSpawner,
         ClosingRotatingCircle,
-        TwoStandardRings,
         RangedShooters,
-        TwoZigZags
+        TwoZigZags,
+        OneZigZag,
+        OneBigGuy
     };
 
     public static Wave GenerateWave(int level)
@@ -29,11 +31,21 @@ public class WaveFactory
             case 3:
                 return FourthWave();
             default:
-                Wave wave = new Wave();
-                while (level > 0)
+                Wave wave = RandomWaveComponent(5);
+                level -= 5;
+                int waves = 0;
+                while (level > 5)
                 {
-                    wave.Merge(RandomWaveComponent(level));
+                    waves++;
+                    Wave waveComponent = RandomWaveComponent(5);
+                    wave.Merge(waveComponent, Parameters.STANDARD_WAVE_DURATION * waves);
                     level -= 5;
+                }
+
+                if (level > 0)
+                {
+                    waves++;
+                    wave.Merge(RandomWaveComponent(level), Parameters.STANDARD_WAVE_DURATION * waves);
                 }
                 return wave;
         }
@@ -125,22 +137,28 @@ public class WaveFactory
         return wave;
     }
 
-    public static Wave TwoStandardRings(int difficulty)
+    public static Wave OppositeSides(int difficulty)
     {
         Wave wave = new Wave();
-        SubWave subWaveA = new SubWave();
+        float angleA = UnityEngine.Random.value * 360;
+        float angleB = (angleA + 180) % 360;
         for (int i = 0; i < difficulty; i++)
         {
-            if (i % 2 == 0)
-            {
-                subWaveA.AddEnemy(EnemyFactory.StandardEnemy());
-            }
+            SubWave subWave = new SubWave();
+            Wave tempWave = new Wave();
+            StatsHolder enemy = EnemyFactory.StandardEnemy();
+            enemy.predefinedPosition = true;
+            enemy.spawnAngle = i % 2 == 0 ? angleA : angleB;
+            subWave.AddEnemy(enemy);
+            StatsHolder enemy2 = enemy.Clone();
+            enemy2.spawnAngle = enemy.spawnAngle + 5.0f;
+            subWave.AddEnemy(enemy2);
+            StatsHolder enemy3 = enemy.Clone();
+            enemy3.spawnAngle = enemy.spawnAngle + 10.0f;
+            subWave.AddEnemy(enemy3);
+            tempWave.AddSubWave(subWave, 0.0f);
+            wave.Merge(tempWave, 2.0f * i);
         }
-        subWaveA.SpreadOut();
-        SubWave subWaveB = subWaveA.Clone();
-        subWaveB.Shift((180 / subWaveB.GetEnemies().Count) % 360);
-        wave.AddSubWave(subWaveA, 0.0f);
-        wave.AddSubWave(subWaveB, 2.0f);
         return wave;
     }
 
@@ -165,9 +183,20 @@ public class WaveFactory
         subWave.AddEnemy(EnemyFactory.ZigZag());
         subWave.ScaleSubWaveSpeed(0.5f);
         subWave.ScaleSubWaveSize(1.5f);
-        subWave.ScaleSubWaveHealth(difficulty);
-        subWave.ScaleSubWaveAngularSpeed(((float)difficulty) / 5);
-        subWave.ScaleSubWaveDamage(((float)difficulty) / 5);
+        subWave.ScaleSubWaveHealth(difficulty / 4.0f);
+        subWave.ScaleSubWaveAngularSpeed(((float)difficulty) / 5.0f);
+        subWave.ScaleSubWaveDamage(((float)difficulty) / 6.0f);
+        wave.AddSubWave(subWave, 0.0f);
+        return wave;
+    }
+
+    public static Wave OneBigGuy(int difficulty)
+    {
+        Wave wave = new Wave();
+        SubWave subWave = new SubWave();
+        subWave.AddEnemy(EnemyFactory.SlowEnemy());
+        subWave.ScaleSubWaveHealth(difficulty / 4.0f);
+        subWave.ScaleSubWaveDamage(((float)difficulty) / 6.0f);
         wave.AddSubWave(subWave, 0.0f);
         return wave;
     }

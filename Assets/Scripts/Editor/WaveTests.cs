@@ -29,7 +29,7 @@ public class WaveTests
         this.expextedAppendWaveAB = new Wave();
         this.expextedAppendWaveAB.AddSubWave(GenerateTestSubWave(), 0.0f);
         this.expextedAppendWaveAB.AddSubWave(GenerateTestSubWave(), 1.0f);
-        this.expextedAppendWaveAB.AddSubWave(GenerateTestSubWave(), 1.0f + Wave.STANDARD_WAVE_DURATION);
+        this.expextedAppendWaveAB.AddSubWave(GenerateTestSubWave(), 1.0f + Parameters.STANDARD_WAVE_DURATION);
     }
 
     [Test]
