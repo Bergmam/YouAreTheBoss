@@ -74,6 +74,7 @@ public class EnemySpawner : MonoBehaviour
         }
 
         initEnemy.name = stats.Name + numberOfEnemies;
+        initEnemy.transform.localScale *= Parameters.SPRITE_SCALE_FACTOR;
         numberOfEnemies++;
     }
 }
