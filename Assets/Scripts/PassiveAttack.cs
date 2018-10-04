@@ -26,6 +26,8 @@ public class PassiveAttack : MonoBehaviour
     private CameraShake camShake;
     private GameObject bossButtons;
 
+    private GameObject activeAttackFireButton;
+
     void Awake()
     {
         this.radialFillControl = GameObject.FindObjectOfType<RadialFillControl>();
@@ -34,6 +36,8 @@ public class PassiveAttack : MonoBehaviour
         this.aimColorModifier = aim.GetComponent<ColorModifier>();
         this.backgroundFade = GameObject.Find("BackgroundFade");
         this.backgroundFade.SetActive(false);
+        this.activeAttackFireButton = GameObject.Find("ActiveAttackFireButton");
+        this.activeAttackFireButton.SetActive(false);
         this.bossButtons = GameObject.Find("BossButtons");
         camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
     }
@@ -177,12 +181,19 @@ public class PassiveAttack : MonoBehaviour
                 }
             }
             this.aimingActiveAttack = true;
+            this.activeAttackFireButton.SetActive(true);
+            this.activeAttackFireButton.GetComponent<Button>().onClick.RemoveAllListeners();
+            this.activeAttackFireButton.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                SetAttack(currentAttackNumber);
+            });
 
             return;
         }
         else if (newAttack.frequency <= Parameters.SLOW_ATTACK_LIMIT && aimingActiveAttack)
         {
             this.aimingActiveAttack = false;
+            this.activeAttackFireButton.SetActive(false);
         }
 
 
