@@ -6,17 +6,21 @@ using System;
 public class WaveFactory
 {
 
-    private static List<Func<int, Wave>> waveComponents = new List<Func<int, Wave>>()
+    private static List<Func<int, Wave>> fastWaveComponents = new List<Func<int, Wave>>()
     {
-        OppositeSides,
         RotatingWorm,
-        RangedSpawner,
         ClosingRotatingCircle,
         RangedShooters,
         TwoZigZags,
+        BomberCluster,
+    };
+
+    private static List<Func<int, Wave>> slowWaveComponents = new List<Func<int, Wave>>()
+    {
+        OppositeSides,
+        RangedSpawner,
         OneZigZag,
         OneBigGuy,
-        BomberCluster,
         CirclingSpawner
     };
 
@@ -33,30 +37,35 @@ public class WaveFactory
             case 3:
                 return FourthWave();
             default:
-                Wave wave = RandomWaveComponent(5);
+                Wave wave = RandomSlowWaveComponent(5);
                 level -= 5;
                 int waves = 0;
                 while (level > 5)
                 {
                     waves++;
-                    Wave waveComponent = RandomWaveComponent(5);
+                    Wave waveComponent = waves % 3 == 0 ? RandomSlowWaveComponent(5) : RandomFastWaveComponent(5);
                     wave.Merge(waveComponent, Parameters.STANDARD_WAVE_DURATION * waves);
                     level -= 5;
                 }
 
                 if (level > 0)
                 {
-                    waves++;
-                    wave.Merge(RandomWaveComponent(level), Parameters.STANDARD_WAVE_DURATION * waves);
+                    wave.Merge(RandomFastWaveComponent(level), Parameters.STANDARD_WAVE_DURATION * waves);
                 }
                 return wave;
         }
     }
 
-    private static Wave RandomWaveComponent(int difficulty)
+    private static Wave RandomSlowWaveComponent(int difficulty)
     {
-        int randomIndex = (int)Mathf.Round(UnityEngine.Random.Range(0, waveComponents.Count));
-        return waveComponents[randomIndex](difficulty);
+        int randomIndex = (int)Mathf.Round(UnityEngine.Random.Range(0, slowWaveComponents.Count));
+        return slowWaveComponents[randomIndex](difficulty);
+    }
+
+    private static Wave RandomFastWaveComponent(int difficulty)
+    {
+        int randomIndex = (int)Mathf.Round(UnityEngine.Random.Range(0, fastWaveComponents.Count));
+        return fastWaveComponents[randomIndex](difficulty);
     }
 
     private static Wave FirstWave()
