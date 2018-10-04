@@ -35,4 +35,5 @@ public static class Parameters
     public static float HEALTH_SCALE = 0.7f;
 
     public static float SPRITE_SCALE_FACTOR = 0.75f;
+    public static Color AttACK_BUTTON_COOLDOWN_COLOR = new Color32(0, 229, 225, 160);
 }
