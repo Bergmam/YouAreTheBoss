@@ -30,7 +30,7 @@ public static class Parameters
     public static float DURABLE_ENEMY_MIN_HEALTH = 200f;
     public static int ATTACK_UPGRADE_WAVE_NUMBER = 5;
 
-    public static float STANDARD_WAVE_DURATION = 4.5f;
+    public static float STANDARD_WAVE_DURATION = 5.5f;
 
     public static float HEALTH_SCALE = 0.7f;
 

@@ -40,7 +40,7 @@ public class WaveFactory
                 Wave wave = RandomSlowWaveComponent(5);
                 level -= 5;
                 int waves = 0;
-                while (level > 5)
+                while (level >= 5)
                 {
                     waves++;
                     Wave waveComponent = waves % 3 == 0 ? RandomSlowWaveComponent(5) : RandomFastWaveComponent(5);
