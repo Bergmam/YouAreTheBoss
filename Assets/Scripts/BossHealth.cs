@@ -42,6 +42,7 @@ public class BossHealth : MonoBehaviour
                 WaveNumber.highScore = WaveNumber.waveNumber;
             }
             this.gameOverPanel.SetActive(true);
+            GameObject.Find("ActiveAttackFireButton").SetActive(false);
             this.scoreLabel.SetActive(false);
             this.bossButtons.SetActive(false);
             ((WaveHandler)GameObject.FindObjectOfType(typeof(WaveHandler))).clearWave();
