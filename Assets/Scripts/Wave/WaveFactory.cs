@@ -15,7 +15,9 @@ public class WaveFactory
         RangedShooters,
         TwoZigZags,
         OneZigZag,
-        OneBigGuy
+        OneBigGuy,
+        BomberCluster,
+        CirclingSpawner
     };
 
     public static Wave GenerateWave(int level)
@@ -122,6 +124,16 @@ public class WaveFactory
         return wave;
     }
 
+    public static Wave CirclingSpawner(int difficulty)
+    {
+        Wave wave = new Wave();
+        SubWave subWave = new SubWave();
+        StatsHolder stats = EnemyFactory.CirclingSpawner();
+        subWave.AddEnemy(stats);
+        wave.AddSubWave(subWave, 0.0f);
+        return wave;
+    }
+
     public static Wave ClosingRotatingCircle(int difficulty)
     {
         Wave wave = new Wave();
@@ -158,6 +170,23 @@ public class WaveFactory
             subWave.AddEnemy(enemy3);
             tempWave.AddSubWave(subWave, 0.0f);
             wave.Merge(tempWave, 2.0f * i);
+        }
+        return wave;
+    }
+
+    public static Wave BomberCluster(int difficulty)
+    {
+        Wave wave = new Wave();
+        float angle = UnityEngine.Random.value * 360;
+        for (int i = 0; i < difficulty; i++)
+        {
+            SubWave subWave = new SubWave();
+            float spawnAangle = angle + UnityEngine.Random.value * 30;
+            StatsHolder enemy = EnemyFactory.SmallBomber();
+            enemy.predefinedPosition = true;
+            enemy.spawnAngle = spawnAangle;
+            subWave.AddEnemy(enemy);
+            wave.AddSubWave(subWave, UnityEngine.Random.value * 0.5f);
         }
         return wave;
     }

@@ -8,11 +8,11 @@ public class EnemyFactory
 
     private static List<Func<StatsHolder>> basicEnemyGenerators = new List<Func<StatsHolder>>()
     {
-		StandardEnemy,
-		FastEnemy,
-		Rotator,
-		RangedCirclingEnemy,
-		ZigZag
+        StandardEnemy,
+        FastEnemy,
+        Rotator,
+        RangedCirclingEnemy,
+        ZigZag
     };
 
     public static StatsHolder RandomBasicEnemy()
@@ -42,7 +42,7 @@ public class EnemyFactory
 
     public static StatsHolder Rotator()
     {
-		bool clockwise = UnityEngine.Random.value >= 0.5;
+        bool clockwise = UnityEngine.Random.value >= 0.5;
         StatsHolder stats = new StatsHolder("Rotator", 0.7f, 2.5f, 1.0f, 100.0f, 0.7f, Color.blue);
         if (clockwise)
         {
@@ -76,7 +76,7 @@ public class EnemyFactory
 
     public static StatsHolder RangedCirclingEnemy()
     {
-		bool clockwise = UnityEngine.Random.value >= 0.5;
+        bool clockwise = UnityEngine.Random.value >= 0.5;
         StatsHolder stats = new StatsHolder("Shooting Shark", 3.0f, 1.0f, 2.0f, 50.0f, 1.2f, new Color(1.0f, 0.0f, 1.0f, 1.0f));
         if (clockwise)
         {
@@ -132,6 +132,23 @@ public class EnemyFactory
         StatsHolder stats = new StatsHolder("Mad Spawner", 4.0f, 1.0f, 3.0f, 400.0f, 3.0f, Color.grey);
         stats.attackDelay = 1.0f;
         stats.projectile = RangedCirclingMinon();
+        return stats;
+    }
+
+    internal static StatsHolder CirclingSpawner()
+    {
+        StatsHolder stats = new StatsHolder("Circling Spawner", 4.0f, 1.0f, 2.5f, 400.0f, 1.0f, Color.green);
+        stats.attackDelay = 1.0f;
+        stats.projectile = StandardEnemy();
+        bool clockwise = UnityEngine.Random.value >= 0.5;
+        if (clockwise)
+        {
+            stats.circlingSpeed = -30f;
+        }
+        else
+        {
+            stats.circlingSpeed = 30f;
+        }
         return stats;
     }
 
