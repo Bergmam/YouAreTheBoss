@@ -8,8 +8,8 @@ public class ColorModifier : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private Image image;
-    private Color selectedColor = new Color32(135, 0, 0, 255);
-    private Color defaultColor = Color.white;
+    private Color selectedColor;
+    private Color defaultColor;
     private float countDownTime;
     private float countDownStartTime;
     private bool fadeToSelected;
@@ -35,7 +35,7 @@ public class ColorModifier : MonoBehaviour
             float newB = proportion * defaultColor.b + (1 - proportion) * selectedColor.b;
             float newG = proportion * defaultColor.g + (1 - proportion) * selectedColor.g;
             float newA = proportion * defaultColor.a + (1 - proportion) * selectedColor.a;
-            SetColor(new Color(newA, newB, newG, newA));
+            SetColor(new Color(newR, newG, newB, newA));
         }
         bool reachedZero = countDownTime < 0 && wasOverZero; // Became less than zero after update.
         if (reachedZero)
