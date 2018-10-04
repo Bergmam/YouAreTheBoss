@@ -36,23 +36,25 @@ public class AttackLists
         return defaultAttacks.Count + chosenUpgradeAttacks.Count;
     }
 
-    public static List<BossAttack> defaultAttacks = new List<BossAttack>(){
+    public static List<BossAttack> defaultAttacks = new List<BossAttack>()
+    {
         new BossAttack("Melee", 30, 0.0f, 0.4f, 35, 1.0f),
         new BossAttack("Sniper", 5, 0.0f, 1.0f, 300, 4.8f),
         new BossAttack("Ranged", 30, 0.4f, 1.0f, 35, 1.0f),
-        new BossAttack("Small Donut", 120, 0.0f, 0.4f, 15, 0.4f)
+        new BossAttack("Small Donut", 120, 0.0f, 0.4f, 12, 0.4f),
+        new BossAttack("Lazer", 2, 0.0f, 1.0f, 10, 0.1f),
+        new BossAttack("Touch of Death", 2, 0.9f, 1.0f, 300, 0.08f),
+        new BossAttack("Small Donut Nuke", 180, 0.0f, 0.3f, 400, 6.0f),
+        new BossAttack("Big Donut Nuke", 180, 0.5f, 0.7f, 400, 9),
+        new BossAttack("Thin Melee", 15, 0.0f, 0.4f, 70, 1.0f),
+        new BossAttack("Swipe", 75, 0.0f, 0.45f, 100, 1.8f),
+        new BossAttack("Ranged Donut", 120, 0.5f, 0.7f, 18, 0.3f)
     };
 
     public static BossAttack[] selectedAttacks = new BossAttack[Parameters.NUMBER_OF_ATTACKS];
 
-    public static List<BossAttack> chooseableUpgradeAttacks = new List<BossAttack>(){
-        new BossAttack("Lazer", 1, 0.0f, 1.0f, 10, 0.1f),
-        new BossAttack("Touch of Death", 2, 0.9f, 1.0f, 300, 0.08f),
-        new BossAttack("Small Donut Nuke", 180, 0.0f, 0.3f, 400, 9f),
-        new BossAttack("Big Donut Nuke", 180, 0.5f, 0.7f, 400, 9),
-        new BossAttack("Thin Melee", 15, 0.0f, 0.4f, 50, 1.0f),
-        new BossAttack("Swipe", 75, 0.0f, 0.45f, 100, 1.8f),
-        new BossAttack("Ranged Donut", 120, 0.5f, 0.7f, 20, 0.2f)
+    public static List<BossAttack> chooseableUpgradeAttacks = new List<BossAttack>()
+    {
     };
 
     public static List<BossAttack> chosenUpgradeAttacks = new List<BossAttack>();
