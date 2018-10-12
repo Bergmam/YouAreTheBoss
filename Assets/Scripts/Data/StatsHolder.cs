@@ -27,7 +27,7 @@ public class StatsHolder
     public StatsHolder(string name,
         float MovementSpeed,
         float Damage,
-        float Range,
+        RangeLevel Range,
         float Health,
         float Scale,
         Color Color)
@@ -35,7 +35,7 @@ public class StatsHolder
         this.Name = name;
         this.MovementSpeed = MovementSpeed;
         this.Damage = Damage;
-        this.Range = Range;
+        this.Range = rangeLevelToFloatRange(Range);
         this.Health = Health * Parameters.HEALTH_SCALE;
         this.Scale = Scale;
         this.Color = Color;
@@ -97,7 +97,7 @@ public class StatsHolder
         StatsHolder clone = new StatsHolder(this.Name,
             this.MovementSpeed,
             this.Damage,
-            this.Range,
+            floatRangeToRangeLevel(this.Range),
             this.Health,
             this.Scale,
             this.Color);
@@ -187,5 +187,42 @@ public class StatsHolder
             3 * attackDelay +
             3 * zigZagAngle
         );
+    }
+
+    private float rangeLevelToFloatRange(RangeLevel inputRange)
+    {
+        switch (inputRange)
+        {
+            case RangeLevel.SELF_DESTRUCT:
+                return Parameters.SELF_DESTRUCT_RANGE;
+            case RangeLevel.MELE:
+                return Parameters.MELE_RANGE;
+            case RangeLevel.MID:
+                return Parameters.MID_RANGE;
+            case RangeLevel.LONG:
+                return Parameters.LONG_RANGE;
+            default:
+                return 0.0f;
+        }
+    }
+
+    private RangeLevel floatRangeToRangeLevel(float inputRange)
+    {
+        if (inputRange == Parameters.SELF_DESTRUCT_RANGE)
+        {
+            return RangeLevel.SELF_DESTRUCT;
+        }
+        else if (inputRange == Parameters.MID_RANGE)
+        {
+            return RangeLevel.MID;
+        }
+        else if (inputRange == Parameters.LONG_RANGE)
+        {
+            return RangeLevel.LONG;
+        }
+        else
+        {
+            return RangeLevel.MELE;
+        }
     }
 }

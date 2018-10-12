@@ -11,13 +11,13 @@ public class SubWaveTests
     public void Init()
     {
 
-        StatsHolder statsHolderA = new StatsHolder("TestHolder", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, Color.black);
+        StatsHolder statsHolderA = new StatsHolder("TestHolder", 1.0f, 1.0f, RangeLevel.MELE, 1.0f, 1.0f, Color.black);
         subWaveA = new SubWave();
         subWaveA.AddEnemy(statsHolderA);
-        StatsHolder statsHolderB = new StatsHolder("TestHolder", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, Color.black);
+        StatsHolder statsHolderB = new StatsHolder("TestHolder", 1.0f, 1.0f, RangeLevel.MELE, 1.0f, 1.0f, Color.black);
         subWaveB = new SubWave();
         subWaveB.AddEnemy(statsHolderA);
-        StatsHolder otherStatsHolder = new StatsHolder("AnotherTestHolder", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, Color.black);
+        StatsHolder otherStatsHolder = new StatsHolder("AnotherTestHolder", 1.0f, 1.0f, RangeLevel.MELE, 1.0f, 1.0f, Color.black);
         otherSubWave = new SubWave();
         otherSubWave.AddEnemy(otherStatsHolder);
     }
