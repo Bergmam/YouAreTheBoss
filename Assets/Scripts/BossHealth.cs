@@ -11,8 +11,13 @@ public class BossHealth : MonoBehaviour
     private GameObject scoreLabel;
     private GameObject bossButtons;
 
+    private GameObject activeAttackFireButton;
+
+    private bool gameOver = false;
+
     void Awake()
     {
+        this.activeAttackFireButton = GameObject.Find("ActiveAttackFireButton");
         this.gameOverPanel = GameObject.Find("GameOverPanel");
         this.scoreLabel = GameObject.Find("ScoreLabel");
         this.bossButtons = GameObject.Find("BossButtons");
@@ -31,8 +36,9 @@ public class BossHealth : MonoBehaviour
         BossHealthVal = BossHealthVal - damage;
         bossHealthBar.UpdateFill(BossHealthVal / 100.0f);
 
-        if (BossHealthVal <= 0)
+        if (BossHealthVal <= 0 && !gameOver)
         {
+            gameOver = true;
             if (!WaveNumber.highScoreGenerated)
             {
                 WaveNumber.highScoreGenerated = true;
@@ -42,7 +48,7 @@ public class BossHealth : MonoBehaviour
                 WaveNumber.highScore = WaveNumber.waveNumber;
             }
             this.gameOverPanel.SetActive(true);
-            GameObject.Find("ActiveAttackFireButton").SetActive(false);
+            this.activeAttackFireButton.SetActive(false);
             this.scoreLabel.SetActive(false);
             this.bossButtons.SetActive(false);
             ((WaveHandler)GameObject.FindObjectOfType(typeof(WaveHandler))).clearWave();

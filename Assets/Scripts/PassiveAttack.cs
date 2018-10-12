@@ -38,14 +38,13 @@ public class PassiveAttack : MonoBehaviour
         this.backgroundFade = GameObject.Find("BackgroundFade");
         this.backgroundFade.SetActive(false);
         this.activeAttackFireButton = GameObject.Find("ActiveAttackFireButton");
-        this.activeAttackFireButton.SetActive(false);
         this.bossButtons = GameObject.Find("BossButtons");
         camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
     }
 
     void Start()
     {
-
+        this.activeAttackFireButton.SetActive(false);
 
         int dictIndex = 1;
         foreach (BossAttack attack in AttackLists.selectedAttacks)
