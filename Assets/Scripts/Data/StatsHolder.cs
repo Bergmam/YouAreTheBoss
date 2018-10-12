@@ -27,7 +27,7 @@ public class StatsHolder
     public StatsHolder(string name,
         float MovementSpeed,
         float Damage,
-        float Range,
+        RangeLevel Range,
         float Health,
         float Scale,
         Color Color)
@@ -35,7 +35,7 @@ public class StatsHolder
         this.Name = name;
         this.MovementSpeed = MovementSpeed;
         this.Damage = Damage;
-        this.Range = Range;
+        this.Range = RangeUtils.rangeLevelToFloatRange(Range);
         this.Health = Health * Parameters.HEALTH_SCALE;
         this.Scale = Scale;
         this.Color = Color;
@@ -97,7 +97,7 @@ public class StatsHolder
         StatsHolder clone = new StatsHolder(this.Name,
             this.MovementSpeed,
             this.Damage,
-            this.Range,
+            RangeUtils.floatRangeToRangeLevel(this.Range),
             this.Health,
             this.Scale,
             this.Color);

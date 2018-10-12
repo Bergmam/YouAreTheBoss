@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class PassiveAttack : MonoBehaviour
 {
@@ -182,12 +183,7 @@ public class PassiveAttack : MonoBehaviour
             }
             this.aimingActiveAttack = true;
             this.activeAttackFireButton.SetActive(true);
-            this.activeAttackFireButton.GetComponent<Button>().onClick.RemoveAllListeners();
-            this.activeAttackFireButton.GetComponent<Button>().onClick.AddListener(() =>
-            {
-                SetAttack(currentAttackNumber);
-            });
-
+            this.activeAttackFireButton.GetComponent<EventTimer>().AddTimedTrigger(() => SetAttack(currentAttackNumber));
             return;
         }
         else if (newAttack.frequency <= Parameters.SLOW_ATTACK_LIMIT && aimingActiveAttack)

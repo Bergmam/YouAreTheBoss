@@ -78,7 +78,7 @@ public class WaveTests
     public SubWave GenerateTestSubWave()
     {
         SubWave subWave = new SubWave();
-        subWave.AddEnemy(new StatsHolder("TestEnemy", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, Color.black));
+        subWave.AddEnemy(new StatsHolder("TestEnemy", 1.0f, 1.0f, RangeLevel.MELE, 1.0f, 1.0f, Color.black));
         return subWave;
     }
 

@@ -11,14 +11,23 @@ public class BossAttack
     public float damage;
     public float frequency;
 
-    public BossAttack(string name, float angle, float closeRadiusScale, float farRadiusClase, float damage, float frequency)
+    public BossAttack(string name, float angle, RangeLevel closeRange, RangeLevel farRange, float damage, float frequency)
     {
+        float closeRangeFloat = RangeUtils.rangeLevelToFloatRange(closeRange);
+        float farRangeFloat = RangeUtils.rangeLevelToFloatRange(farRange);
+        float maxRange = RangeUtils.rangeLevelToFloatRange(RangeLevel.LONG);
         this.name = name;
         this.angle = angle;
-        this.closeRadiusScale = closeRadiusScale;
-        this.farRadiusScale = farRadiusClase;
+        this.closeRadiusScale = closeRangeFloat / maxRange;
+        this.farRadiusScale = farRangeFloat / maxRange;
         this.damage = damage;
         this.frequency = frequency;
+
+        if (closeRange == farRange)
+        {
+            this.closeRadiusScale -= 0.05f;
+            this.farRadiusScale += 0.05f;
+        }
     }
 
     bool Equals(BossAttack other)
