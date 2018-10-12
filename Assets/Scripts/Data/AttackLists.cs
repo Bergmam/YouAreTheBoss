@@ -44,8 +44,8 @@ public class AttackLists
         new BossAttack("Small Donut", 120, RangeLevel.SELF_DESTRUCT, RangeLevel.MELE, 12, 0.4f),
         new BossAttack("Lazer", 2, RangeLevel.SELF_DESTRUCT, RangeLevel.LONG, 10, 0.1f),
         new BossAttack("Touch of Death", 2, RangeLevel.LONG, RangeLevel.LONG, 300, 0.08f),
-        new BossAttack("Small Donut Nuke", 180, RangeLevel.SELF_DESTRUCT, RangeLevel.MELE, 400, 6.0f),
-        new BossAttack("Big Donut Nuke", 180, RangeLevel.MID, RangeLevel.LONG, 400, 9),
+        new BossAttack("Small Donut Nuke", 180, RangeLevel.SELF_DESTRUCT, RangeLevel.MELE, 400, 4.8f),
+        new BossAttack("Big Donut Nuke", 180, RangeLevel.MELE, RangeLevel.LONG, 400, 9),
         new BossAttack("Thin Melee", 15, RangeLevel.SELF_DESTRUCT, RangeLevel.MELE, 70, 1.0f),
         new BossAttack("Swipe", 75, RangeLevel.SELF_DESTRUCT, RangeLevel.MELE, 100, 1.8f),
         new BossAttack("Ranged Donut", 120, RangeLevel.MID, RangeLevel.MID, 18, 0.3f)
