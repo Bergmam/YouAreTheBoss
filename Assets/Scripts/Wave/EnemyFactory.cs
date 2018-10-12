@@ -7,6 +7,7 @@ public class EnemyFactory
 {
 
     private static Color orange = new Color(1.0f, 0.6f, 0.2f, 1.0f);
+    private static Color lightGreen = new Color(0.6f, 1.0f, 0.6f, 1.0f);
 
     private static List<Func<StatsHolder>> basicEnemyGenerators = new List<Func<StatsHolder>>()
     {
@@ -119,11 +120,16 @@ public class EnemyFactory
         return stats;
     }
 
-    internal static StatsHolder CirclingSpawner()
+    public static StatsHolder CirclingSpawnerMinion()
     {
-        StatsHolder stats = new StatsHolder("Circling Spawner", 4.0f, 1.0f, RangeLevel.MID, 400.0f, 1.0f, Color.green);
-        stats.attackDelay = 1.0f;
-        stats.projectile = StandardEnemy();
+        return new StatsHolder("Standard Enemy", 0.8f, 2.5f, RangeLevel.MELE, 50.0f, 1.0f, lightGreen);
+    }
+
+    public static StatsHolder CirclingSpawner()
+    {
+        StatsHolder stats = new StatsHolder("Circling Spawner", 4.0f, 1.0f, RangeLevel.MID, 300.0f, 1.0f, Color.green);
+        stats.attackDelay = 2.0f;
+        stats.projectile = CirclingSpawnerMinion();
         bool clockwise = UnityEngine.Random.value >= 0.5;
         if (clockwise)
         {
