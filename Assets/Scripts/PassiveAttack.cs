@@ -27,7 +27,8 @@ public class PassiveAttack : MonoBehaviour
     private CameraShake camShake;
     private GameObject bossButtons;
 
-    private GameObject activeAttackFireButton;
+    private GameObject activeAttackScreenButton;
+    private GameObject activeAttackBossButton;
 
     void Awake()
     {
@@ -37,14 +38,14 @@ public class PassiveAttack : MonoBehaviour
         this.aimColorModifier = aim.GetComponent<ColorModifier>();
         this.backgroundFade = GameObject.Find("BackgroundFade");
         this.backgroundFade.SetActive(false);
-        this.activeAttackFireButton = GameObject.Find("ActiveAttackFireButton");
+        this.activeAttackScreenButton = GameObject.Find("ActiveAttackScreenButton");
         this.bossButtons = GameObject.Find("BossButtons");
         camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
     }
 
     void Start()
     {
-        this.activeAttackFireButton.SetActive(false);
+        this.activeAttackScreenButton.SetActive(false);
 
         int dictIndex = 1;
         foreach (BossAttack attack in AttackLists.selectedAttacks)
@@ -115,6 +116,9 @@ public class PassiveAttack : MonoBehaviour
 
         if (this.aimingActiveAttack)
         {
+            this.activeAttackScreenButton.SetActive(false);
+            this.activeAttackBossButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/UI_Button_Standard_Sky_2");
+            this.activeAttackBossButton.transform.Find("Image").gameObject.SetActive(true);
             this.camShake.Shake(0.1f, 0.2f);
             this.currentAttackButton.transform.parent.GetComponent<Image>().color = this.currentAttackButtonOriginalColor;
         }
@@ -165,6 +169,9 @@ public class PassiveAttack : MonoBehaviour
             this.currentAttackButtonOriginalColor = this.currentAttackButton.transform.parent.GetComponent<Image>().color;
             gameObject.GetComponent<SpriteRenderer>().color = Color.magenta;
             this.currentAttackButton.transform.parent.GetComponent<Image>().color = new Color(1.0f, 0.3f, 1.0f, 1.0f);
+            this.currentAttackButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/UI_Icon_FullScreenExit");
+            this.currentAttackButton.transform.Find("Image").gameObject.SetActive(false);
+            this.activeAttackBossButton = this.currentAttackButton;
             this.backgroundFade.SetActive(true);
             Color aimColor = Color.magenta;
             aimColor.a = 0.6f;
@@ -181,14 +188,15 @@ public class PassiveAttack : MonoBehaviour
                 }
             }
             this.aimingActiveAttack = true;
-            this.activeAttackFireButton.SetActive(true);
-            this.activeAttackFireButton.GetComponent<EventTimer>().AddTimedTrigger(() => SetAttack(currentAttackNumber));
+            this.activeAttackScreenButton.SetActive(true);
+            this.activeAttackScreenButton.GetComponent<EventTimer>().AddTimedTrigger(() => SetAttack(currentAttackNumber));
             return;
         }
         else if (newAttack.frequency <= Parameters.SLOW_ATTACK_LIMIT && aimingActiveAttack)
         {
-            this.aimingActiveAttack = false;
-            this.activeAttackFireButton.SetActive(false);
+            this.activeAttackBossButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/UI_Button_Standard_Sky_2");
+            this.activeAttackBossButton.transform.Find("Image").gameObject.SetActive(true);
+            this.activeAttackScreenButton.SetActive(false);
         }
 
 
