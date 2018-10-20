@@ -93,12 +93,12 @@ public class Enemy : MonoBehaviour
                 KillSelf();
             }
             // Mele attack
-            else if (Range <= Parameters.MAX_MELE_RANGE && !IsInvoking("doDamageToBoss"))
+            else if (Range <= Parameters.MELE_RANGE && !IsInvoking("doDamageToBoss"))
             {
                 InvokeRepeating("doDamageToBoss", 0, this.attackFrequency);
             }
             // Ranged attack
-            else if (Range > Parameters.MAX_MELE_RANGE && !IsInvoking("spawnProjectile"))
+            else if (Range > Parameters.MELE_RANGE && !IsInvoking("spawnProjectile"))
             {
                 InvokeRepeating("spawnProjectile", 0, this.attackFrequency);
             }
