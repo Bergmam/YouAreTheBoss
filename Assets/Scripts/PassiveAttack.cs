@@ -79,13 +79,8 @@ public class PassiveAttack : MonoBehaviour
 
     void DoAttack()
     {
-        Color color = UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>().color;
-        color.a = 0.0f;
-
         float unitCircleRotation = RotationUtils.MakePositiveAngle(transform.eulerAngles.z + 90);
 
-        Color zeroAlphaColor = color;
-        zeroAlphaColor.a = 0.0f;
         object[] obj = GameObject.FindObjectsOfType(typeof(GameObject));
         foreach (Enemy enemy in GameObject.FindObjectsOfType(typeof(Enemy)))
         {
@@ -150,7 +145,7 @@ public class PassiveAttack : MonoBehaviour
         if (radialFillControl != null)
         {
             this.aimColorModifier.FadeToSelected(0.0f);
-            radialFillControl.SetMirroredFill((int)this.currentAttack.angle);
+            radialFillControl.SetMirroredFill(this.currentAttack.angle);
         }
 
         if (attackMaskControl != null)
@@ -222,11 +217,6 @@ public class PassiveAttack : MonoBehaviour
         {
             SetAttack(previousAttackNumber);
         }
-    }
-
-    public BossAttack GetAttack(int number)
-    {
-        return this.attackDict[number];
     }
 
     void Update()
