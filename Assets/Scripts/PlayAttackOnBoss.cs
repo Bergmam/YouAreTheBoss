@@ -42,7 +42,7 @@ public class PlayAttackOnBoss : MonoBehaviour
 
         if (attackMaskControl != null)
         {
-            attackMaskControl.SetSize(this.currentAttack.closeRadiusScale, this.currentAttack.farRadiusScale);
+            attackMaskControl.SetSize(this.currentAttack.closeRadius, this.currentAttack.farRadius);
         }
 
         InvokeRepeating("doAttack", 0, this.currentAttack.frequency);

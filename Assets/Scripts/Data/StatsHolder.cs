@@ -76,7 +76,7 @@ public class StatsHolder
 
     public bool IsRanged()
     {
-        return this.Range > Parameters.MAX_MELE_RANGE;
+        return this.Range > Parameters.MELE_RANGE;
     }
 
     public Dictionary<string, bool> GetAttributes()
@@ -118,6 +118,11 @@ public class StatsHolder
         clone.zigZagAngle = this.zigZagAngle;
         clone.zigZag = this.zigZag;
         return clone;
+    }
+
+    public void SetRange(RangeLevel range)
+    {
+        this.Range = RangeUtils.rangeLevelToFloatRange(range);
     }
 
     public override bool Equals(object obj)

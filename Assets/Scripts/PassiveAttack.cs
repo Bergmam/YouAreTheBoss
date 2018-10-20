@@ -18,8 +18,6 @@ public class PassiveAttack : MonoBehaviour
     AttackMaskControl attackMaskControl;
     CooldownBehaviour currentCooldownBehaviour;
     private ColorModifier aimColorModifier;
-    private float MIN_ATTACK_RADIUS = 0.5f;
-    private float MAX_ATTACK_RADIUS = 2.8f;
     private bool aimingActiveAttack = false;
     private GameObject backgroundFade;
     GameObject currentAttackButton;
@@ -89,14 +87,12 @@ public class PassiveAttack : MonoBehaviour
         Color zeroAlphaColor = color;
         zeroAlphaColor.a = 0.0f;
         object[] obj = GameObject.FindObjectsOfType(typeof(GameObject));
-        float attackCloseRadius = this.MIN_ATTACK_RADIUS + this.currentAttack.closeRadiusScale * (this.MAX_ATTACK_RADIUS - this.MIN_ATTACK_RADIUS);
-        float attackFarRadius = this.MIN_ATTACK_RADIUS + this.currentAttack.farRadiusScale * (this.MAX_ATTACK_RADIUS - this.MIN_ATTACK_RADIUS);
         foreach (Enemy enemy in GameObject.FindObjectsOfType(typeof(Enemy)))
         {
             if (!enemy.SetForDeath && enemy.isInAttackArea(unitCircleRotation - this.currentAttack.angle,
                     unitCircleRotation + this.currentAttack.angle,
-                    attackCloseRadius,
-                    attackFarRadius))
+                    this.currentAttack.closeRadius,
+                    this.currentAttack.farRadius))
             {
                 enemy.applyDamageTo(this.currentAttack.damage);
             }
@@ -159,7 +155,7 @@ public class PassiveAttack : MonoBehaviour
 
         if (attackMaskControl != null)
         {
-            attackMaskControl.SetSize(this.currentAttack.closeRadiusScale, this.currentAttack.farRadiusScale);
+            attackMaskControl.SetSize(this.currentAttack.closeRadius, this.currentAttack.farRadius);
         }
 
         this.currentAttackButton = GameObject.Find("Passive" + attackNumber + "Button");

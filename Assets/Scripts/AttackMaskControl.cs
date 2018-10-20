@@ -25,11 +25,13 @@ public class AttackMaskControl : MonoBehaviour
         }
     }
 
-    public void SetSize(float closeRadiusScale, float farRadiusScale)
+    public void SetSize(float attackCloseRadius, float attackFarRadius)
     {
-        float closeRadius = MIN_CLOSE_RADIUS + closeRadiusScale * (MAX_CLOSE_RADIUS - MIN_CLOSE_RADIUS);
-        float farRadius = MIN_FAR_RADIUS + farRadiusScale * (MAX_FAR_RADIUS - MIN_FAR_RADIUS);
-        this.mask.rectTransform.sizeDelta = new Vector2(farRadius, farRadius);
-        this.image.rectTransform.sizeDelta = new Vector2(closeRadius, closeRadius);
+        float closeRadiusScale = (attackCloseRadius - Parameters.MIN_ATTACK_RADIUS) / (Parameters.MAX_ATTACK_RADIUS - Parameters.MIN_ATTACK_RADIUS);
+        float farRadiusScale = (attackFarRadius - Parameters.MIN_ATTACK_RADIUS) / (Parameters.MAX_ATTACK_RADIUS - Parameters.MIN_ATTACK_RADIUS);
+        float maskCloseRadius = MIN_CLOSE_RADIUS + closeRadiusScale * (MAX_CLOSE_RADIUS - MIN_CLOSE_RADIUS);
+        float maskFarRadius = MIN_FAR_RADIUS + farRadiusScale * (MAX_FAR_RADIUS - MIN_FAR_RADIUS);
+        this.mask.rectTransform.sizeDelta = new Vector2(maskFarRadius, maskFarRadius);
+        this.image.rectTransform.sizeDelta = new Vector2(maskCloseRadius, maskCloseRadius);
     }
 }
