@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,43 +11,67 @@ public class AttackController : MonoBehaviour
     private PassiveAttackController passiveAttackController;
     private ActiveAttackController activeAttackController;
     private bool aimingActiveAttack;
+    private int previousAttackNumber;
+    private ColorModifier aimColorModifier;
+    private GameObject activeAttackScreenButton;
+    private GameObject backgroundFade;
 
     void Awake()
     {
+        this.backgroundFade = GameObject.Find("BackgroundFade");
         this.attackMaskControl = GameObject.FindObjectOfType<AttackMaskControl>();
-
         this.passiveAttackController = gameObject.AddComponent<PassiveAttackController>();
         this.activeAttackController = gameObject.AddComponent<ActiveAttackController>();
-
         this.aimImage = UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>();
+        this.radialFillControl = GameObject.FindObjectOfType<RadialFillControl>();
+        this.attackMaskControl = GameObject.FindObjectOfType<AttackMaskControl>();
+        Transform aim = UnityUtils.RecursiveFind(transform, "Image");
+        this.aimColorModifier = aim.GetComponent<ColorModifier>();
+        this.activeAttackScreenButton = GameObject.Find("ActiveAttackScreenButton");
     }
 
-    void DoAttack()
+    void Start()
     {
-
+        SetAttack(1);
+        aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
+        aimColorModifier.SetSelectedColor(Parameters.AIM_DAMAGE_COLOR);
+        UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>().color = Parameters.AIM_DEFAULT_COLOR;
     }
 
-    void SetAttack(int attackNumber)
+    public void SetAttack(int attackNumber)
     {
-        CancelInvoke();
+        this.passiveAttackController.CancelInvoke();
 
-        if (aimingActiveAttack)
+        if (aimingActiveAttack && previousAttackNumber == attackNumber)
         {
             this.activeAttackController.DoAttack();
-            this.aimingActiveAttack = false;
+            // Switch to an attack with ?
         }
         else
         {
+            aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
+            aimColorModifier.SetSelectedColor(Parameters.AIM_DAMAGE_COLOR);
+            for (int i = 1; i <= 3; i++)
+            {
+                GameObject currentAttackButton = GameObject.Find("Passive" + i + "Button");
+                currentAttackButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/UI_Button_Standard_Sky_2");
+                currentAttackButton.transform.Find("Image").gameObject.SetActive(true);
+                this.backgroundFade.SetActive(false);
+                // Reset colors of buttons maybe???
+            }
+            this.previousAttackNumber = attackNumber;
             BossAttack newAttack = AttackLists.selectedAttacks[attackNumber - 1];
             if (newAttack.frequency > Parameters.SLOW_ATTACK_LIMIT)
             {
-                passiveAttackController.SetAttack(attackNumber);
+                activeAttackController.SetAttack(attackNumber);
                 this.aimingActiveAttack = true;
+                this.activeAttackScreenButton.GetComponent<EventTimer>().AddTimedTrigger(() => SetAttack(attackNumber));
             }
             else
             {
-                // TODO: Deactivate everything with active (pink color, sprite, etc.)
-                activeAttackController.SetAttack(attackNumber);
+                this.aimingActiveAttack = false;
+                this.activeAttackController.CancelReactivate();
+                passiveAttackController.SetAttack(attackNumber);
             }
             attackMaskControl.SetSize(newAttack.closeRadius, newAttack.farRadius);
             radialFillControl.SetMirroredFill(newAttack.angle);
