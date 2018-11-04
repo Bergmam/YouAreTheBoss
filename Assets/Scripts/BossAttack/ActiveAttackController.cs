@@ -14,6 +14,8 @@ public class ActiveAttackController : MonoBehaviour
     private static Color AIM_COLOR = Color.magenta;
     private GameObject backgroundFade;
     private GameObject activeAttackScreenButton;
+
+    private GameObject chargeSystem;
     private bool active;
 
     void Awake()
@@ -25,6 +27,7 @@ public class ActiveAttackController : MonoBehaviour
         Transform aim = UnityUtils.RecursiveFind(transform, "Image");
         this.aimColorModifier = aim.GetComponent<ColorModifier>();
         this.backgroundFade = GameObject.Find("BackgroundFade");
+        this.chargeSystem = Instantiate(Resources.Load<GameObject>("Prefabs/ChargeUp"), transform.position, Quaternion.identity);
         this.activeAttackScreenButton = GameObject.Find("ActiveAttackScreenButton");
     }
 
@@ -32,6 +35,7 @@ public class ActiveAttackController : MonoBehaviour
     {
         this.activeAttackScreenButton.SetActive(false);
         this.backgroundFade.SetActive(false);
+        this.chargeSystem.SetActive(false);
     }
 
     public void SetAttack(int attackNumber)
@@ -42,6 +46,7 @@ public class ActiveAttackController : MonoBehaviour
         this.currentAttack = newAttack;
         setColors(attackNumber);
         this.backgroundFade.SetActive(true);
+        this.chargeSystem.SetActive(true);
     }
 
     private void setColors(int attackNumber)
@@ -78,6 +83,7 @@ public class ActiveAttackController : MonoBehaviour
         CooldownBehaviour cooldownBehaviour = this.currentAttackButton.GetComponentInChildren<CooldownBehaviour>();
         cooldownBehaviour.StartCooldown(this.currentAttack.frequency);
         this.backgroundFade.SetActive(false);
+        this.chargeSystem.SetActive(false);
         this.activeAttackScreenButton.SetActive(false);
         aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
         aimColorModifier.SetSelectedColor(AIM_COLOR);
@@ -93,6 +99,7 @@ public class ActiveAttackController : MonoBehaviour
         if (this.active)
         {
             this.backgroundFade.SetActive(true);
+            this.chargeSystem.SetActive(true);
             this.activeAttackScreenButton.SetActive(true);
             currentAttackButton.transform.Find("Image").gameObject.SetActive(false);
             this.currentAttackButton.GetComponent<Image>().sprite = fireSprite;
