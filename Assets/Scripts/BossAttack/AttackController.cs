@@ -45,6 +45,7 @@ public class AttackController : MonoBehaviour
             }
             else
             {
+                // TODO: Deactivate everything with active (pink color, sprite, etc.)
                 activeAttackController.SetAttack(attackNumber);
             }
             attackMaskControl.SetSize(newAttack.closeRadius, newAttack.farRadius);
