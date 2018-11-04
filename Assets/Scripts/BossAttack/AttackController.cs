@@ -30,8 +30,17 @@ public class AttackController : MonoBehaviour
         this.activeAttackScreenButton = GameObject.Find("ActiveAttackScreenButton");
     }
 
+
     void Start()
     {
+        Color[] buttonColors = { Color.red, Color.blue, Color.green };
+        for (int i = 1; i <= 3; i++)
+        {
+            GameObject attackButtonBackground = GameObject.Find("Passive" + i + "Background");
+            ColorModifier colorModifier = attackButtonBackground.AddComponent<ColorModifier>();
+            colorModifier.SetDefaultColor(buttonColors[i - 1]);
+            colorModifier.SetSelectedColor(new Color(1.0f, 0.3f, 1.0f, 1.0f));
+        }
         SetAttack(1);
         aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
         aimColorModifier.SetSelectedColor(Parameters.AIM_DAMAGE_COLOR);
@@ -45,7 +54,6 @@ public class AttackController : MonoBehaviour
         if (aimingActiveAttack && previousAttackNumber == attackNumber)
         {
             this.activeAttackController.DoAttack();
-            // Switch to an attack with ?
         }
         else
         {
@@ -57,7 +65,7 @@ public class AttackController : MonoBehaviour
                 currentAttackButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/UI_Button_Standard_Sky_2");
                 currentAttackButton.transform.Find("Image").gameObject.SetActive(true);
                 this.backgroundFade.SetActive(false);
-                // Reset colors of buttons maybe???
+                currentAttackButton.transform.parent.GetComponent<ColorModifier>().DeSelect();
             }
             this.previousAttackNumber = attackNumber;
             BossAttack newAttack = AttackLists.selectedAttacks[attackNumber - 1];

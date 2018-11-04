@@ -7,7 +7,6 @@ public class ActiveAttackController : MonoBehaviour
 
     private BossAttack currentAttack;
     private GameObject currentAttackButton;
-    private Color currentAttackButtonOriginalColor;
     private ColorModifier aimColorModifier;
     private CameraShake camShake;
     private Sprite fireSprite;
@@ -48,24 +47,12 @@ public class ActiveAttackController : MonoBehaviour
     private void setColors(int attackNumber)
     {
         this.currentAttackButton = GameObject.Find("Passive" + attackNumber + "Button");
-        this.currentAttackButtonOriginalColor = currentAttackButton.transform.parent.GetComponent<Image>().color;
-        this.currentAttackButton.transform.parent.GetComponent<Image>().color = new Color(1.0f, 0.3f, 1.0f, 1.0f);
+        this.currentAttackButton.transform.parent.GetComponent<ColorModifier>().Select();
         this.currentAttackButton.GetComponent<Image>().sprite = fireSprite;
         this.currentAttackButton.transform.Find("Image").gameObject.SetActive(false);
         gameObject.GetComponent<SpriteRenderer>().color = Color.magenta;
         this.aimColorModifier.FadeToSelected(0.0f);
         this.aimColorModifier.SetColor(AIM_COLOR);
-        foreach (Transform child in GameObject.Find("BossButtons").transform)
-        {
-            if (!child.name.Contains(attackNumber.ToString()))
-            {
-                child.Find("Overlay").GetComponent<Image>().color = new Color(0, 0, 0, 0.2f);
-            }
-            else
-            {
-                child.Find("Highlight").GetComponent<Image>().color = Color.magenta;
-            }
-        }
     }
 
     public void DoAttack()
