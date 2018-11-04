@@ -9,8 +9,7 @@ public class AttackButtonsImageLoader : MonoBehaviour
 
     void Start()
     {
-        PassiveAttack passiveAttack = Transform.FindObjectOfType<PassiveAttack>();
-        BossAttack attack = passiveAttack.GetAttack(number);
+        BossAttack attack = AttackLists.selectedAttacks[number - 1];
         Transform imageTransform = transform.Find("Image");
         if (imageTransform != null)
         {

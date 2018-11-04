@@ -27,7 +27,7 @@ public static class Parameters
     public static Color ENEMY_ATTACK_COLOR = Color.black;
 
     public static float ENEMY_SPAWN_RADIUS = 5f;
-    public static int NUMBER_OF_ATTACKS = 4;
+    public static int NUMBER_OF_ATTACKS = 3;
 
     public static float STRONG_ENEMY_MIN_DAMAGE = 2.0f;
     public static float FAST_ENEMY_MIN_SPEED = 3.0f;

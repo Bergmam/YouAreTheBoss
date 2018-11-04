@@ -37,7 +37,7 @@ public class PlayAttackOnBoss : MonoBehaviour
         // Set fill and mask for the attack area
         if (radialFillControl != null)
         {
-            radialFillControl.SetMirroredFill((int)this.currentAttack.angle);
+            radialFillControl.SetMirroredFill(this.currentAttack.angle);
         }
 
         if (attackMaskControl != null)
