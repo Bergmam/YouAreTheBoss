@@ -23,9 +23,9 @@ public class RadialFillControl : MonoBehaviour {
 	/// Sets the fill to the specified number of degrees on each side of the center.
 	/// </summary>
 	/// <param name="degrees">Degrees.</param>
-	public void SetMirroredFill (int degrees)
+	public void SetMirroredFill (float degrees)
 	{
-		this.image.fillAmount = (float)(degrees * 2) / 360; // Expand radial fill to twice the fill ammount.
+		this.image.fillAmount = (degrees * 2) / 360; // Expand radial fill to twice the fill ammount.
 
 		//Rotate the image so that the center of the fill is in the same direction.
 		float currentRotX = this.transform.localEulerAngles.x;
