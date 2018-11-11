@@ -66,13 +66,22 @@ public class Enemy : MonoBehaviour
         {
             radialPosition.AddRadius((-1) * step);
             radialPosition.AddAngle(angularStep);
-
-            MoveTo(radialPosition);
-
-            if (RotationUtils.InCounterClockwiseLimits(radialPosition.GetAngle(), zigZagAngleHigh, zigZagAngleLow) && zigZag)
+            float newPositionAngle = radialPosition.GetAngle();
+            if (RotationUtils.InCounterClockwiseLimits(newPositionAngle, zigZagAngleHigh, zigZagAngleLow) && zigZag)
             {
+                // If exited over high limit ( [high, mid(high,low)] ), set to high.
+                if (RotationUtils.InCounterClockwiseLimits(newPositionAngle, zigZagAngleHigh, RotationUtils.MiddleOfRotations(zigZagAngleHigh, zigZagAngleLow)))
+                {
+                    radialPosition.SetAngle(zigZagAngleHigh);
+                }
+                else
+                {
+                    radialPosition.SetAngle(zigZagAngleLow);
+                }
                 angularSpeed = -1 * angularSpeed;
             }
+
+            MoveTo(radialPosition);
 
         }
         else // If in range, do appropriate attack.
@@ -81,12 +90,22 @@ public class Enemy : MonoBehaviour
 
             MoveTo(radialPosition);
 
-            if (RotationUtils.InCounterClockwiseLimits(radialPosition.GetAngle(), zigZagAngleHigh, zigZagAngleLow) && zigZag)
+            float newPositionAngle = radialPosition.GetAngle();
+            if (RotationUtils.InCounterClockwiseLimits(newPositionAngle, zigZagAngleHigh, zigZagAngleLow) && zigZag)
             {
+                // If exited over high limit ( [high, mid(high,low)] ), set to high.
+                if (RotationUtils.InCounterClockwiseLimits(newPositionAngle, zigZagAngleHigh, RotationUtils.MiddleOfRotations(zigZagAngleHigh, zigZagAngleLow)))
+                {
+                    radialPosition.SetAngle(zigZagAngleHigh);
+                }
+                else
+                {
+                    radialPosition.SetAngle(zigZagAngleLow);
+                }
                 circlingSpeed = -1 * circlingSpeed;
             }
-
             MoveTo(radialPosition);
+            
             if (selfDestruct)
             {
                 doDamageToBoss();
