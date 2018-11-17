@@ -110,4 +110,8 @@ public class ActiveAttackController : MonoBehaviour
     {
         this.active = false;
     }
+
+    public void SetChargeSystem(bool val){
+        this.chargeSystem.SetActive(val);
+    }
 }

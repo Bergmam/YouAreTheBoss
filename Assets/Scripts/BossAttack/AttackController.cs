@@ -65,6 +65,7 @@ public class AttackController : MonoBehaviour
                 currentAttackButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/UI_Button_Standard_Sky_2");
                 currentAttackButton.transform.Find("Image").gameObject.SetActive(true);
                 this.backgroundFade.SetActive(false);
+                this.activeAttackController.SetChargeSystem(false);
                 currentAttackButton.transform.parent.GetComponent<ColorModifier>().DeSelect();
             }
             this.previousAttackNumber = attackNumber;

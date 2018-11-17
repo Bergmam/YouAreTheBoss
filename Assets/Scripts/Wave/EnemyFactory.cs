@@ -114,7 +114,7 @@ public class EnemyFactory
 
     public static StatsHolder RangedSpawner()
     {
-        StatsHolder stats = new StatsHolder("Mad Spawner", 4.0f, 1.0f, RangeLevel.LONG, 400.0f, 3.0f, Color.grey);
+        StatsHolder stats = new StatsHolder("Mad Spawner", 4.0f, 1.0f, RangeLevel.MID, 400.0f, 3.0f, Color.grey);
         stats.attackDelay = 1.0f;
         stats.projectile = RangedCirclingMinon();
         return stats;
