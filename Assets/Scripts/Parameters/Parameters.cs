@@ -8,8 +8,8 @@ public static class Parameters
     public static float scrollDelay = 0.15f;
     public static float SELF_DESTRUCT_RANGE = 0.5f;
     public static float MELE_RANGE = 0.8f;
-    public static float MID_RANGE = 1.6f;
-    public static float LONG_RANGE = 2.4f;
+    public static float MID_RANGE = 2.0f;
+    public static float LONG_RANGE = 2.6f;
     public static float MIN_ATTACK_RADIUS = 0.5f;
     public static float MAX_ATTACK_RADIUS = 2.8f;
     public static float PROJECTILE_SPEED = 2.0f;

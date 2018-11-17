@@ -15,8 +15,8 @@ public class BossAttack
     {
         this.name = name;
         this.angle = angle;
-        this.closeRadius = RangeUtils.rangeLevelToFloatRange(closeRange) - 0.25f;
-        this.farRadius = RangeUtils.rangeLevelToFloatRange(farRange) + 0.25f;
+        this.closeRadius = Mathf.Max(RangeUtils.rangeLevelToFloatRange(closeRange) - 0.25f, 0);
+        this.farRadius = Mathf.Min(RangeUtils.rangeLevelToFloatRange(farRange) + 0.75f, Parameters.MAX_ATTACK_RADIUS);
         this.damage = damage;
         this.frequency = frequency;
     }

@@ -17,7 +17,7 @@ public class BossHealth : MonoBehaviour
 
     void Awake()
     {
-        this.activeAttackFireButton = GameObject.Find("ActiveAttackFireButton");
+        this.activeAttackFireButton = GameObject.Find("ActiveAttackScreenButton");
         this.gameOverPanel = GameObject.Find("GameOverPanel");
         this.scoreLabel = GameObject.Find("ScoreLabel");
         this.bossButtons = GameObject.Find("BossButtons");
