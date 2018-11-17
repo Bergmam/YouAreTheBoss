@@ -105,6 +105,7 @@ public class AttackButtons : MonoBehaviour
         CreateAttackButton(attackButtons.Count, attack);
         DisableUpgradePopUp();
         this.playButton.interactable = true;
+        infoButton.GetComponent<Button>().interactable = true;
     }
 
     public void DisableButtons()
