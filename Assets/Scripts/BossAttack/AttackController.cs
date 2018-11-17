@@ -42,9 +42,6 @@ public class AttackController : MonoBehaviour
             colorModifier.SetSelectedColor(new Color(1.0f, 0.3f, 1.0f, 1.0f));
         }
         SetAttack(1);
-        aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
-        aimColorModifier.SetSelectedColor(Parameters.AIM_DAMAGE_COLOR);
-        UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>().color = Parameters.AIM_DEFAULT_COLOR;
     }
 
     public void SetAttack(int attackNumber)
@@ -80,6 +77,7 @@ public class AttackController : MonoBehaviour
             {
                 this.aimingActiveAttack = false;
                 this.activeAttackController.CancelReactivate();
+                this.activeAttackController.CancelAiming();
                 passiveAttackController.SetAttack(attackNumber);
             }
             attackMaskControl.SetSize(newAttack.closeRadius, newAttack.farRadius);
