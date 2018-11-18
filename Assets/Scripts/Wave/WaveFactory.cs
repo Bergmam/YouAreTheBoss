@@ -13,7 +13,9 @@ public class WaveFactory
         RangedShooters,
         TwoZigZags,
         BomberCluster,
-        LineOfRanged
+        LineOfRanged,
+        ZigZagWorm,
+        WeakCluster
     };
 
     private static List<Func<int, Wave>> slowWaveComponents = new List<Func<int, Wave>>()
@@ -22,7 +24,8 @@ public class WaveFactory
         RangedSpawner,
         OneZigZag,
         OneBigGuy,
-        CirclingSpawner
+        CirclingSpawner,
+        ThreeBombs
     };
 
     public static Wave GenerateWave(int level)
@@ -126,6 +129,28 @@ public class WaveFactory
         return wave;
     }
 
+    public static Wave ZigZagWorm(int difficulty)
+    {
+        float direction = 3.0f;
+        Wave wave = new Wave();
+        float timeStamp = 0f;
+        float angle = UnityEngine.Random.value * 360;
+        for (int i = 0; i < 10; i++)
+        {
+            SubWave subWave = new SubWave();
+            StatsHolder stats = EnemyFactory.ZigZag();
+            stats.Health = 0.1f;
+            stats.Damage = 0.5f;
+            stats.zigZagAngle = 120.0f;
+            stats.spawnAngle = angle + i * direction;
+            stats.predefinedPosition = true;
+            subWave.AddEnemy(stats);
+            wave.AddSubWave(subWave, timeStamp);
+            timeStamp += 0.05f;
+        }
+        return wave;
+    }
+
     public static Wave RangedSpawner(int difficulty)
     {
         Wave wave = new Wave();
@@ -203,6 +228,23 @@ public class WaveFactory
         return wave;
     }
 
+    public static Wave WeakCluster(int difficulty)
+    {
+        Wave wave = new Wave();
+        float angle = UnityEngine.Random.value * 360;
+        for (int i = 0; i < difficulty * 2; i++)
+        {
+            SubWave subWave = new SubWave();
+            float spawnAangle = angle + UnityEngine.Random.value * 30;
+            StatsHolder enemy = EnemyFactory.CirclingSpawnerMinion();
+            enemy.predefinedPosition = true;
+            enemy.spawnAngle = spawnAangle;
+            subWave.AddEnemy(enemy);
+            wave.AddSubWave(subWave, UnityEngine.Random.value * 0.5f);
+        }
+        return wave;
+    }
+
     public static Wave RangedShooters(int difficulty)
     {
         Wave wave = new Wave();
@@ -255,6 +297,26 @@ public class WaveFactory
         Wave wave = new Wave();
         SubWave subWave = new SubWave();
         subWave.AddEnemy(EnemyFactory.SlowEnemy());
+        subWave.ScaleSubWaveHealth(difficulty / 4.0f);
+        subWave.ScaleSubWaveDamage(((float)difficulty) / 6.0f);
+        wave.AddSubWave(subWave, 0.0f);
+        return wave;
+    }
+
+    public static Wave ThreeBombs(int difficulty)
+    {
+        Wave wave = new Wave();
+        SubWave subWave = new SubWave();
+        for (int i = 0; i < 3; i++)
+        {
+            StatsHolder bomber = EnemyFactory.SmallBomber();
+            bomber.Scale = 4.0f;
+            bomber.Health = 200.0f;
+            bomber.Damage = 20.0f;
+            bomber.MovementSpeed = 0.2f;
+            subWave.AddEnemy(bomber);
+        }
+        subWave.SpreadOut();
         subWave.ScaleSubWaveHealth(difficulty / 4.0f);
         subWave.ScaleSubWaveDamage(((float)difficulty) / 6.0f);
         wave.AddSubWave(subWave, 0.0f);
