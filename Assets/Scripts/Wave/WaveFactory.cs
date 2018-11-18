@@ -40,18 +40,20 @@ public class WaveFactory
             default:
                 Wave wave = RandomSlowWaveComponent(5);
                 level -= 5;
-                int waves = 0;
+                int nrOfSpawnedWaves = 1;
+                float offset = 0.0f;
                 while (level >= 5)
                 {
-                    waves++;
-                    Wave waveComponent = waves % 3 == 0 ? RandomSlowWaveComponent(5) : RandomFastWaveComponent(5);
-                    wave.Merge(waveComponent, Parameters.STANDARD_WAVE_DURATION * waves);
+                    bool spawnSlowWave = nrOfSpawnedWaves % 3 == 0;
+                    Wave component = spawnSlowWave ? RandomSlowWaveComponent(5) : RandomFastWaveComponent(5);
+                    wave.Merge(component, offset);
+                    offset = spawnSlowWave ? offset + 1.0f : offset + Parameters.STANDARD_WAVE_DURATION;
                     level -= 5;
+                    nrOfSpawnedWaves++;
                 }
-
                 if (level > 0)
                 {
-                    wave.Merge(RandomFastWaveComponent(level), Parameters.STANDARD_WAVE_DURATION * waves);
+                    wave.Merge(RandomFastWaveComponent(level), offset);
                 }
                 return wave;
         }
