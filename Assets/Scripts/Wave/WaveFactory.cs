@@ -13,6 +13,7 @@ public class WaveFactory
         RangedShooters,
         TwoZigZags,
         BomberCluster,
+        LineOfRanged
     };
 
     private static List<Func<int, Wave>> slowWaveComponents = new List<Func<int, Wave>>()
@@ -210,6 +211,25 @@ public class WaveFactory
             subWave.AddEnemy(EnemyFactory.RangedCirclingEnemy());
             wave.AddSubWave(subWave, timeStamp);
             timeStamp += 0.5f;
+        }
+        return wave;
+    }
+
+    public static Wave LineOfRanged(int difficulty)
+    {
+        int numberOfEnemies = difficulty + 2;
+        Wave wave = new Wave();
+        float timeStamp = 0.0f;
+        float angle = UnityEngine.Random.value * 360;
+        for (int i = 0; i < numberOfEnemies; i++)
+        {
+            SubWave subWave = new SubWave();
+            StatsHolder enemy = EnemyFactory.FastEnemy();
+            enemy.predefinedPosition = true;
+            enemy.spawnAngle = angle + 5.0f * i;
+            subWave.AddEnemy(enemy);
+            wave.AddSubWave(subWave, timeStamp);
+            timeStamp += 0.3f;
         }
         return wave;
     }
