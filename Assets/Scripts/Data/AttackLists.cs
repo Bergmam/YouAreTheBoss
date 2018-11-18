@@ -54,7 +54,11 @@ public class AttackLists
         new BossAttack("Big Donut Nuke", 180, RangeLevel.MID, RangeLevel.MID, 400, 9),
         new BossAttack("Thin Melee", 15, RangeLevel.MELE, RangeLevel.MELE, 70, 1.0f),
         new BossAttack("Swipe", 75, RangeLevel.MELE, RangeLevel.MELE, 100, 1.8f),
-        new BossAttack("Ranged Donut", 120, RangeLevel.LONG, RangeLevel.LONG, 18, 0.3f)
+        new BossAttack("Ranged Donut", 120, RangeLevel.LONG, RangeLevel.LONG, 18, 0.3f),
+        new BossAttack("Shotgun", 20, RangeLevel.MELE, RangeLevel.MID, 200, 2.51f),
+        new BossAttack("Meka Nuke", 180, RangeLevel.MELE, RangeLevel.LONG, 400, 20.0f),
+        new BossAttack("Thin Range", 12.5f, RangeLevel.MID, RangeLevel.MID, 70, 1.0f),
+        new BossAttack("Ranged Swipe", 75, RangeLevel.MID, RangeLevel.MID, 100, 1.9f)
     };
 
     public static List<BossAttack> chosenUpgradeAttacks = new List<BossAttack>();
@@ -71,7 +75,12 @@ public class AttackLists
         {"Touch of Death", "Art/starsigns/sagititarius"},
         {"Small Donut", "Art/starsigns/scorpio"},
         {"Ranged Donut", "Art/starsigns/taurus"},
-        {"Swipe", "Art/starsigns/virgo"}
+        {"Swipe", "Art/starsigns/virgo"},
+        // TODO: Icons below are duplicates. Switch them to new icons.
+        {"Shotgun", "Art/starsigns/sagititarius"},
+        {"Meka Nuke", "Art/starsigns/crab"},
+        {"Thin Range", "Art/starsigns/taurus"},
+        {"Ranged Swipe", "Art/starsigns/virgo"}
     };
 
     public static string GetAssetString(string name)
