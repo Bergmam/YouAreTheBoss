@@ -31,13 +31,6 @@ public class ActiveAttackController : MonoBehaviour
         this.activeAttackScreenButton = GameObject.Find("ActiveAttackScreenButton");
     }
 
-    void Start()
-    {
-        this.activeAttackScreenButton.SetActive(false);
-        this.backgroundFade.SetActive(false);
-        this.chargeSystem.SetActive(false);
-    }
-
     public void SetAttack(int attackNumber)
     {
         this.active = true;
@@ -111,7 +104,15 @@ public class ActiveAttackController : MonoBehaviour
         this.active = false;
     }
 
-    public void SetChargeSystem(bool val){
+    public void SetChargeSystem(bool val)
+    {
         this.chargeSystem.SetActive(val);
+    }
+
+    public void CancelAiming()
+    {
+        this.activeAttackScreenButton.SetActive(false);
+        this.backgroundFade.SetActive(false);
+        this.chargeSystem.SetActive(false);
     }
 }
