@@ -17,6 +17,7 @@ public class ActiveAttackController : MonoBehaviour
 
     private GameObject chargeSystem;
     private bool active;
+    private CooldownBehaviour cooldownBehaviour;
 
     void Awake()
     {
@@ -45,6 +46,7 @@ public class ActiveAttackController : MonoBehaviour
     private void setColors(int attackNumber)
     {
         this.currentAttackButton = GameObject.Find("Passive" + attackNumber + "Button");
+        this.cooldownBehaviour = this.currentAttackButton.GetComponentInChildren<CooldownBehaviour>();
         this.currentAttackButton.transform.parent.GetComponent<ColorModifier>().Select();
         this.currentAttackButton.GetComponent<Image>().sprite = fireSprite;
         this.currentAttackButton.transform.Find("Image").gameObject.SetActive(false);
@@ -73,8 +75,8 @@ public class ActiveAttackController : MonoBehaviour
 
         StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), new Color(0, 0.89f, 1), 0.5f));
 
-        CooldownBehaviour cooldownBehaviour = this.currentAttackButton.GetComponentInChildren<CooldownBehaviour>();
-        cooldownBehaviour.StartCooldown(this.currentAttack.frequency);
+        this.cooldownBehaviour = this.currentAttackButton.GetComponentInChildren<CooldownBehaviour>();
+        this.cooldownBehaviour.StartCooldown(this.currentAttack.frequency);
         this.backgroundFade.SetActive(false);
         this.chargeSystem.SetActive(false);
         this.activeAttackScreenButton.SetActive(false);
@@ -89,7 +91,7 @@ public class ActiveAttackController : MonoBehaviour
     public IEnumerator ReactivateAttackAfterTime(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        if (this.active)
+        if (this.cooldownBehaviour.Ready)
         {
             this.backgroundFade.SetActive(true);
             this.chargeSystem.SetActive(true);
