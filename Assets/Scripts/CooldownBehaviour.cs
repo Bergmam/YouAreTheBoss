@@ -10,9 +10,11 @@ public class CooldownBehaviour : MonoBehaviour
     private float originalCooldownValue;
     private float cooldown;
     private Toggle parentButton;
+    public bool Ready;
 
     void Awake()
     {
+        this.Ready = true;
         this.parentButton = transform.parent.GetComponent<Toggle>();
         this.image = gameObject.GetComponent<Image>();
         if (this.image == null)
@@ -36,12 +38,14 @@ public class CooldownBehaviour : MonoBehaviour
         else if (!this.parentButton.enabled)
         {
             this.parentButton.enabled = true;
+            this.Ready = true;
         }
     }
 
     public void StartCooldown(float cooldown)
     {
         this.parentButton.enabled = false;
+        this.Ready = false;
         this.cooldown = cooldown;
         this.originalCooldownValue = cooldown;
     }
@@ -49,6 +53,7 @@ public class CooldownBehaviour : MonoBehaviour
     public void RestartCooldown()
     {
         this.parentButton.enabled = false;
+        this.Ready = false;
         this.cooldown = this.originalCooldownValue;
     }
 }
