@@ -76,11 +76,10 @@ public class AttackLists
         {"Small Donut", "Art/starsigns/scorpio"},
         {"Ranged Donut", "Art/starsigns/taurus"},
         {"Swipe", "Art/starsigns/virgo"},
-        // TODO: Icons below are duplicates. Switch them to new icons.
-        {"Shotgun", "Art/starsigns/sagititarius"},
-        {"Meka Nuke", "Art/starsigns/crab"},
-        {"Thin Range", "Art/starsigns/taurus"},
-        {"Ranged Swipe", "Art/starsigns/virgo"}
+        {"Shotgun", "Art/starsigns/akkh"},
+        {"Meka Nuke", "Art/starsigns/cat"},
+        {"Thin Range", "Art/starsigns/eye"},
+        {"Ranged Swipe", "Art/starsigns/scarab"}
     };
 
     public static string GetAssetString(string name)
