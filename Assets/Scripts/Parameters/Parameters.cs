@@ -34,11 +34,13 @@ public static class Parameters
     public static float DURABLE_ENEMY_MIN_HEALTH = 200f;
     public static int ATTACK_UPGRADE_WAVE_NUMBER = 5;
 
-    public static float STANDARD_WAVE_DURATION = 5.5f;
+    public static float STANDARD_WAVE_DURATION = 5.0f;
 
     public static float HEALTH_SCALE = 0.7f;
 
     public static float SPRITE_SCALE_FACTOR = 0.75f;
     public static Color AttACK_BUTTON_COOLDOWN_COLOR = new Color32(0, 229, 225, 160);
+    public static float BASIC_ENEMY_HEALTH = 50.0f;
+    public static float BASIC_ENEMY_SPEED = 0.9f;
 
 }

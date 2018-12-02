@@ -31,7 +31,7 @@ public class EnemyFactory
 
     public static StatsHolder Rotator(bool clockwise)
     {
-        StatsHolder stats = new StatsHolder("Rotator", 0.7f, 2.5f, RangeLevel.MELE, 100.0f, 0.7f, Color.blue);
+        StatsHolder stats = new StatsHolder("Rotator", 2.5f, RangeLevel.MELE, 0.7f, Color.blue);
         if (clockwise)
         {
             stats.angularSpeed = -50f;
@@ -51,12 +51,12 @@ public class EnemyFactory
 
     public static StatsHolder FastEnemy()
     {
-        return new StatsHolder("Ranged", 2.0f, 1.0f, RangeLevel.MID, 50.0f, 0.5f, Color.yellow);
+        return new StatsHolder("Ranged", 1.0f, RangeLevel.MID, 0.5f, Color.yellow);
     }
 
     public static StatsHolder RangedCirclingEnemy(bool clockwise)
     {
-        StatsHolder stats = new StatsHolder("Shooting Shark", 3.0f, 1.0f, RangeLevel.MID, 50.0f, 1.2f, Color.magenta);
+        StatsHolder stats = new StatsHolder("Shooting Shark", 1.0f, RangeLevel.MID, 1.2f, Color.magenta);
         if (clockwise)
         {
             stats.circlingSpeed = -30f;
@@ -76,7 +76,7 @@ public class EnemyFactory
 
     public static StatsHolder StandardEnemy()
     {
-        return new StatsHolder("Standard Enemy", 0.8f, 2.5f, RangeLevel.MELE, 100.0f, 1.0f, Color.green);
+        return new StatsHolder("Standard Enemy", 2.5f, RangeLevel.MELE, 1.0f, Color.green);
     }
 
     public static StatsHolder Projectile(float damage)
@@ -144,7 +144,7 @@ public class EnemyFactory
 
     public static StatsHolder SmallBomber()
     {
-        StatsHolder stats = new StatsHolder("Small Bomber", 1.5f, 7.5f, RangeLevel.SELF_DESTRUCT, 0.1f, 1.0f, orange);
+        StatsHolder stats = new StatsHolder("Small Bomber", 7.5f, RangeLevel.SELF_DESTRUCT, 1.0f, orange);
         stats.angularSpeed = 20f;
         stats.selfDestruct = true;
         return stats;
@@ -157,7 +157,7 @@ public class EnemyFactory
 
     public static StatsHolder ZigZag(bool clockwise)
     {
-        StatsHolder stats = new StatsHolder("ZigZag", 0.8f, 2.5f, RangeLevel.MELE, 100.0f, 1.0f, Color.white);
+        StatsHolder stats = new StatsHolder("ZigZag", 2.5f, RangeLevel.MELE, 1.0f, Color.white);
         stats.angularSpeed = clockwise ? -70 : 70;
         stats.zigZag = true;
         stats.zigZagAngle = 90;
