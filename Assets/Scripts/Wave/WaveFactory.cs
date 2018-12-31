@@ -30,32 +30,32 @@ public class WaveFactory
 
     public static Wave GenerateWave(int level)
     {
-        level++;
         switch (level)
         {
-            case 1:
+            case 0:
                 return FirstWave();
-            case 2:
+            case 1:
                 return SecondWave();
-            case 3:
+            case 2:
                 return ThirdWave();
-            case 4:
+            case 3:
                 return FourthWave();
             default:
-                Wave wave = new Wave();
-                while (level > 0)
+                Wave wave = RandomSlowWaveComponent();
+                level -= 5;
+                int nrOfSpawnedWaves = 1;
+                float offset = 0.0f;
+                while (level >= 0)
                 {
-                    Wave component = RandomFastWaveComponent();
-                    if (level % 4 == 0)
-                    {
-                        component.Merge(RandomSlowWaveComponent());
-                    }
-                    wave.Append(component);
-                    level--;
+                    bool spawnSlowWave = nrOfSpawnedWaves % 3 == 0;
+                    Wave component = spawnSlowWave ? RandomSlowWaveComponent() : RandomFastWaveComponent();
+                    wave.Merge(component, offset);
+                    offset = spawnSlowWave ? offset + 1.0f : offset + Parameters.STANDARD_WAVE_DURATION;
+                    level -= 5;
+                    nrOfSpawnedWaves++;
                 }
                 return wave;
         }
-
     }
 
     private static Wave RandomSlowWaveComponent()
