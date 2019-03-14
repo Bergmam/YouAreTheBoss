@@ -51,12 +51,12 @@ public class EnemyFactory
 
     public static StatsHolder FastEnemy()
     {
-        return new StatsHolder("Ranged", 1.0f, RangeLevel.MID, 0.5f, Color.yellow);
+        return new StatsHolder("Ranged", 1.0f, RangeLevel.MID, Parameters.BASIC_RANGED_ENEMY_HEALTH, 0.5f, Color.yellow);
     }
 
     public static StatsHolder RangedCirclingEnemy(bool clockwise)
     {
-        StatsHolder stats = new StatsHolder("Shooting Shark", 1.0f, RangeLevel.MID, 1.2f, Color.magenta);
+        StatsHolder stats = new StatsHolder("Shooting Shark", 1.0f, RangeLevel.MID, Parameters.BASIC_RANGED_ENEMY_HEALTH, 1.2f, Color.magenta);
         if (clockwise)
         {
             stats.circlingSpeed = -30f;
@@ -115,7 +115,7 @@ public class EnemyFactory
     public static StatsHolder RangedSpawner()
     {
         StatsHolder stats = new StatsHolder("Mad Spawner", 4.0f, 1.0f, RangeLevel.MID, 400.0f, 3.0f, Color.grey);
-        stats.attackDelay = 1.0f;
+        stats.attackDelay = 2.0f;
         stats.projectile = RangedCirclingMinon();
         return stats;
     }
@@ -128,7 +128,7 @@ public class EnemyFactory
     public static StatsHolder CirclingSpawner()
     {
         StatsHolder stats = new StatsHolder("Circling Spawner", 4.0f, 1.0f, RangeLevel.MID, 300.0f, 1.0f, Color.green);
-        stats.attackDelay = 2.0f;
+        stats.attackDelay = 2.5f;
         stats.projectile = CirclingSpawnerMinion();
         bool clockwise = UnityEngine.Random.value >= 0.5;
         if (clockwise)
@@ -157,7 +157,7 @@ public class EnemyFactory
 
     public static StatsHolder ZigZag(bool clockwise)
     {
-        StatsHolder stats = new StatsHolder("ZigZag", 2.5f, RangeLevel.MELE, 1.0f, Color.white);
+        StatsHolder stats = new StatsHolder("ZigZag", 2.5f, RangeLevel.MELE, 30.0f, 1.0f, Color.white);
         stats.angularSpeed = clockwise ? -70 : 70;
         stats.zigZag = true;
         stats.zigZagAngle = 90;

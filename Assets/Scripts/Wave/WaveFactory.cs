@@ -9,7 +9,6 @@ public class WaveFactory
     private static List<Func<Wave>> fastWaveComponents = new List<Func<Wave>>()
     {
         RotatingWorm,
-        ClosingRotatingCircle,
         RangedShooters,
         TwoZigZags,
         BomberCluster,
@@ -20,7 +19,6 @@ public class WaveFactory
 
     private static List<Func<Wave>> slowWaveComponents = new List<Func<Wave>>()
     {
-        OppositeSides,
         RangedSpawner,
         OneZigZag,
         OneBigGuy,
@@ -43,12 +41,18 @@ public class WaveFactory
                 return FourthWave();
             default:
                 Wave wave = new Wave();
+                level -= 3;
                 while (level > 0)
                 {
-                    Wave component = RandomFastWaveComponent();
+                    Wave component;
                     if (level % 4 == 0)
                     {
-                        component.Merge(RandomSlowWaveComponent());
+                        component = RandomSlowWaveComponent();
+                        component.Append(RandomFastWaveComponent());
+                    }
+                    else
+                    {
+                        component = RandomFastWaveComponent();
                     }
                     wave.Append(component);
                     level--;
@@ -279,9 +283,9 @@ public class WaveFactory
         Wave wave = new Wave();
         SubWave subWave = new SubWave();
         subWave.AddEnemy(EnemyFactory.ZigZag());
-        subWave.ScaleSubWaveSpeed(0.5f);
-        subWave.ScaleSubWaveSize(1.5f);
-        subWave.ScaleSubWaveHealth(5 / 3.0f);
+        subWave.ScaleSubWaveSpeed(0.4f);
+        subWave.ScaleSubWaveSize(2.5f);
+        subWave.ScaleSubWaveHealth(2.5f);
         subWave.ScaleSubWaveAngularSpeed(1);
         subWave.ScaleSubWaveDamage(5.0f / 6.0f);
         wave.AddSubWave(subWave, 0.0f);

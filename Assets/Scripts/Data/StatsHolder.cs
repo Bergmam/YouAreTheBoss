@@ -24,7 +24,19 @@ public class StatsHolder
     public float zigZagAngle;
     public bool zigZag;
 
-    public StatsHolder(string name,
+    public StatsHolder(
+        string name,
+        float Damage,
+        RangeLevel Range,
+        float Health,
+        float Scale,
+        Color Color) : this(name, Damage, Range, Scale, Color)
+    {
+        this.Health = Health * Parameters.HEALTH_SCALE;
+    }
+
+    public StatsHolder(
+        string name,
         float Damage,
         RangeLevel Range,
         float Scale,
@@ -45,7 +57,8 @@ public class StatsHolder
         this.zigZag = false;
     }
 
-    public StatsHolder(string name,
+    public StatsHolder(
+        string name,
         float MovementSpeed,
         float Damage,
         RangeLevel Range,
