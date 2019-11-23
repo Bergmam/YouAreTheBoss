@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class BossHealth : MonoBehaviour
 {
-
-    public float BossHealthVal = 100.0f;
     ProgressBarBehaviour bossHealthBar;
     private GameObject gameOverPanel;
     private GameObject scoreLabel;
@@ -29,14 +27,15 @@ public class BossHealth : MonoBehaviour
     void Start()
     {
         bossHealthBar = GameObject.Find("BossHealthBar").GetComponent<ProgressBarBehaviour>();
+        bossHealthBar.UpdateFill(BossHealthHolder.BossHealth / BossHealthHolder.BossFullHealth);
     }
 
     public bool bossTakeDamage(float damage)
     {
-        BossHealthVal = BossHealthVal - damage;
-        bossHealthBar.UpdateFill(BossHealthVal / 100.0f);
+        BossHealthHolder.BossHealth = BossHealthHolder.BossHealth - damage;
+        bossHealthBar.UpdateFill(BossHealthHolder.BossHealth / BossHealthHolder.BossFullHealth);
 
-        if (BossHealthVal <= 0 && !gameOver)
+        if (BossHealthHolder.BossHealth <= 0 && !gameOver)
         {
             gameOver = true;
             if (!WaveNumber.highScoreGenerated)
