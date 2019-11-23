@@ -46,7 +46,7 @@ public class Enemy : MonoBehaviour
         this.enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
         this.sprite = transform.Find("Sprite");
         this.colorModifier = this.sprite.GetComponent<ColorModifier>();
-        this.hitParticle = Resources.Load("Prefabs/hitParticleSystem", typeof(GameObject)) as GameObject;
+        this.hitParticle = Resources.Load("Prefabs/HitParticleSystem", typeof(GameObject)) as GameObject;
     }
 
     void Start()
