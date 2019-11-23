@@ -28,16 +28,15 @@ public class WaveFactory
 
     public static Wave GenerateWave(int level)
     {
-        level++;
         switch (level)
         {
-            case 1:
+            case 0:
                 return FirstWave();
-            case 2:
+            case 1:
                 return SecondWave();
-            case 3:
+            case 2:
                 return ThirdWave();
-            case 4:
+            case 3:
                 return FourthWave();
             default:
                 Wave wave = new Wave();
@@ -59,7 +58,6 @@ public class WaveFactory
                 }
                 return wave;
         }
-
     }
 
     private static Wave RandomSlowWaveComponent()
