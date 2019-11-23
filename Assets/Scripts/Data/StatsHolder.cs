@@ -110,7 +110,7 @@ public class StatsHolder
 
     public bool IsRanged()
     {
-        return this.Range > Parameters.MELE_RANGE;
+        return this.Range > Parameters.MELEE_RANGE;
     }
 
     public Dictionary<string, bool> GetAttributes()

@@ -111,13 +111,13 @@ public class Enemy : MonoBehaviour
                 doDamageToBoss();
                 KillSelf();
             }
-            // Mele attack
-            else if (Range <= Parameters.MELE_RANGE && !IsInvoking("doDamageToBoss"))
+            // Melee attack
+            else if (Range <= Parameters.MELEE_RANGE && !IsInvoking("doDamageToBoss"))
             {
                 InvokeRepeating("doDamageToBoss", 0, this.attackFrequency);
             }
             // Ranged attack
-            else if (Range > Parameters.MELE_RANGE && !IsInvoking("spawnProjectile"))
+            else if (Range > Parameters.MELEE_RANGE && !IsInvoking("spawnProjectile"))
             {
                 InvokeRepeating("spawnProjectile", 0, this.attackFrequency);
             }
