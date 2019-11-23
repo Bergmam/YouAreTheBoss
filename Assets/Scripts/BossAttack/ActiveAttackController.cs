@@ -91,7 +91,7 @@ public class ActiveAttackController : MonoBehaviour
     public IEnumerator ReactivateAttackAfterTime(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        if (this.cooldownBehaviour.Ready)
+        if (this.cooldownBehaviour.Ready && this.active)
         {
             this.backgroundFade.SetActive(true);
             this.chargeSystem.SetActive(true);

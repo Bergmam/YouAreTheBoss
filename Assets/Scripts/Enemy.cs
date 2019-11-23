@@ -46,7 +46,7 @@ public class Enemy : MonoBehaviour
         this.enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
         this.sprite = transform.Find("Sprite");
         this.colorModifier = this.sprite.GetComponent<ColorModifier>();
-        this.hitParticle = Resources.Load("Prefabs/hitParticleSystem", typeof(GameObject)) as GameObject;
+        this.hitParticle = Resources.Load("Prefabs/HitParticleSystem", typeof(GameObject)) as GameObject;
     }
 
     void Start()
@@ -111,15 +111,15 @@ public class Enemy : MonoBehaviour
                 doDamageToBoss();
                 KillSelf();
             }
-            // Mele attack
-            else if (Range <= Parameters.MELE_RANGE && !IsInvoking("doDamageToBoss"))
+            // Melee attack
+            else if (Range <= Parameters.MELEE_RANGE && !IsInvoking("doDamageToBoss"))
             {
-                InvokeRepeating("doDamageToBoss", 0, this.attackFrequency);
+                InvokeRepeating("doDamageToBoss", 1.0f, this.attackFrequency);
             }
             // Ranged attack
-            else if (Range > Parameters.MELE_RANGE && !IsInvoking("spawnProjectile"))
+            else if (Range > Parameters.MELEE_RANGE && !IsInvoking("spawnProjectile"))
             {
-                InvokeRepeating("spawnProjectile", 0, this.attackFrequency);
+                InvokeRepeating("spawnProjectile", 1.0f, this.attackFrequency);
             }
         }
         transform.Find("Sprite").rotation = Quaternion.LookRotation(Vector3.forward, Vector3.zero - transform.position);

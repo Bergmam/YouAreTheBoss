@@ -7,7 +7,7 @@ public class RangeUtils
             case RangeLevel.SELF_DESTRUCT:
                 return Parameters.SELF_DESTRUCT_RANGE;
             case RangeLevel.MELE:
-                return Parameters.MELE_RANGE;
+                return Parameters.MELEE_RANGE;
             case RangeLevel.MID:
                 return Parameters.MID_RANGE;
             case RangeLevel.LONG:

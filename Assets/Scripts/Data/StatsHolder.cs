@@ -24,7 +24,41 @@ public class StatsHolder
     public float zigZagAngle;
     public bool zigZag;
 
-    public StatsHolder(string name,
+    public StatsHolder(
+        string name,
+        float Damage,
+        RangeLevel Range,
+        float Health,
+        float Scale,
+        Color Color) : this(name, Damage, Range, Scale, Color)
+    {
+        this.Health = Health * Parameters.HEALTH_SCALE;
+    }
+
+    public StatsHolder(
+        string name,
+        float Damage,
+        RangeLevel Range,
+        float Scale,
+        Color Color)
+    {
+        this.Name = name;
+        this.MovementSpeed = Parameters.BASIC_ENEMY_SPEED;
+        this.Damage = Damage;
+        this.Range = RangeUtils.rangeLevelToFloatRange(Range);
+        this.Health = Parameters.BASIC_ENEMY_HEALTH * Parameters.HEALTH_SCALE;
+        this.Scale = Scale;
+        this.Color = Color;
+        this.angularSpeed = 0f;
+        this.predefinedPosition = false;
+        this.spawnRadius = Parameters.ENEMY_SPAWN_RADIUS;
+        this.requiredKill = true;
+        this.attackDelay = 0.5f;
+        this.zigZag = false;
+    }
+
+    public StatsHolder(
+        string name,
         float MovementSpeed,
         float Damage,
         RangeLevel Range,
@@ -76,7 +110,7 @@ public class StatsHolder
 
     public bool IsRanged()
     {
-        return this.Range > Parameters.MELE_RANGE;
+        return this.Range > Parameters.MELEE_RANGE;
     }
 
     public Dictionary<string, bool> GetAttributes()

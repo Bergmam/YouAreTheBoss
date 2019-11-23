@@ -7,7 +7,7 @@ public static class Parameters
 
     public static float scrollDelay = 0.15f;
     public static float SELF_DESTRUCT_RANGE = 0.5f;
-    public static float MELE_RANGE = 0.8f;
+    public static float MELEE_RANGE = 0.8f;
     public static float MID_RANGE = 2.0f;
     public static float LONG_RANGE = 2.6f;
     public static float MIN_ATTACK_RADIUS = 0.5f;
@@ -34,11 +34,14 @@ public static class Parameters
     public static float DURABLE_ENEMY_MIN_HEALTH = 200f;
     public static int ATTACK_UPGRADE_WAVE_NUMBER = 5;
 
-    public static float STANDARD_WAVE_DURATION = 5.5f;
+    public static float STANDARD_WAVE_DURATION = 3.0f;
 
-    public static float HEALTH_SCALE = 0.7f;
+    public static float HEALTH_SCALE = 1.0f;
 
     public static float SPRITE_SCALE_FACTOR = 0.75f;
     public static Color AttACK_BUTTON_COOLDOWN_COLOR = new Color32(0, 229, 225, 160);
+    public static float BASIC_ENEMY_HEALTH = 50.0f;
+    public static float BASIC_RANGED_ENEMY_HEALTH = 30.0f;
+    public static float BASIC_ENEMY_SPEED = 0.9f;
 
 }
