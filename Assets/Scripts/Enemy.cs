@@ -114,12 +114,12 @@ public class Enemy : MonoBehaviour
             // Melee attack
             else if (Range <= Parameters.MELEE_RANGE && !IsInvoking("doDamageToBoss"))
             {
-                InvokeRepeating("doDamageToBoss", 0, this.attackFrequency);
+                InvokeRepeating("doDamageToBoss", 1.0f, this.attackFrequency);
             }
             // Ranged attack
             else if (Range > Parameters.MELEE_RANGE && !IsInvoking("spawnProjectile"))
             {
-                InvokeRepeating("spawnProjectile", 0, this.attackFrequency);
+                InvokeRepeating("spawnProjectile", 1.0f, this.attackFrequency);
             }
         }
         transform.Find("Sprite").rotation = Quaternion.LookRotation(Vector3.forward, Vector3.zero - transform.position);
