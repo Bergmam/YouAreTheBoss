@@ -31,10 +31,12 @@ public class Enemy : MonoBehaviour
     private EnemySpawner enemySpawner;
 
     private GameObject hitParticle;
+    private GameObject healthPickup;
     private StatsHolder projectile;
     private float zigZagAngleLow;
     private float zigZagAngleHigh;
     private bool zigZag;
+    private WaveHandler waveHandler;
 
     private Transform sprite;
 
@@ -47,6 +49,8 @@ public class Enemy : MonoBehaviour
         this.sprite = transform.Find("Sprite");
         this.colorModifier = this.sprite.GetComponent<ColorModifier>();
         this.hitParticle = Resources.Load("Prefabs/HitParticleSystem", typeof(GameObject)) as GameObject;
+        this.healthPickup = Resources.Load("Prefabs/HealthPickup", typeof(GameObject)) as GameObject;
+        this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
     }
 
     void Start()
@@ -194,6 +198,12 @@ public class Enemy : MonoBehaviour
         if (Health <= 0)
         {
             KillSelf();
+            int rand = Random.Range(0, 3);
+            if (rand == 0)
+            {
+                Instantiate(this.healthPickup, this.transform.position, Quaternion.identity);
+                this.waveHandler.HealthPickupAdded();
+            }
         }
         else
         {

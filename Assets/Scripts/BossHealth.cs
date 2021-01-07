@@ -59,6 +59,13 @@ public class BossHealth : MonoBehaviour
         }
     }
 
+    public void HealBossPercentage(int percentage)
+    {
+        float healthToAdd = 0.01f * percentage * BossHealthHolder.BossFullHealth;
+        BossHealthHolder.BossHealth = Mathf.Min(BossHealthHolder.BossHealth + healthToAdd, BossHealthHolder.BossFullHealth);
+        bossHealthBar.UpdateFill(BossHealthHolder.BossHealth / BossHealthHolder.BossFullHealth);
+    }
+
     public void playAgain()
     {
         WaveNumber.waveNumber = 0;

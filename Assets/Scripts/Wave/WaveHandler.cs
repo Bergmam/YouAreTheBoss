@@ -9,6 +9,7 @@ public class WaveHandler : MonoBehaviour
     private int requiredKillEnemiesInWave;
     private int requireKillUnitsSpawned;
     private bool gameOver = false;
+    private int activeHealthPickups;
 
     void Awake()
     {
@@ -31,7 +32,10 @@ public class WaveHandler : MonoBehaviour
     void Update()
     {
         int livingEnemies = GameObject.FindObjectsOfType(typeof(Enemy)).Length;
-        if (livingEnemies <= 0 && requireKillUnitsSpawned >= requiredKillEnemiesInWave && !gameOver)
+        if (livingEnemies <= 0
+            && requireKillUnitsSpawned >= requiredKillEnemiesInWave
+            && this.activeHealthPickups <= 0
+            && !gameOver)
         {
             gameOver = true;
             WaveNumber.waveNumber++;
@@ -58,5 +62,15 @@ public class WaveHandler : MonoBehaviour
         {
             GameObject.Destroy(enemy.gameObject);
         }
+    }
+
+    public void HealthPickupAdded()
+    {
+        this.activeHealthPickups++;
+    }
+
+    public void HealthPickupRemoved()
+    {
+        this.activeHealthPickups--;
     }
 }
