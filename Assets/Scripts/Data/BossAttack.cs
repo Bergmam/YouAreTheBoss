@@ -10,8 +10,9 @@ public class BossAttack
     public float farRadius;
     public float damage;
     public float frequency;
+    public bool isProjectile;
 
-    public BossAttack(string name, float angle, RangeLevel closeRange, RangeLevel farRange, float damage, float frequency)
+    public BossAttack(string name, float angle, RangeLevel closeRange, RangeLevel farRange, float damage, float frequency, bool isProjectile)
     {
         this.name = name;
         this.angle = angle;
@@ -19,6 +20,7 @@ public class BossAttack
         this.farRadius = Mathf.Min(RangeUtils.rangeLevelToFloatRange(farRange) + 0.75f, Parameters.MAX_ATTACK_RADIUS);
         this.damage = damage;
         this.frequency = frequency;
+        this.isProjectile = isProjectile;
     }
 
     bool Equals(BossAttack other)
@@ -28,6 +30,7 @@ public class BossAttack
                 this.closeRadius == other.closeRadius &&
                 this.farRadius == other.farRadius &&
                 this.damage == other.damage &&
-                this.frequency == other.frequency;
+                this.frequency == other.frequency &&
+                this.isProjectile == other.isProjectile;
     }
 }

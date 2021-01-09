@@ -21,7 +21,7 @@ public class CooldownBehaviour : MonoBehaviour
         {
             Destroy(this);
         }
-        this.image.color = Parameters.AttACK_BUTTON_COOLDOWN_COLOR;
+        this.image.color = Parameters.ATTACK_BUTTON_COOLDOWN_COLOR;
 
         //Make sure the image the script is attached to is actually filled radially.
         this.image.type = Image.Type.Filled;

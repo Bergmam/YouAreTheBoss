@@ -8,9 +8,11 @@ public class PassiveAttackController : MonoBehaviour
     private ColorModifier aimColorModifier;
 
     private CooldownBehaviour cooldownBehaviour;
+    private GameObject projectile;
 
     void Awake()
     {
+        this.projectile = Resources.Load<GameObject>("Prefabs/BossProjectile");
         this.aimColorModifier = UnityUtils.RecursiveFind(transform, "Image").GetComponent<ColorModifier>();
     }
 
@@ -26,31 +28,44 @@ public class PassiveAttackController : MonoBehaviour
         GameObject currentAttackButton = GameObject.Find("Passive" + attackNumber + "Button");
         this.cooldownBehaviour = currentAttackButton.GetComponentInChildren<CooldownBehaviour>();
         this.cooldownBehaviour.StartCooldown(this.currentAttack.frequency);
+
+        if (this.currentAttack.isProjectile)
+        {
+            this.aimColorModifier.DeSelect();
+        }
     }
 
     public void DoAttack()
     {
         float unitCircleRotation = RotationUtils.MakePositiveAngle(transform.eulerAngles.z + 90);
 
-        object[] obj = GameObject.FindObjectsOfType(typeof(GameObject));
-        foreach (Enemy enemy in GameObject.FindObjectsOfType(typeof(Enemy)))
+        if (this.currentAttack.isProjectile)
         {
-            if (!enemy.SetForDeath && enemy.isInAttackArea(unitCircleRotation - this.currentAttack.angle,
-                    unitCircleRotation + this.currentAttack.angle,
-                    this.currentAttack.closeRadius,
-                    this.currentAttack.farRadius))
+            Vector3 projectilePos = RotationUtils.RadialPosToXY(new RadialPosition(0.25f, unitCircleRotation));
+            GameObject spawnedProjectile = Instantiate(this.projectile, projectilePos, Quaternion.identity);
+            spawnedProjectile.GetComponent<BossProjectile>().Attack = this.currentAttack;
+        }
+        else
+        {
+            object[] obj = GameObject.FindObjectsOfType(typeof(GameObject));
+            foreach (Enemy enemy in GameObject.FindObjectsOfType(typeof(Enemy)))
             {
-                enemy.applyDamageTo(this.currentAttack.damage);
+                if (!enemy.SetForDeath && enemy.isInAttackArea(unitCircleRotation - this.currentAttack.angle,
+                        unitCircleRotation + this.currentAttack.angle,
+                        this.currentAttack.closeRadius,
+                        this.currentAttack.farRadius))
+                {
+                    enemy.applyDamageTo(this.currentAttack.damage);
+                }
             }
+            this.aimColorModifier.FadeToSelected(0.0f);
+            this.aimColorModifier.FadeToDeselected(this.currentAttack.frequency);
         }
 
         // For now, change color of boss when he is attacking
         // TODO: Change when areas of damage is implemented
         gameObject.GetComponent<SpriteRenderer>().color = Color.red;
         this.cooldownBehaviour.RestartCooldown();
-
-        this.aimColorModifier.FadeToSelected(0.0f);
-        this.aimColorModifier.FadeToDeselected(this.currentAttack.frequency);
 
         StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), new Color(0, 0.89f, 1), 0.5f));
     }

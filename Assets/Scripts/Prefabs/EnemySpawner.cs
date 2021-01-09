@@ -56,7 +56,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    public void InstantiateEnemyPrefab(StatsHolder stats)
+    public GameObject InstantiateEnemyPrefab(StatsHolder stats)
     {
         GameObject initEnemy = Instantiate(preInitEnemy);
         if (!stats.predefinedPosition)
@@ -76,5 +76,6 @@ public class EnemySpawner : MonoBehaviour
         initEnemy.name = stats.Name + numberOfEnemies;
         initEnemy.transform.localScale *= Parameters.SPRITE_SCALE_FACTOR;
         numberOfEnemies++;
+        return initEnemy;
     }
 }

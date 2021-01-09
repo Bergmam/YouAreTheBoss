@@ -155,7 +155,8 @@ public class Enemy : MonoBehaviour
         this.colorModifier.FadeToDeselected(this.attackFrequency / 3f);
         RadialPosition thisRadialPos = RotationUtils.XYToRadialPos(transform.position);
         this.projectile.SetRadialSpawnPosition(thisRadialPos.GetAngle(), thisRadialPos.GetRadius());
-        this.enemySpawner.InstantiateEnemyPrefab(this.projectile);
+        GameObject spawnedProjectile = this.enemySpawner.InstantiateEnemyPrefab(this.projectile);
+        spawnedProjectile.transform.Find("Sprite").tag = "enemyProjectile";
     }
 
     public bool isInAttackArea(float lowAngle, float highAngle, float nearRadius, float farRadius)

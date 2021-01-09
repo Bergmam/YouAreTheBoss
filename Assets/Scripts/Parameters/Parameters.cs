@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class Parameters
 {
+    // TODO: Make this a MonoBehaviour or a ScriptableObject so we can edit it in the editor.
 
     public static float scrollDelay = 0.15f;
     public static float SELF_DESTRUCT_RANGE = 0.5f;
@@ -39,9 +40,11 @@ public static class Parameters
     public static float HEALTH_SCALE = 1.0f;
 
     public static float SPRITE_SCALE_FACTOR = 0.75f;
-    public static Color AttACK_BUTTON_COOLDOWN_COLOR = new Color32(0, 229, 225, 160);
+    public static Color ATTACK_BUTTON_COOLDOWN_COLOR = new Color32(0, 229, 225, 160);
     public static float BASIC_ENEMY_HEALTH = 50.0f;
     public static float BASIC_RANGED_ENEMY_HEALTH = 30.0f;
     public static float BASIC_ENEMY_SPEED = 0.9f;
+
+    public static float DESTROY_BOSS_PROJECTILES_RADIUS = 6.5f;
 
 }
