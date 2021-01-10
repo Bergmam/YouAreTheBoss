@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class HealthPickup : MonoBehaviour
 {
-    private BossHealth bossHealth;
     private WaveHandler waveHandler;
+    private ItemData item = new ItemData();
 
     void Awake()
     {
-        this.bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>();
         this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
     }
 
@@ -31,7 +30,8 @@ public class HealthPickup : MonoBehaviour
 
     private void OnPressed()
     {
-        bossHealth.HealBossPercentage(20);
+        GameObject.FindObjectOfType<ItemButtons>().AddItem(this.item);
+
         this.waveHandler.HealthPickupRemoved();
         Destroy(this.gameObject);
     }

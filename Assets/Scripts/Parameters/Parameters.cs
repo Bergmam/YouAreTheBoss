@@ -47,4 +47,6 @@ public static class Parameters
 
     public static float DESTROY_BOSS_PROJECTILES_RADIUS = 6.5f;
 
+    public static int NUMBER_OF_ITEMS = 5;
+
 }
