@@ -1,6 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+public enum EnemyType {
+    ENEMY,
+    PROJECTILE,
+    MINION
+}
+
 public class StatsHolder
 {
     public string Name;
@@ -20,7 +26,7 @@ public class StatsHolder
     public bool requiredKill;
     public StatsHolder projectile;
     public float attackDelay;
-
+    public EnemyType enemyType = EnemyType.ENEMY;
     public float zigZagAngle;
     public bool zigZag;
 

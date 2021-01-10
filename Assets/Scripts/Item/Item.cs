@@ -7,6 +7,7 @@ public class Item : MonoBehaviour
     private WaveHandler waveHandler;
     public int PercentHealthToHeal;
     public int InvunerableSeconds;
+    public int FreezeEnemiesSeconds;
     public Sprite Sprite;
 
     void Awake()
@@ -35,6 +36,7 @@ public class Item : MonoBehaviour
         ItemData item = new ItemData();
         item.PercentHealthToHeal = this.PercentHealthToHeal;
         item.InvunerableSeconds = this.InvunerableSeconds;
+        item.FreezeEnemiesSeconds = this.FreezeEnemiesSeconds;
         item.Sprite = this.gameObject.GetComponent<SpriteRenderer>().sprite;
 
         GameObject.FindObjectOfType<ItemButtons>().AddItem(item);

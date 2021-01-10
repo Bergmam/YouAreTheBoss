@@ -23,9 +23,9 @@ public class BossProjectile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.transform.tag == "enemy")
+        Enemy enemy = other.transform.parent.gameObject.GetComponent<Enemy>();
+        if (enemy != null && enemy.EnemyType == EnemyType.ENEMY || enemy.EnemyType == EnemyType.MINION)
         {
-            Enemy enemy = other.transform.parent.gameObject.GetComponent<Enemy>();
             enemy.applyDamageTo(this.Attack.damage);
             Destroy(this.gameObject);
         }

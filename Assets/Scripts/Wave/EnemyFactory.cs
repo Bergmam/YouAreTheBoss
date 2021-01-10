@@ -93,6 +93,7 @@ public class EnemyFactory
         stats.selfDestruct = true;
         stats.invunerable = true;
         stats.requiredKill = false;
+        stats.enemyType = EnemyType.PROJECTILE;
         return stats;
     }
 
@@ -100,6 +101,7 @@ public class EnemyFactory
     {
         StatsHolder stats = new StatsHolder("Minion", 2.0f, 0.5f, RangeLevel.MELE, 0.5f, 0.5f, Color.black);
         stats.requiredKill = false;
+        stats.enemyType = EnemyType.MINION;
         return stats;
     }
 
@@ -108,6 +110,7 @@ public class EnemyFactory
         StatsHolder stats = new StatsHolder("CirclingMinion", 4.0f, 2.0f, RangeLevel.MID, 10.0f, 0.5f, Color.white);
         stats.circlingSpeed = -70f;
         stats.requiredKill = false;
+        stats.enemyType = EnemyType.MINION;
         return stats;
     }
 
@@ -122,7 +125,9 @@ public class EnemyFactory
 
     public static StatsHolder CirclingSpawnerMinion()
     {
-        return new StatsHolder("Standard Enemy", 0.8f, 2.5f, RangeLevel.MELE, 50.0f, 1.0f, lightGreen);
+        StatsHolder stats = new StatsHolder("Standard Enemy", 0.8f, 2.5f, RangeLevel.MELE, 50.0f, 1.0f, lightGreen);
+        stats.enemyType = EnemyType.MINION;
+        return stats;
     }
 
     public static StatsHolder CirclingSpawner()

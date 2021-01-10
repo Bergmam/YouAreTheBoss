@@ -12,7 +12,8 @@ public class BossHealth : MonoBehaviour
     private GameObject activeAttackFireButton;
     private bool gameOver = false;
     private bool invunerable;
-    ColorModifier shieldColorModifier;
+    private ColorModifier shieldColorModifier;
+    private IEnumerator resetInvunerabilityCoroutine;
 
     void Awake()
     {
@@ -81,10 +82,15 @@ public class BossHealth : MonoBehaviour
         {
             return;
         }
+        if (this.resetInvunerabilityCoroutine != null)
+        {
+            StopCoroutine(this.resetInvunerabilityCoroutine);
+        }
         this.invunerable = true;
         this.shieldColorModifier.Select();
         this.shieldColorModifier.FadeToDeselected(seconds);
-        StartCoroutine(ResetInvunerabilityAfterTime(seconds));
+        this.resetInvunerabilityCoroutine = ResetInvunerabilityAfterTime(seconds);
+        StartCoroutine(resetInvunerabilityCoroutine);
     }
 
     public IEnumerator ResetInvunerabilityAfterTime(float time) {

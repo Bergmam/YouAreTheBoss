@@ -30,14 +30,17 @@ public class Enemy : MonoBehaviour
 
     private GameObject hitParticle;
     private GameObject healthPickup;
+    private GameObject freezePickup;
     private GameObject shieldPickup;
     private StatsHolder projectile;
     private float zigZagAngleLow;
     private float zigZagAngleHigh;
     private bool zigZag;
     private WaveHandler waveHandler;
-
+    private bool frozen;
     private Transform sprite;
+    public EnemyType EnemyType { get; private set; }
+    private IEnumerator unfreezeCoroutine;
 
     // Handle camera shaking
     CameraShake camShake;
@@ -50,6 +53,7 @@ public class Enemy : MonoBehaviour
         this.hitParticle = Resources.Load("Prefabs/HitParticleSystem", typeof(GameObject)) as GameObject;
         this.healthPickup = Resources.Load("Prefabs/HealthPickup", typeof(GameObject)) as GameObject;
         this.shieldPickup = Resources.Load("Prefabs/ShieldPickup", typeof(GameObject)) as GameObject;
+        this.freezePickup = Resources.Load("Prefabs/FreezePickup", typeof(GameObject)) as GameObject;
         this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
     }
 
@@ -57,11 +61,16 @@ public class Enemy : MonoBehaviour
     {
         camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
         bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>(); // Should all units know of the hero's health?
-        transform.Find("Sprite").rotation = Quaternion.LookRotation(Vector3.forward, Vector3.zero - transform.position);
+        this.sprite.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.zero - transform.position);
     }
 
     void Update()
     {
+        if (this.frozen && this.EnemyType != EnemyType.PROJECTILE)
+        {
+            return;
+        }
+
         RadialPosition radialPosition = RotationUtils.XYToRadialPos(this.transform.position);
         float step = MovementSpeed * Time.deltaTime;
         float angularStep = this.angularSpeed * Time.deltaTime;
@@ -126,7 +135,7 @@ public class Enemy : MonoBehaviour
                 InvokeRepeating("spawnProjectile", 1.0f, this.attackFrequency);
             }
         }
-        transform.Find("Sprite").rotation = Quaternion.LookRotation(Vector3.forward, Vector3.zero - transform.position);
+        this.sprite.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.zero - transform.position);
 
     }
 
@@ -138,7 +147,7 @@ public class Enemy : MonoBehaviour
             if (!killingBlow)
             {
                 camShake.Shake(0.05f, 0.1f);
-                this.colorModifier.FadeToDeselected(this.attackFrequency / 3f);
+                this.colorModifier.FadeToDeselected(this.attackFrequency / 3.0f);
                 GameObject hitParticle = Instantiate(this.hitParticle, transform.position / 2, transform.rotation);
                 var main = hitParticle.GetComponent<ParticleSystem>().main;
                 main.startColor = new Color(0.3f, 0.082f, 0.3945f, 0.6f);
@@ -152,17 +161,16 @@ public class Enemy : MonoBehaviour
     /// </summary>
     void spawnProjectile()
     {
-        this.colorModifier.FadeToDeselected(this.attackFrequency / 3f);
+        this.colorModifier.FadeToDeselected(this.attackFrequency / 3.0f);
         RadialPosition thisRadialPos = RotationUtils.XYToRadialPos(transform.position);
         this.projectile.SetRadialSpawnPosition(thisRadialPos.GetAngle(), thisRadialPos.GetRadius());
         GameObject spawnedProjectile = this.enemySpawner.InstantiateEnemyPrefab(this.projectile);
-        spawnedProjectile.transform.Find("Sprite").tag = "enemyProjectile";
     }
 
     public bool isInAttackArea(float lowAngle, float highAngle, float nearRadius, float farRadius)
     {
 
-        float spriteRadius = transform.Find("Sprite").GetComponent<SpriteRenderer>().bounds.size.x / 2;
+        float spriteRadius = this.sprite.GetComponent<SpriteRenderer>().bounds.size.x / 2;
         float distanceToBossActual = Mathf.Max(Vector3.Distance(Vector3.zero, transform.position), 0);
         float distanceToBossFar = distanceToBossActual + spriteRadius;
         float distanceToBossNear = distanceToBossActual - spriteRadius;
@@ -199,16 +207,20 @@ public class Enemy : MonoBehaviour
         if (Health <= 0)
         {
             KillSelf();
-            int itemRand = Random.Range(0, 10);
-            if (itemRand < 2) // 2 in 10 chance to spawn an item.
+            int itemRand = Random.Range(0, 12);
+            if (itemRand < 3)
             {
                 if (itemRand == 0)
                 {
                     Instantiate(this.healthPickup, this.transform.position, Quaternion.identity);
                 }
-                else
+                else if (itemRand == 1)
                 {
                     Instantiate(this.shieldPickup, this.transform.position, Quaternion.identity);
+                }
+                else
+                {
+                    Instantiate(this.freezePickup, this.transform.position, Quaternion.identity);
                 }
                 this.waveHandler.ItemAdded();
             }
@@ -223,6 +235,7 @@ public class Enemy : MonoBehaviour
     public void SetStats(StatsHolder stats)
     {
         transform.name = stats.Name;
+        this.EnemyType = stats.enemyType;
         this.circlingSpeed = stats.circlingSpeed;
         this.selfDestruct = stats.selfDestruct;
         this.invunerable = stats.invunerable;
@@ -299,4 +312,27 @@ public class Enemy : MonoBehaviour
         transform.position = RotationUtils.RadialPosToXY(radialPosition);
     }
 
+    public void Freeze(int seconds)
+    {
+        if (seconds <= 0)
+        {
+            return;
+        }
+
+        if (this.unfreezeCoroutine != null)
+        {
+            StopCoroutine(this.unfreezeCoroutine);
+        }
+        this.frozen = true;
+        CancelInvoke("doDamageToBoss");
+        CancelInvoke("spawnProjectile");
+        this.unfreezeCoroutine = ResetFrozenAfterTime(seconds);
+        StartCoroutine(this.unfreezeCoroutine);
+    }
+
+    public IEnumerator ResetFrozenAfterTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        this.frozen = false;
+    }
 }

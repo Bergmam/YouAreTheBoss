@@ -19,6 +19,14 @@ public class ItemButton : MonoBehaviour
         this.bossHealth.HealBossPercentage(item.PercentHealthToHeal);
         this.bossHealth.MakeInvunerable(item.InvunerableSeconds);
 
+        if (item.FreezeEnemiesSeconds > 0)
+        {
+            foreach (Enemy enemy in GameObject.FindObjectsOfType<Enemy>())
+            {
+                enemy.Freeze(item.FreezeEnemiesSeconds);
+            }
+        }
+
         this.gameObject.SetActive(false);
         BossItemHolder.BossItems[this.Index] = null;
     }
