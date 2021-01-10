@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemButtons : MonoBehaviour
 {
@@ -8,11 +9,19 @@ public class ItemButtons : MonoBehaviour
     {
         for (int i = 0; i < this.transform.childCount; i++)
         {
-            GameObject itemButtonGameObject = this.transform.GetChild(i).gameObject;
+            Transform itemButtonTransform = this.transform.GetChild(i);
+            GameObject itemButtonGameObject = itemButtonTransform.gameObject;
             itemButtonGameObject.GetComponent<ItemButton>().Index = i;
-            if (BossItemHolder.BossItems[i] == null)
+            ItemData item = BossItemHolder.BossItems[i];
+            if (item == null)
             {
                 itemButtonGameObject.SetActive(false);
+            }
+            else
+            {
+                Transform imageTransform = itemButtonTransform.Find("Image");
+                Image image = imageTransform.GetComponent<Image>();
+                image.sprite = item.Sprite;
             }
         }
     }
@@ -21,10 +30,16 @@ public class ItemButtons : MonoBehaviour
     {
         for (int i = 0; i < this.transform.childCount; i++)
         {
-            GameObject itemButtonGameObject = this.transform.GetChild(i).gameObject;
+            Transform itemButtonTransform = this.transform.GetChild(i);
+            GameObject itemButtonGameObject = itemButtonTransform.gameObject;
             if (!itemButtonGameObject.activeSelf)
             {
                 BossItemHolder.BossItems[i] = item;
+
+                Transform imageTransform = itemButtonTransform.Find("Image");
+                Image image = imageTransform.GetComponent<Image>();
+                image.sprite = item.Sprite;
+
                 itemButtonGameObject.SetActive(true);
                 return;
             }

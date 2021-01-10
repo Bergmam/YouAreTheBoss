@@ -64,12 +64,12 @@ public class WaveHandler : MonoBehaviour
         }
     }
 
-    public void HealthPickupAdded()
+    public void ItemAdded()
     {
         this.activeHealthPickups++;
     }
 
-    public void HealthPickupRemoved()
+    public void ItemRemoved()
     {
         this.activeHealthPickups--;
     }

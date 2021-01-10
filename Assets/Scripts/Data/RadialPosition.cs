@@ -38,7 +38,7 @@ public class RadialPosition {
 		this.angle = RotationUtils.MakePositiveAngle (angle);
 	}
 
-	public string ToString(){
+	public override string ToString(){
 		return "(angle = " + angle + ", radius = " + radius + ")";
 	}
 }

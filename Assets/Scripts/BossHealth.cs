@@ -10,8 +10,9 @@ public class BossHealth : MonoBehaviour
     private GameObject bossButtons;
 
     private GameObject activeAttackFireButton;
-
     private bool gameOver = false;
+    private bool invunerable;
+    ColorModifier shieldColorModifier;
 
     void Awake()
     {
@@ -22,6 +23,9 @@ public class BossHealth : MonoBehaviour
         this.gameOverPanel.SetActive(false);
         this.scoreLabel.SetActive(true);
         this.bossButtons.SetActive(true);
+        this.shieldColorModifier = this.transform.Find("Shield").gameObject.GetComponent<ColorModifier>();
+        this.shieldColorModifier.SetDefaultColor(new Color(1.0f, 1.0f, 0.0f, 0.0f));
+        this.shieldColorModifier.SetSelectedColor(new Color(1.0f, 0.4f, 0.0f, 1.0f));
     }
 
     void Start()
@@ -32,6 +36,11 @@ public class BossHealth : MonoBehaviour
 
     public bool bossTakeDamage(float damage)
     {
+        if (invunerable)
+        {
+            return false;
+        }
+
         BossHealthHolder.BossHealth = BossHealthHolder.BossHealth - damage;
         bossHealthBar.UpdateFill(BossHealthHolder.BossHealth / BossHealthHolder.BossFullHealth);
 
@@ -64,6 +73,23 @@ public class BossHealth : MonoBehaviour
         float healthToAdd = 0.01f * percentage * BossHealthHolder.BossFullHealth;
         BossHealthHolder.BossHealth = Mathf.Min(BossHealthHolder.BossHealth + healthToAdd, BossHealthHolder.BossFullHealth);
         bossHealthBar.UpdateFill(BossHealthHolder.BossHealth / BossHealthHolder.BossFullHealth);
+    }
+
+    public void MakeInvunerable(int seconds)
+    {
+        if(seconds <= 0)
+        {
+            return;
+        }
+        this.invunerable = true;
+        this.shieldColorModifier.Select();
+        this.shieldColorModifier.FadeToDeselected(seconds);
+        StartCoroutine(ResetInvunerabilityAfterTime(seconds));
+    }
+
+    public IEnumerator ResetInvunerabilityAfterTime(float time) {
+        yield return new WaitForSeconds(time);
+        this.invunerable = false;
     }
 
     public void playAgain()

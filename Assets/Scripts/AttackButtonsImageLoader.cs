@@ -14,7 +14,7 @@ public class AttackButtonsImageLoader : MonoBehaviour
         if (imageTransform != null)
         {
             Image image = imageTransform.GetComponent<Image>();
-            image.sprite = image.sprite = Resources.Load<Sprite>(AttackLists.GetAssetString(attack.name));
+            image.sprite = Resources.Load<Sprite>(AttackLists.GetAssetString(attack.name));
         }
     }
 }

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthPickup : MonoBehaviour
+public class Item : MonoBehaviour
 {
     private WaveHandler waveHandler;
-    private ItemData item = new ItemData();
+    public int PercentHealthToHeal;
+    public int InvunerableSeconds;
+    public Sprite Sprite;
 
     void Awake()
     {
@@ -22,7 +24,7 @@ public class HealthPickup : MonoBehaviour
             }
         }
     }
-    
+
     void OnMouseDown()
     {
         OnPressed();
@@ -30,9 +32,13 @@ public class HealthPickup : MonoBehaviour
 
     private void OnPressed()
     {
-        GameObject.FindObjectOfType<ItemButtons>().AddItem(this.item);
+        ItemData item = new ItemData();
+        item.PercentHealthToHeal = this.PercentHealthToHeal;
+        item.InvunerableSeconds = this.InvunerableSeconds;
+        item.Sprite = this.gameObject.GetComponent<SpriteRenderer>().sprite;
 
-        this.waveHandler.HealthPickupRemoved();
+        GameObject.FindObjectOfType<ItemButtons>().AddItem(item);
+        this.waveHandler.ItemRemoved();
         Destroy(this.gameObject);
     }
 }

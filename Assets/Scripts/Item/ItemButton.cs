@@ -14,7 +14,11 @@ public class ItemButton : MonoBehaviour
 
     public void UseItem()
     {
-        bossHealth.HealBossPercentage(20);
+        ItemData item = BossItemHolder.BossItems[this.Index];
+
+        this.bossHealth.HealBossPercentage(item.PercentHealthToHeal);
+        this.bossHealth.MakeInvunerable(item.InvunerableSeconds);
+
         this.gameObject.SetActive(false);
         BossItemHolder.BossItems[this.Index] = null;
     }

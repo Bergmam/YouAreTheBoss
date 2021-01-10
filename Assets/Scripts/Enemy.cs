@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private float AttackRadius = 1.0f;
-
     private float MovementSpeed = 1.0f;
     private float angularSpeed = 0f;
 
@@ -32,6 +30,7 @@ public class Enemy : MonoBehaviour
 
     private GameObject hitParticle;
     private GameObject healthPickup;
+    private GameObject shieldPickup;
     private StatsHolder projectile;
     private float zigZagAngleLow;
     private float zigZagAngleHigh;
@@ -50,6 +49,7 @@ public class Enemy : MonoBehaviour
         this.colorModifier = this.sprite.GetComponent<ColorModifier>();
         this.hitParticle = Resources.Load("Prefabs/HitParticleSystem", typeof(GameObject)) as GameObject;
         this.healthPickup = Resources.Load("Prefabs/HealthPickup", typeof(GameObject)) as GameObject;
+        this.shieldPickup = Resources.Load("Prefabs/ShieldPickup", typeof(GameObject)) as GameObject;
         this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
     }
 
@@ -109,7 +109,7 @@ public class Enemy : MonoBehaviour
                 circlingSpeed = -1 * circlingSpeed;
             }
             MoveTo(radialPosition);
-            
+
             if (selfDestruct)
             {
                 doDamageToBoss();
@@ -199,11 +199,18 @@ public class Enemy : MonoBehaviour
         if (Health <= 0)
         {
             KillSelf();
-            int rand = Random.Range(0, 3);
-            if (rand == 0)
+            int itemRand = Random.Range(0, 10);
+            if (itemRand < 2) // 2 in 10 chance to spawn an item.
             {
-                Instantiate(this.healthPickup, this.transform.position, Quaternion.identity);
-                this.waveHandler.HealthPickupAdded();
+                if (itemRand == 0)
+                {
+                    Instantiate(this.healthPickup, this.transform.position, Quaternion.identity);
+                }
+                else
+                {
+                    Instantiate(this.shieldPickup, this.transform.position, Quaternion.identity);
+                }
+                this.waveHandler.ItemAdded();
             }
         }
         else
