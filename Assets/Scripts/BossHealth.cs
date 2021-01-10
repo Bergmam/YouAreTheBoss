@@ -8,6 +8,8 @@ public class BossHealth : MonoBehaviour
     private GameObject gameOverPanel;
     private GameObject scoreLabel;
     private GameObject bossButtons;
+    private GameObject itemButtons;
+    private GameObject pauseButton;
 
     private GameObject activeAttackFireButton;
     private bool gameOver = false;
@@ -21,6 +23,8 @@ public class BossHealth : MonoBehaviour
         this.gameOverPanel = GameObject.Find("GameOverPanel");
         this.scoreLabel = GameObject.Find("ScoreLabel");
         this.bossButtons = GameObject.Find("BossButtons");
+        this.itemButtons = GameObject.Find("ItemButtons");
+        this.pauseButton = GameObject.Find("PauseButton");
         this.gameOverPanel.SetActive(false);
         this.scoreLabel.SetActive(true);
         this.bossButtons.SetActive(true);
@@ -60,6 +64,8 @@ public class BossHealth : MonoBehaviour
             this.activeAttackFireButton.SetActive(false);
             this.scoreLabel.SetActive(false);
             this.bossButtons.SetActive(false);
+            this.itemButtons.SetActive(false);
+            this.pauseButton.SetActive(false);
             ((WaveHandler)GameObject.FindObjectOfType(typeof(WaveHandler))).clearWave();
             return true;
         }
