@@ -82,39 +82,18 @@ public class Enemy : MonoBehaviour
             float newPositionAngle = radialPosition.GetAngle();
             if (RotationUtils.InCounterClockwiseLimits(newPositionAngle, zigZagAngleHigh, zigZagAngleLow) && zigZag)
             {
-                // If exited over high limit ( [high, mid(high,low)] ), set to high.
-                if (RotationUtils.InCounterClockwiseLimits(newPositionAngle, zigZagAngleHigh, RotationUtils.MiddleOfRotations(zigZagAngleHigh, zigZagAngleLow)))
-                {
-                    radialPosition.SetAngle(zigZagAngleHigh);
-                }
-                else
-                {
-                    radialPosition.SetAngle(zigZagAngleLow);
-                }
+                updateRadialPos(radialPosition, zigZagAngleLow, zigZagAngleHigh);
                 angularSpeed = -1 * angularSpeed;
             }
-
             MoveTo(radialPosition);
-
         }
         else // If in range, do appropriate attack.
         {
             radialPosition.AddAngle(circlingStep);
-
-            MoveTo(radialPosition);
-
             float newPositionAngle = radialPosition.GetAngle();
             if (RotationUtils.InCounterClockwiseLimits(newPositionAngle, zigZagAngleHigh, zigZagAngleLow) && zigZag)
             {
-                // If exited over high limit ( [high, mid(high,low)] ), set to high.
-                if (RotationUtils.InCounterClockwiseLimits(newPositionAngle, zigZagAngleHigh, RotationUtils.MiddleOfRotations(zigZagAngleHigh, zigZagAngleLow)))
-                {
-                    radialPosition.SetAngle(zigZagAngleHigh);
-                }
-                else
-                {
-                    radialPosition.SetAngle(zigZagAngleLow);
-                }
+                updateRadialPos(radialPosition, zigZagAngleLow, zigZagAngleHigh);
                 circlingSpeed = -1 * circlingSpeed;
             }
             MoveTo(radialPosition);
@@ -137,6 +116,21 @@ public class Enemy : MonoBehaviour
         }
         this.sprite.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.zero - transform.position);
 
+    }
+
+    private void updateRadialPos(RadialPosition radialPos, float zigZagAngleLow, float zigZagAngleHigh)
+    {
+        float positionAngle = radialPos.GetAngle();
+        float midAngle = RotationUtils.MiddleOfRotations(zigZagAngleHigh, zigZagAngleLow);
+        // If exited over high limit ( [high, mid(high,low)] ), set to high.
+        if (RotationUtils.InCounterClockwiseLimits(positionAngle, zigZagAngleHigh, midAngle))
+        {
+            radialPos.SetAngle(zigZagAngleHigh);
+        }
+        else
+        {
+            radialPos.SetAngle(zigZagAngleLow);
+        }
     }
 
     void doDamageToBoss()
