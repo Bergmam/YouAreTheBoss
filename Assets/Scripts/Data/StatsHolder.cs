@@ -29,6 +29,9 @@ public class StatsHolder
     public EnemyType enemyType = EnemyType.ENEMY;
     public float zigZagAngle;
     public bool zigZag;
+    public float TurnBackDistance;
+    public float TurnForwardDistance;
+    public int NumberOfTurns; // Negative value means keep turning forever.
 
     public StatsHolder(
         string name,

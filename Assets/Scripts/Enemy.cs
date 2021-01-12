@@ -41,6 +41,9 @@ public class Enemy : MonoBehaviour
     private Transform sprite;
     public EnemyType EnemyType { get; private set; }
     private IEnumerator unfreezeCoroutine;
+    public float turnBackDistance;
+    public float turnForwardDistance;
+    public int numberOfTurns; // Negative value means keep turning forever.
 
     // Handle camera shaking
     CameraShake camShake;
@@ -60,7 +63,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
-        bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>(); // Should all units know of the hero's health?
+        bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>();
         this.sprite.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.zero - transform.position);
     }
 
@@ -71,33 +74,27 @@ public class Enemy : MonoBehaviour
             return;
         }
 
+        float distanceFromBoss = Vector3.Distance(Vector3.zero, transform.position);
         RadialPosition radialPosition = RotationUtils.XYToRadialPos(this.transform.position);
-        float step = MovementSpeed * Time.deltaTime;
-        float angularStep = this.angularSpeed * Time.deltaTime;
-        float circlingStep = this.circlingSpeed * Time.deltaTime;
-        if (Vector3.Distance(Vector3.zero, transform.position) > Range)
-        {
-            radialPosition.AddRadius((-1) * step);
-            radialPosition.AddAngle(angularStep);
-            float newPositionAngle = radialPosition.GetAngle();
-            if (RotationUtils.InCounterClockwiseLimits(newPositionAngle, zigZagAngleHigh, zigZagAngleLow) && zigZag)
-            {
-                updateRadialPos(radialPosition, zigZagAngleLow, zigZagAngleHigh);
-                angularSpeed = -1 * angularSpeed;
-            }
-            MoveTo(radialPosition);
-        }
-        else // If in range, do appropriate attack.
-        {
-            radialPosition.AddAngle(circlingStep);
-            float newPositionAngle = radialPosition.GetAngle();
-            if (RotationUtils.InCounterClockwiseLimits(newPositionAngle, zigZagAngleHigh, zigZagAngleLow) && zigZag)
-            {
-                updateRadialPos(radialPosition, zigZagAngleLow, zigZagAngleHigh);
-                circlingSpeed = -1 * circlingSpeed;
-            }
-            MoveTo(radialPosition);
 
+        // Move forward and back
+        float step = MovementSpeed * Time.deltaTime;
+        radialPosition.AddRadius((-1) * step);
+
+        // Move sideways
+        float angularStep = this.angularSpeed * Time.deltaTime;
+        radialPosition.AddAngle(angularStep);
+        float newPositionAngle = radialPosition.GetAngle();
+        if (RotationUtils.InCounterClockwiseLimits(newPositionAngle, this.zigZagAngleHigh, this.zigZagAngleLow) && zigZag)
+        {
+            updateRadialPos(radialPosition, this.zigZagAngleLow, this.zigZagAngleHigh);
+            angularSpeed = -1 * angularSpeed;
+            circlingSpeed = -1 * circlingSpeed;
+        }
+
+        // Attack
+        if (distanceFromBoss <= Range)
+        {
             if (selfDestruct)
             {
                 doDamageToBoss();
@@ -113,9 +110,43 @@ public class Enemy : MonoBehaviour
             {
                 InvokeRepeating("spawnProjectile", 1.0f, this.attackFrequency);
             }
-        }
-        this.sprite.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.zero - transform.position);
 
+            // Stop moving forward and back if no turns left when in range.
+            if (this.numberOfTurns == 0)
+            {
+                this.MovementSpeed = 0;
+                // Angular speed is stats.angularSpeed until no turns left and in range, then it becomes stats.circlingSpeed.
+                this.angularSpeed = this.circlingSpeed;
+
+                this.zigZag = false; // Circling units con't zigzag (yet).
+            }
+        }
+        else
+        {
+            CancelInvoke(); // Stop attacking when out of range.
+        }
+
+        if (distanceFromBoss < this.turnBackDistance && this.MovementSpeed > 0
+            || distanceFromBoss > this.turnForwardDistance && this.MovementSpeed < 0)
+        {
+            changeRadialDirection();
+        }
+        MoveTo(radialPosition);
+
+        this.sprite.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.zero - transform.position);
+    }
+
+    private void changeRadialDirection()
+    {
+        if (this.numberOfTurns == 0)
+        {
+            return;
+        }
+        else if (this.numberOfTurns > 0 && this.MovementSpeed < 0) // 1 "turn" ends when enemy is moving forward again.
+        {
+            this.numberOfTurns--;
+        }
+        this.MovementSpeed = -this.MovementSpeed;
     }
 
     private void updateRadialPos(RadialPosition radialPos, float zigZagAngleLow, float zigZagAngleHigh)
@@ -230,7 +261,6 @@ public class Enemy : MonoBehaviour
     {
         transform.name = stats.Name;
         this.EnemyType = stats.enemyType;
-        this.circlingSpeed = stats.circlingSpeed;
         this.selfDestruct = stats.selfDestruct;
         this.invunerable = stats.invunerable;
         if (invunerable) //Don't show healthbar for invunerable units (projectiles)
@@ -240,6 +270,7 @@ public class Enemy : MonoBehaviour
         MoveTo(new RadialPosition(stats.spawnRadius, stats.spawnAngle));
         MovementSpeed = stats.MovementSpeed;
         this.angularSpeed = stats.angularSpeed;
+        this.circlingSpeed = stats.circlingSpeed;
         Damage = stats.Damage;
         Range = stats.Range;
         Health = stats.Health;
@@ -272,6 +303,9 @@ public class Enemy : MonoBehaviour
             this.zigZagAngleHigh = stats.spawnAngle;
             this.zigZagAngleLow = stats.spawnAngle - stats.zigZagAngle;
         }
+        this.turnBackDistance = stats.TurnBackDistance;
+        this.turnForwardDistance = stats.TurnForwardDistance;
+        this.numberOfTurns = stats.NumberOfTurns;
         colorModifier.SetDefaultColor(stats.Color);
         colorModifier.SetSelectedColor(Parameters.ENEMY_ATTACK_COLOR);
     }
