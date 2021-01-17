@@ -6,7 +6,6 @@ using TMPro;
 
 public class PlayAttackOnBoss : MonoBehaviour
 {
-
     RadialFillControl radialFillControl;
     AttackMaskControl attackMaskControl;
     private ColorModifier aimColorModifier;
@@ -15,9 +14,11 @@ public class PlayAttackOnBoss : MonoBehaviour
     private TextMeshProUGUI tapText;
     private Coroutine changeStuff;
     SpriteRenderer spriteRenderer;
+    private GameObject projectile;
 
     void Awake()
     {
+        this.projectile = Resources.Load<GameObject>("Prefabs/BossProjectile");
         this.radialFillControl = UnityUtils.RecursiveFind(transform, "Mask").GetComponent<RadialFillControl>();
         this.attackMaskControl = UnityUtils.RecursiveFind(transform, "Mask").GetComponent<AttackMaskControl>();
         Transform aim = UnityUtils.RecursiveFind(transform, "Image");
@@ -90,7 +91,9 @@ public class PlayAttackOnBoss : MonoBehaviour
     {
         if (this.currentAttack.isProjectile)
         {
-            // TODO: Projectiles
+            Vector3 projectilePos = this.transform.position;
+            GameObject spawnedProjectile = Instantiate(this.projectile, projectilePos, Quaternion.identity);
+            spawnedProjectile.GetComponent<BossProjectile>().Attack = this.currentAttack;
         }
         else
         {
