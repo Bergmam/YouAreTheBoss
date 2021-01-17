@@ -232,28 +232,33 @@ public class Enemy : MonoBehaviour
         if (Health <= 0)
         {
             KillSelf();
-            int itemRand = Random.Range(0, 12);
-            if (itemRand < 3)
-            {
-                if (itemRand == 0)
-                {
-                    Instantiate(this.healthPickup, this.transform.position, Quaternion.identity);
-                }
-                else if (itemRand == 1)
-                {
-                    Instantiate(this.shieldPickup, this.transform.position, Quaternion.identity);
-                }
-                else
-                {
-                    Instantiate(this.freezePickup, this.transform.position, Quaternion.identity);
-                }
-                this.waveHandler.ItemAdded();
-            }
+            SpawnItem();
         }
         else
         {
             transform.Find("Sprite").GetComponent<SpriteRenderer>().color = Color.red;
             StartCoroutine(UnityUtils.ChangeToDefaultColorAfterTime(colorModifier, 0.5f));
+        }
+    }
+
+    private void SpawnItem()
+    {
+        int itemRand = Random.Range(0, 12);
+        if (itemRand < 3)
+        {
+            if (itemRand == 0)
+            {
+                Instantiate(this.healthPickup, this.transform.position, Quaternion.identity);
+            }
+            else if (itemRand == 1)
+            {
+                Instantiate(this.shieldPickup, this.transform.position, Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(this.freezePickup, this.transform.position, Quaternion.identity);
+            }
+            this.waveHandler.ItemAdded();
         }
     }
 
@@ -326,13 +331,11 @@ public class Enemy : MonoBehaviour
 
         SetForDeath = true;
         var renderer = this.sprite.gameObject.GetComponent<Renderer>();
-        //renderer.material = Resources.Load("Materials/MAT_Dissolve", typeof(Material)) as Material;
-        Invoke("DestroyGO", 0);
-    }
 
-    private void DestroyGO()
-    {
-        Destroy(gameObject);
+        CancelInvoke("doDamageToBoss");
+        CancelInvoke("spawnProjectile");
+
+        Destroy(this.gameObject);
     }
 
     public void MoveTo(RadialPosition radialPosition)

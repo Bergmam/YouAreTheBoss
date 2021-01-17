@@ -126,4 +126,9 @@ public class ColorModifier : MonoBehaviour
             this.image.color = color;
         }
     }
+
+    public void StopFade()
+    {
+        this.countDownTime = 0;
+    }
 }

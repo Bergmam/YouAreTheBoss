@@ -111,8 +111,21 @@ public class UnityUtils
 		image.color = color;
     }
     
+    public static IEnumerator DeactiveGameObjectAfterTime(GameObject gameObject, float time) {
+        yield return new WaitForSeconds(time);
+        gameObject.SetActive(false);
+    }
+    
+    public static IEnumerator ActiveGameObjectAfterTime(GameObject gameObject, float time) {
+        yield return new WaitForSeconds(time);
+        gameObject.SetActive(true);
+    }
+    
     public static IEnumerator ChangeToDefaultColorAfterTime(ColorModifier colorModifier, float time) {
         yield return new WaitForSeconds(time);
-		colorModifier.DeSelect();
+        if (colorModifier.gameObject.activeSelf)
+        {
+            colorModifier.DeSelect();
+        }
     }
 }

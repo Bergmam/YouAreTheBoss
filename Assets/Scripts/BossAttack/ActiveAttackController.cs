@@ -11,7 +11,6 @@ public class ActiveAttackController : MonoBehaviour
     private CameraShake camShake;
     private Sprite fireSprite;
     private Sprite defaultSprite;
-    private static Color AIM_COLOR = Color.magenta;
     private GameObject backgroundFade;
     private GameObject activeAttackScreenButton;
 
@@ -21,7 +20,6 @@ public class ActiveAttackController : MonoBehaviour
 
     void Awake()
     {
-        AIM_COLOR.a = 0.6f;
         this.fireSprite = Resources.Load<Sprite>("Art/UI_Icon_FullScreenExit");
         this.defaultSprite = Resources.Load<Sprite>("Art/UI_Button_Standard_Sky_2");
         this.camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
@@ -52,7 +50,7 @@ public class ActiveAttackController : MonoBehaviour
         this.currentAttackButton.transform.Find("Image").gameObject.SetActive(false);
         gameObject.GetComponent<SpriteRenderer>().color = Color.magenta;
         this.aimColorModifier.FadeToSelected(0.0f);
-        this.aimColorModifier.SetColor(AIM_COLOR);
+        this.aimColorModifier.SetColor(Parameters.ACTIVE_ATTACK_AIM_COLOR);
     }
 
     public void DoAttack()
@@ -81,7 +79,7 @@ public class ActiveAttackController : MonoBehaviour
         this.chargeSystem.SetActive(false);
         this.activeAttackScreenButton.SetActive(false);
         aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
-        aimColorModifier.SetSelectedColor(AIM_COLOR);
+        aimColorModifier.SetSelectedColor(Parameters.ACTIVE_ATTACK_AIM_COLOR);
         aimColorModifier.FadeToSelected(this.currentAttack.frequency);
         currentAttackButton.transform.Find("Image").gameObject.SetActive(true);
         this.currentAttackButton.GetComponent<Image>().sprite = defaultSprite;
