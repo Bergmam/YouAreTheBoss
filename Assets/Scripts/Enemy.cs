@@ -87,7 +87,7 @@ public class Enemy : MonoBehaviour
         float newPositionAngle = radialPosition.GetAngle();
         if (RotationUtils.InCounterClockwiseLimits(newPositionAngle, this.zigZagAngleHigh, this.zigZagAngleLow) && zigZag)
         {
-            updateRadialPos(radialPosition, this.zigZagAngleLow, this.zigZagAngleHigh);
+            clampPositionAngle(radialPosition, this.zigZagAngleLow, this.zigZagAngleHigh);
             angularSpeed = -1 * angularSpeed;
             circlingSpeed = -1 * circlingSpeed;
         }
@@ -130,6 +130,7 @@ public class Enemy : MonoBehaviour
             || distanceFromBoss > this.turnForwardDistance && this.MovementSpeed < 0)
         {
             changeRadialDirection();
+            clampPositionRadius(radialPosition);
         }
         MoveTo(radialPosition);
 
@@ -149,7 +150,23 @@ public class Enemy : MonoBehaviour
         this.MovementSpeed = -this.MovementSpeed;
     }
 
-    private void updateRadialPos(RadialPosition radialPos, float zigZagAngleLow, float zigZagAngleHigh)
+    private void clampPositionRadius(RadialPosition radialPos)
+    {
+        if (this.numberOfTurns == 0)
+        {
+            return;
+        }
+        if (this.MovementSpeed < 0)
+        {
+            radialPos.SetRadius(this.turnBackDistance);
+        }
+        else
+        {
+            radialPos.SetRadius(this.turnForwardDistance);
+        }
+    }
+
+    private void clampPositionAngle(RadialPosition radialPos, float zigZagAngleLow, float zigZagAngleHigh)
     {
         float positionAngle = radialPos.GetAngle();
         float midAngle = RotationUtils.MiddleOfRotations(zigZagAngleHigh, zigZagAngleLow);

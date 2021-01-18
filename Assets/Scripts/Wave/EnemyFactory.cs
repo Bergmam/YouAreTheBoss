@@ -185,11 +185,11 @@ public class EnemyFactory
 
     public static StatsHolder Jitterer()
     {
-        StatsHolder stats = new StatsHolder("Jitterer", 7.5f, RangeLevel.SELF_DESTRUCT, 1.5f, orange);
+        StatsHolder stats = new StatsHolder("Jitterer", 7.5f, RangeLevel.SELF_DESTRUCT, Parameters.BASIC_RANGED_ENEMY_HEALTH, 1.5f, orange);
         stats.MovementSpeed = 10.0f;
         stats.selfDestruct = true;
-        stats.TurnBackDistance = 2.099f;
-        stats.TurnForwardDistance = 2.1f;
+        stats.TurnBackDistance = 2.0999f;
+        stats.TurnForwardDistance = 2.1000f;
         stats.NumberOfTurns = 20;
 
         stats.angularSpeed = 100;

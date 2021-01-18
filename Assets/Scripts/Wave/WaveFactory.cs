@@ -147,13 +147,26 @@ public class WaveFactory
     private static Wave JittererWave()
     {
         Wave wave = new Wave();
+
+        int[] indexes = {0, 1, 2, 3, 4, 5};
+        for (int i = 0; i < indexes.Length; i++)
+        {
+            int rand = UnityEngine.Random.Range(0, indexes.Length);
+            int tmp = indexes[i];
+            indexes[i] = indexes[rand];
+            indexes[rand] = tmp;
+        }
+
         float timeStamp = 0.0f;
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < indexes.Length; i++)
         {
             SubWave subWave = new SubWave();
-            subWave.AddEnemy(EnemyFactory.Jitterer());
+            StatsHolder enemy = EnemyFactory.Jitterer();
+            enemy.spawnAngle = (360 / indexes.Length) * indexes[i];
+            enemy.predefinedPosition = true;
+            subWave.AddEnemy(enemy);
             wave.AddSubWave(subWave, timeStamp);
-            timeStamp += 0.5f;
+            timeStamp += 0.75f;
         }
         return wave;
     }
