@@ -12,9 +12,11 @@ public class PlayAttackOnBoss : MonoBehaviour
     BossAttack currentAttack;
     CooldownBehaviour currentCooldownBehaviour;
     private TextMeshProUGUI tapText;
-    private Coroutine changeStuff;
     SpriteRenderer spriteRenderer;
     private GameObject projectile;
+    private GameObject chargeSystem;
+    private float activeAttackWait = 4.0f;
+    private SelfShaker shaker;
 
     void Awake()
     {
@@ -25,6 +27,8 @@ public class PlayAttackOnBoss : MonoBehaviour
         this.aimColorModifier = aim.GetComponent<ColorModifier>();
         this.tapText = gameObject.GetComponentInChildren<TextMeshProUGUI>();
         this.spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        this.chargeSystem = Instantiate(Resources.Load<GameObject>("Prefabs/ChargeUp"), transform.position, Quaternion.identity);
+        this.shaker = gameObject.AddComponent<SelfShaker>();
     }
 
     void Start()
@@ -32,6 +36,7 @@ public class PlayAttackOnBoss : MonoBehaviour
         this.aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
         UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>().color = Parameters.AIM_DEFAULT_COLOR;
         this.tapText.gameObject.SetActive(false);
+        this.chargeSystem.SetActive(false);
     }
 
     public void setAttack(BossAttack attack)
@@ -52,11 +57,11 @@ public class PlayAttackOnBoss : MonoBehaviour
         if (this.currentAttack.frequency > Parameters.SLOW_ATTACK_LIMIT)
         {
             this.aimColorModifier.SetSelectedColor(Parameters.ACTIVE_ATTACK_AIM_COLOR);
-            this.aimColorModifier.Select();
-            InvokeRepeating("doActiveAttack", 0.5f, this.currentAttack.frequency + 2.0f);
+            InvokeRepeating("doActiveAttack", 0, this.currentAttack.frequency + this.activeAttackWait);
         }
         else
         {
+            this.chargeSystem.SetActive(false);
             this.aimColorModifier.SetSelectedColor(Parameters.AIM_DAMAGE_COLOR);
             InvokeRepeating("doPassiveAttack", 0, this.currentAttack.frequency);
         }
@@ -64,26 +69,27 @@ public class PlayAttackOnBoss : MonoBehaviour
 
     void doActiveAttack()
     {
-
         if (this.currentAttack.isProjectile)
         {
             // TODO: Active attack projetiles
         }
         else
         {
+            this.aimColorModifier.StopFade();
             this.aimColorModifier.Select();
-            this.changeStuff = StartCoroutine(DoActiveAttackAfterTime(this.aimColorModifier, 1.0f, this.currentAttack.frequency));
+            this.chargeSystem.SetActive(true);
+            StartCoroutine(doActiveAttackAfterTime(this.aimColorModifier, this.activeAttackWait, this.currentAttack.frequency));
         }
-
-        float resetAttacktiveAttackAfter = 1.3f;
-        StartCoroutine(UnityUtils.ChangeToColorAfterTime(this.spriteRenderer, new Color(0, 0.89f, 1), resetAttacktiveAttackAfter));
-        StartCoroutine(UnityUtils.DeactiveGameObjectAfterTime(this.tapText.gameObject, resetAttacktiveAttackAfter));
     }
     
-    private IEnumerator DoActiveAttackAfterTime(ColorModifier colorModifier, float waitTime, float fadeTime) {
+    private IEnumerator doActiveAttackAfterTime(ColorModifier colorModifier, float waitTime, float fadeTime) {
         yield return new WaitForSeconds(waitTime);
         this.spriteRenderer.color = Parameters.ACTIVE_ATTACK_AIM_COLOR;
+        this.chargeSystem.SetActive(false);
         this.tapText.gameObject.SetActive(true);
+        this.shaker.Shake(0.05f, 0.3f);
+        StartCoroutine(UnityUtils.ChangeToColorAfterTime(this.spriteRenderer, new Color(0, 0.89f, 1), 0.5f));
+        StartCoroutine(UnityUtils.DeactiveGameObjectAfterTime(this.tapText.gameObject, 1.5f));
         this.aimColorModifier.FadeToDeselected(fadeTime);
     }
 
@@ -113,8 +119,10 @@ public class PlayAttackOnBoss : MonoBehaviour
 
     void OnDisable()
     {
-        this.aimColorModifier.StopFade();
-        this.aimColorModifier.DeSelect();
+        this.aimColorModifier?.StopFade();
+        this.aimColorModifier?.DeSelect();
+        this.chargeSystem?.SetActive(false);
+
         StopAllCoroutines();
         CancelInvoke();
     }
