@@ -18,6 +18,7 @@ public class BossHealth : MonoBehaviour
     private IEnumerator resetInvunerabilityCoroutine;
     private WaveHandler waveHandler;
     private Coroutine continueFieldShadeCoroutine;
+    private CameraShake camShake;
 
     void Awake()
     {
@@ -34,6 +35,7 @@ public class BossHealth : MonoBehaviour
         this.shieldColorModifier.SetDefaultColor(new Color(1.0f, 1.0f, 1.0f, 0.0f));
         this.shieldColorModifier.SetSelectedColor(Parameters.BOSS_COLOR);
         this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
+        this.camShake = GameObject.FindObjectOfType<CameraShake>();
     }
 
     void Start()
@@ -63,6 +65,7 @@ public class BossHealth : MonoBehaviour
             return false;
         }
 
+        camShake.Shake(0.05f, 0.1f);
         BossHealthHolder.BossHealth = BossHealthHolder.BossHealth - damage;
         bossHealthBar.UpdateFill(BossHealthHolder.BossHealth / BossHealthHolder.BossFullHealth);
 

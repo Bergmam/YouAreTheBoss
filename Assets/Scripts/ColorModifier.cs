@@ -29,7 +29,7 @@ public class ColorModifier : MonoBehaviour
         {
             countDownTime -= Time.deltaTime;
             float proportion = countDownTime / countDownStartTime;
-            if (!fadeToSelected)
+            if (!this.fadeToSelected)
             {
                 proportion = 1 - proportion; //Change which color is according to proportion and which is the inverse
             }
@@ -46,14 +46,7 @@ public class ColorModifier : MonoBehaviour
         bool reachedZero = countDownTime < 0 && wasOverZero; // Became less than zero after update.
         if (reachedZero)
         {
-            if (fadeToSelected)
-            {
-                Select();
-            }
-            else
-            {
-                DeSelect();
-            }
+            SetSelected(this.fadeToSelected);
         }
     }
 
@@ -154,5 +147,9 @@ public class ColorModifier : MonoBehaviour
     public void SetFadePaused(bool fadePaused)
     {
         this.fadePaused = fadePaused;
+        if (!fadePaused && this.countDownTime <= 0)
+        {
+            SetSelected(this.fadeToSelected);
+        }
     }
 }

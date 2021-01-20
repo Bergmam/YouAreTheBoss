@@ -45,9 +45,6 @@ public class Enemy : MonoBehaviour
     public float turnForwardDistance;
     public int numberOfTurns; // Negative value means keep turning forever.
 
-    // Handle camera shaking
-    CameraShake camShake;
-
     void Awake()
     {
         this.enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
@@ -62,7 +59,6 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
         bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>();
         this.sprite.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.zero - transform.position);
     }
@@ -188,7 +184,6 @@ public class Enemy : MonoBehaviour
             bool killingBlow = bossHealth.bossTakeDamage(Damage);
             if (!killingBlow)
             {
-                camShake.Shake(0.05f, 0.1f);
                 this.colorModifier.FadeToDeselected(this.attackFrequency / 3.0f);
                 GameObject hitParticle = Instantiate(this.hitParticle, transform.position / 2, transform.rotation);
                 var main = hitParticle.GetComponent<ParticleSystem>().main;
