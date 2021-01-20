@@ -88,7 +88,7 @@ public class PlayAttackOnBoss : MonoBehaviour
         this.chargeSystem.SetActive(false);
         this.tapText.gameObject.SetActive(true);
         this.shaker.Shake(0.05f, 0.3f);
-        StartCoroutine(UnityUtils.ChangeToColorAfterTime(this.spriteRenderer, new Color(0, 0.89f, 1), 0.5f));
+        StartCoroutine(UnityUtils.ChangeToColorAfterTime(this.spriteRenderer, Parameters.BOSS_COLOR, 0.5f));
         StartCoroutine(UnityUtils.DeactiveGameObjectAfterTime(this.tapText.gameObject, 1.5f));
         this.aimColorModifier.FadeToDeselected(fadeTime);
     }
@@ -108,7 +108,7 @@ public class PlayAttackOnBoss : MonoBehaviour
         }
             
         this.spriteRenderer.color = Color.red;
-        StartCoroutine(UnityUtils.ChangeToColorAfterTime(this.spriteRenderer, new Color(0, 0.89f, 1), 0.5f));
+        StartCoroutine(UnityUtils.ChangeToColorAfterTime(this.spriteRenderer, Parameters.BOSS_COLOR, 0.5f));
     }
 
     void OnDestroy()

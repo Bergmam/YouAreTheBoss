@@ -9,11 +9,13 @@ public class PassiveAttackController : MonoBehaviour
 
     private CooldownBehaviour cooldownBehaviour;
     private GameObject projectile;
+    private SpriteRenderer spriteRenderer;
 
     void Awake()
     {
         this.projectile = Resources.Load<GameObject>("Prefabs/BossProjectile");
         this.aimColorModifier = UnityUtils.RecursiveFind(transform, "Image").GetComponent<ColorModifier>();
+        this.spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
     public void SetAttack(int attackNumber)
@@ -64,9 +66,9 @@ public class PassiveAttackController : MonoBehaviour
 
         // For now, change color of boss when he is attacking
         // TODO: Change when areas of damage is implemented
-        gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+        this.spriteRenderer.color = Color.red;
         this.cooldownBehaviour.RestartCooldown();
 
-        StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), new Color(0, 0.89f, 1), 0.5f));
+        StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Parameters.BOSS_COLOR, 0.5f));
     }
 }

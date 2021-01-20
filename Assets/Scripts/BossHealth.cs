@@ -16,6 +16,8 @@ public class BossHealth : MonoBehaviour
     private bool invunerable;
     private ColorModifier shieldColorModifier;
     private IEnumerator resetInvunerabilityCoroutine;
+    private WaveHandler waveHandler;
+    private Coroutine continueFieldShadeCoroutine;
 
     void Awake()
     {
@@ -29,8 +31,9 @@ public class BossHealth : MonoBehaviour
         this.scoreLabel.SetActive(true);
         this.bossButtons.SetActive(true);
         this.shieldColorModifier = this.transform.Find("Shield").gameObject.GetComponent<ColorModifier>();
-        this.shieldColorModifier.SetDefaultColor(new Color(1.0f, 1.0f, 0.0f, 0.0f));
-        this.shieldColorModifier.SetSelectedColor(new Color(1.0f, 0.4f, 0.0f, 1.0f));
+        this.shieldColorModifier.SetDefaultColor(new Color(1.0f, 1.0f, 1.0f, 0.0f));
+        this.shieldColorModifier.SetSelectedColor(Parameters.BOSS_COLOR);
+        this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
     }
 
     void Start()
@@ -39,10 +42,24 @@ public class BossHealth : MonoBehaviour
         bossHealthBar.UpdateFill(BossHealthHolder.BossHealth / BossHealthHolder.BossFullHealth);
     }
 
+    private IEnumerator continueShieldFadeAfterDamage()
+    {
+        yield return new WaitForSeconds(0.2f);
+        this.shieldColorModifier.SetFadePaused(false);
+    }
+
     public bool bossTakeDamage(float damage)
     {
         if (invunerable)
         {
+            Color shieldColor = this.shieldColorModifier.GetColor();
+            this.shieldColorModifier.SetFadePaused(true);
+            if (this.continueFieldShadeCoroutine != null)
+            {
+                StopCoroutine(this.continueFieldShadeCoroutine);
+            }
+            this.shieldColorModifier.SetColor(Color.red);
+            this.continueFieldShadeCoroutine = StartCoroutine(continueShieldFadeAfterDamage());
             return false;
         }
 
@@ -66,7 +83,7 @@ public class BossHealth : MonoBehaviour
             this.bossButtons.SetActive(false);
             this.itemButtons.SetActive(false);
             this.pauseButton.SetActive(false);
-            ((WaveHandler)GameObject.FindObjectOfType(typeof(WaveHandler))).clearWave();
+            this.waveHandler.clearWave();
             return true;
         }
         else

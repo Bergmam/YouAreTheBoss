@@ -71,7 +71,7 @@ public class ActiveAttackController : MonoBehaviour
         }
         this.camShake.Shake(0.1f, 0.2f);
 
-        StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), new Color(0, 0.89f, 1), 0.5f));
+        StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Parameters.BOSS_COLOR, 0.5f));
 
         this.cooldownBehaviour = this.currentAttackButton.GetComponentInChildren<CooldownBehaviour>();
         this.cooldownBehaviour.StartCooldown(this.currentAttack.frequency);

@@ -13,6 +13,7 @@ public class ColorModifier : MonoBehaviour
     private float countDownTime;
     private float countDownStartTime;
     private bool fadeToSelected;
+    private bool fadePaused;
 
     void Awake()
     {
@@ -22,6 +23,7 @@ public class ColorModifier : MonoBehaviour
 
     void Update()
     {
+
         bool wasOverZero = countDownTime > 0;
         if (wasOverZero)
         {
@@ -35,7 +37,11 @@ public class ColorModifier : MonoBehaviour
             float newB = proportion * defaultColor.b + (1 - proportion) * selectedColor.b;
             float newG = proportion * defaultColor.g + (1 - proportion) * selectedColor.g;
             float newA = proportion * defaultColor.a + (1 - proportion) * selectedColor.a;
-            SetColor(new Color(newR, newG, newB, newA));
+
+            if (!this.fadePaused)
+            {
+                SetColor(new Color(newR, newG, newB, newA));
+            }
         }
         bool reachedZero = countDownTime < 0 && wasOverZero; // Became less than zero after update.
         if (reachedZero)
@@ -127,8 +133,26 @@ public class ColorModifier : MonoBehaviour
         }
     }
 
+    public Color GetColor()
+    {
+        if (this.spriteRenderer != null)
+        {
+            return this.spriteRenderer.color;
+        }
+        if (this.image != null)
+        {
+            return this.image.color;
+        }
+        return this.defaultColor;
+    }
+
     public void StopFade()
     {
         this.countDownTime = 0;
+    }
+
+    public void SetFadePaused(bool fadePaused)
+    {
+        this.fadePaused = fadePaused;
     }
 }
