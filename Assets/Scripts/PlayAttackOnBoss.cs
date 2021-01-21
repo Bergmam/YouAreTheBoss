@@ -119,9 +119,9 @@ public class PlayAttackOnBoss : MonoBehaviour
 
     void OnDisable()
     {
-        this.aimColorModifier?.StopFade();
-        this.aimColorModifier?.DeSelect();
-        this.chargeSystem?.SetActive(false);
+        this?.aimColorModifier?.StopFade();
+        this?.aimColorModifier?.DeSelect();
+        this?.chargeSystem?.SetActive(false);
 
         StopAllCoroutines();
         CancelInvoke();
