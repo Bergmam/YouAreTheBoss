@@ -74,8 +74,8 @@ public class Enemy : MonoBehaviour
         RadialPosition radialPosition = RotationUtils.XYToRadialPos(this.transform.position);
 
         // Move forward and back
-        float step = MovementSpeed * Time.deltaTime;
-        radialPosition.AddRadius((-1) * step);
+        float radialStep = MovementSpeed * Time.deltaTime;
+        radialPosition.AddRadius((-1) * radialStep);
 
         // Move sideways
         float angularStep = this.angularSpeed * Time.deltaTime;
@@ -255,7 +255,7 @@ public class Enemy : MonoBehaviour
 
     private void SpawnItem()
     {
-        int itemRand = Random.Range(0, 12);
+        int itemRand = Random.Range(0, 30);
         if (itemRand < 3)
         {
             if (itemRand == 0)

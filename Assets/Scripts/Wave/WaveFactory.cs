@@ -16,8 +16,7 @@ public class WaveFactory
         ZigZagWorm,
         WeakCluster,
         JittererWave,
-        RangedRing,
-        TurnTestOne
+        LineOfBackAndForthShooters
     };
 
     private static List<Func<Wave>> slowWaveComponents = new List<Func<Wave>>()
@@ -63,17 +62,26 @@ public class WaveFactory
         }
     }
 
-    private static Wave TurnTestOne()
+    private static Wave LineOfBackAndForthShooters()
     {
         Wave wave = new Wave();
-        SubWave subWave = new SubWave();
-        StatsHolder enemy = EnemyFactory.FastEnemy();
-        enemy.TurnBackDistance = 1.0f;
-        enemy.TurnForwardDistance = 3.0f;
-        enemy.NumberOfTurns = 3;
-        enemy.MovementSpeed = 1.5f;
-        subWave.AddEnemy(enemy);
-        wave.AddSubWave(subWave, 0.0f);
+        float timeStamp = 0.0f;
+        float angle = UnityEngine.Random.value * 360;
+        for (int i = 0; i < 7; i++)
+        {
+            SubWave subWave = new SubWave();
+            StatsHolder enemy = EnemyFactory.FastEnemy();
+            enemy.predefinedPosition = true;
+            enemy.spawnAngle = angle + 5.0f * i;
+            enemy.TurnBackDistance = 1.0f;
+            enemy.TurnForwardDistance = 3.0f;
+            enemy.Color = Color.green;
+            enemy.NumberOfTurns = -1;
+            enemy.MovementSpeed = 1.5f;
+            subWave.AddEnemy(enemy);
+            wave.AddSubWave(subWave, timeStamp);
+            timeStamp += 0.3f;
+        }
         return wave;
     }
 
@@ -167,25 +175,6 @@ public class WaveFactory
             subWave.AddEnemy(enemy);
             wave.AddSubWave(subWave, timeStamp);
             timeStamp += 0.75f;
-        }
-        return wave;
-    }
-
-    public static Wave RangedRing()
-    {
-        int direction = 2;
-        Wave wave = new Wave();
-        float timeStamp = 0f;
-        float angle = UnityEngine.Random.value * 360;
-        for (int i = 0; i < 8; i++)
-        {
-            SubWave subWave = new SubWave();
-            StatsHolder stats = EnemyFactory.RangedRingUnit();
-            stats.spawnAngle = angle + i * direction;
-            stats.predefinedPosition = true;
-            subWave.AddEnemy(stats);
-            wave.AddSubWave(subWave, timeStamp);
-            timeStamp += 0.1f;
         }
         return wave;
     }

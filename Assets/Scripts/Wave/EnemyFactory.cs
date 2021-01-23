@@ -169,20 +169,6 @@ public class EnemyFactory
         return stats;
     }
 
-    public static StatsHolder RangedRingUnit()
-    {
-        StatsHolder stats = new StatsHolder("RangedRing", 1.5f, RangeLevel.MELE, 30.0f, 0.75f, Color.cyan);
-        stats.MovementSpeed = 1.2f;
-        stats.angularSpeed = 50;
-        stats.zigZag = true;
-        stats.zigZagAngle = 45;
-        stats.TurnBackDistance = 1.5f;
-        stats.TurnForwardDistance = 2.75f;
-        stats.NumberOfTurns = 3;
-        stats.circlingSpeed = 100;
-        return stats;
-    }
-
     public static StatsHolder Jitterer()
     {
         StatsHolder stats = new StatsHolder("Jitterer", 7.5f, RangeLevel.SELF_DESTRUCT, Parameters.BASIC_RANGED_ENEMY_HEALTH, 1.5f, orange);
