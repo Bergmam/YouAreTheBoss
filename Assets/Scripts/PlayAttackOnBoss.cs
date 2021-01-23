@@ -15,6 +15,7 @@ public class PlayAttackOnBoss : MonoBehaviour
     SpriteRenderer spriteRenderer;
     private GameObject projectile;
     private GameObject chargeSystem;
+    private GameObject chargeSystemResource;
     private float activeAttackWait = 4.0f;
     private SelfShaker shaker;
 
@@ -27,12 +28,13 @@ public class PlayAttackOnBoss : MonoBehaviour
         this.aimColorModifier = aim.GetComponent<ColorModifier>();
         this.tapText = gameObject.GetComponentInChildren<TextMeshProUGUI>();
         this.spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        this.chargeSystem = Instantiate(Resources.Load<GameObject>("Prefabs/ChargeUp"), transform.position, Quaternion.identity);
         this.shaker = gameObject.AddComponent<SelfShaker>();
+        this.chargeSystemResource = Resources.Load<GameObject>("Prefabs/ChargeUp");
     }
 
     void Start()
     {
+        this.chargeSystem = Instantiate(this.chargeSystemResource, transform.position, Quaternion.identity);
         this.aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
         UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>().color = Parameters.AIM_DEFAULT_COLOR;
         this.tapText.gameObject.SetActive(false);
@@ -81,8 +83,9 @@ public class PlayAttackOnBoss : MonoBehaviour
             StartCoroutine(doActiveAttackAfterTime(this.aimColorModifier, this.activeAttackWait, this.currentAttack.frequency));
         }
     }
-    
-    private IEnumerator doActiveAttackAfterTime(ColorModifier colorModifier, float waitTime, float fadeTime) {
+
+    private IEnumerator doActiveAttackAfterTime(ColorModifier colorModifier, float waitTime, float fadeTime)
+    {
         yield return new WaitForSeconds(waitTime);
         this.spriteRenderer.color = Parameters.ACTIVE_ATTACK_AIM_COLOR;
         this.chargeSystem.SetActive(false);
@@ -106,7 +109,7 @@ public class PlayAttackOnBoss : MonoBehaviour
             this.aimColorModifier.FadeToSelected(0.0f);
             this.aimColorModifier.FadeToDeselected(this.currentAttack.frequency);
         }
-            
+
         this.spriteRenderer.color = Color.red;
         StartCoroutine(UnityUtils.ChangeToColorAfterTime(this.spriteRenderer, Parameters.BOSS_COLOR, 0.5f));
     }
