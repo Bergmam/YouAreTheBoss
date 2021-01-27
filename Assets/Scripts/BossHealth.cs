@@ -32,7 +32,6 @@ public class BossHealth : MonoBehaviour
         this.scoreLabel.SetActive(true);
         this.bossButtons.SetActive(true);
         this.shieldColorModifier = this.transform.Find("Shield").gameObject.GetComponent<ColorModifier>();
-        this.shieldColorModifier.SetDefaultColor(new Color(1.0f, 1.0f, 1.0f, 0.0f));
         this.shieldColorModifier.SetSelectedColor(Parameters.BOSS_COLOR);
         this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
         this.camShake = GameObject.FindObjectOfType<CameraShake>();
@@ -40,6 +39,7 @@ public class BossHealth : MonoBehaviour
 
     void Start()
     {
+        this.shieldColorModifier.SetDefaultColor(new Color(1.0f, 1.0f, 1.0f, 0.0f));
         bossHealthBar = GameObject.Find("BossHealthBar").GetComponent<ProgressBarBehaviour>();
         bossHealthBar.UpdateFill(BossHealthHolder.BossHealth / BossHealthHolder.BossFullHealth);
     }

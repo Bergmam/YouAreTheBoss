@@ -18,6 +18,7 @@ public class PlayAttackOnBoss : MonoBehaviour
     private GameObject chargeSystemResource;
     private float activeAttackWait = 4.0f;
     private SelfShaker shaker;
+    private bool started;
 
     void Awake()
     {
@@ -34,6 +35,11 @@ public class PlayAttackOnBoss : MonoBehaviour
 
     void Start()
     {
+        if (this.started)
+        {
+            return; // setAttack is sometimes called before Start. setAttack calls Start, so we make sure Start is not run again after setAttack.
+        }
+        this.started = true;
         this.chargeSystem = Instantiate(this.chargeSystemResource, transform.position, Quaternion.identity);
         this.aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
         UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>().color = Parameters.AIM_DEFAULT_COLOR;
@@ -43,6 +49,8 @@ public class PlayAttackOnBoss : MonoBehaviour
 
     public void setAttack(BossAttack attack)
     {
+        Start();
+
         this.currentAttack = attack;
 
         if (radialFillControl != null)

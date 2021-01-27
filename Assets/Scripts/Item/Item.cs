@@ -17,11 +17,15 @@ public class Item : MonoBehaviour
 
     void Update()
     {
-        if (Input.touchCount > 0)
+        for (var i = 0; i < Input.touchCount; ++i)
         {
-            if (Input.GetTouch(0).phase == TouchPhase.Began || Input.GetTouch(0).phase == TouchPhase.Moved)
+            if (Input.GetTouch(i).phase == TouchPhase.Began)
             {
-                OnPressed();
+                RaycastHit2D hitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.GetTouch(i).position), Vector2.zero);
+                if (hitInfo && hitInfo.transform.gameObject == this.gameObject)
+                {
+                    OnPressed();
+                }
             }
         }
     }
