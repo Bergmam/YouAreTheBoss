@@ -17,11 +17,12 @@ public class Item : MonoBehaviour
 
     void Update()
     {
-        for (var i = 0; i < Input.touchCount; ++i)
+        // Any finger can pick up items.
+        foreach (Touch touch in Input.touches)
         {
-            if (Input.GetTouch(i).phase == TouchPhase.Began)
+            if (touch.phase == TouchPhase.Began)
             {
-                RaycastHit2D hitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.GetTouch(i).position), Vector2.zero);
+                RaycastHit2D hitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(touch.position), Vector2.zero);
                 if (hitInfo && hitInfo.transform.gameObject == this.gameObject)
                 {
                     OnPressed();
