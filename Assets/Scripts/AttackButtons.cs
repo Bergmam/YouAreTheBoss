@@ -11,8 +11,14 @@ public class AttackButtons : MonoBehaviour
     List<Button> clickedButtons = new List<Button>();
     List<Color> usedColors = new List<Color>();
     Button playButton;
+    Text playButtonText;
+
+    Color playButtonTextActiveColor;
+    Color playButtonTextInactiveColor;
+
     GameObject attackPopUp;
     GameObject upgradePopUp;
+    GameObject chooseThreeAttacksText;
 
     GameObject infoButton;
     private Dictionary<string, Button> attackButtons = new Dictionary<string, Button>();
@@ -23,7 +29,9 @@ public class AttackButtons : MonoBehaviour
     {
         this.attackPopUp = GameObject.Find("AttackPopUp");
         this.infoButton = GameObject.Find("InfoButton");
+        this.chooseThreeAttacksText = GameObject.Find("ChooseAttacksText");
         this.playButton = GameObject.Find("PlayButton").GetComponent<Button>();
+        this.playButtonText = this.playButton.transform.Find("PlayButtonText").GetComponent<Text>();
         this.attackButtonPrefab = Resources.Load("Prefabs/AttackButton", typeof(GameObject)) as GameObject;
         this.upgradePopUp = GameObject.Find("UpgradePopUp");
     }
@@ -32,6 +40,15 @@ public class AttackButtons : MonoBehaviour
     {
         attackPopUp.SetActive(false);
         playButton.interactable = false;
+        
+        playButtonTextActiveColor = playButtonText.color;
+
+        Color tempColor = playButtonTextActiveColor;
+        tempColor.a = 0.5f;
+
+        playButtonTextInactiveColor = tempColor;
+        this.playButtonText.color = playButtonTextInactiveColor;
+
         upgradePopUp.SetActive(false);
 
         for (int i = 0; i < AttackLists.GetNumberOfSelectableAttacks(); i++)
@@ -66,8 +83,14 @@ public class AttackButtons : MonoBehaviour
                 index = UnityEngine.Random.Range(0, AttackLists.chooseableUpgradeAttacks.Count);
             }
             SetUpgradePopUpAttack(2, index);
-            this.playButton.interactable = false;
+            this.SetDonePickingAttacks(false);
         }
+    }
+
+    private void SetDonePickingAttacks(bool isDone){
+        this.playButton.interactable = isDone;
+        this.playButtonText.color = isDone ? this.playButtonTextActiveColor : this.playButtonTextInactiveColor;
+        this.chooseThreeAttacksText.SetActive(!isDone);
     }
 
     private void SetUpgradePopUpAttack(int upgradePopUpAttackNumber, int upgradeAttacksIndex)
@@ -104,14 +127,14 @@ public class AttackButtons : MonoBehaviour
         AttackLists.ChooseUpgradeAttack(attack);
         CreateAttackButton(attackButtons.Count, attack);
         DisableUpgradePopUp();
-        this.playButton.interactable = true;
+        this.SetDonePickingAttacks(true);
         infoButton.GetComponent<Button>().interactable = true;
     }
 
     public void DisableButtons()
     {
         attackButtons.ToList().ForEach(nameButtonPair => nameButtonPair.Value.interactable = false);
-        this.playButton.interactable = false;
+        this.SetDonePickingAttacks(false);
     }
 
     public void AttackButtonPressed(Button button)
@@ -178,7 +201,7 @@ public class AttackButtons : MonoBehaviour
             clickedButtons.Add(button);
             if (!playButton.interactable && clickedButtons.Count >= 3)
             {
-                playButton.interactable = true;
+                this.SetDonePickingAttacks(true);
                 DisableUnclickedButtons();
             }
         }
@@ -204,7 +227,7 @@ public class AttackButtons : MonoBehaviour
         if (clickedButtons.Count < 3)
         {
             EnableAttackButtons();
-            playButton.interactable = false;
+            this.SetDonePickingAttacks(false);
         }
     }
 
