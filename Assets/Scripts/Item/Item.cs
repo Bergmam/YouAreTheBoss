@@ -5,6 +5,7 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     private WaveHandler waveHandler;
+    private BossLookAt bossLookAtScript;
     public int PercentHealthToHeal;
     public int InvunerableSeconds;
     public int FreezeEnemiesSeconds;
@@ -13,22 +14,7 @@ public class Item : MonoBehaviour
     void Awake()
     {
         this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
-    }
-
-    void Update()
-    {
-        // Any finger can pick up items.
-        foreach (Touch touch in Input.touches)
-        {
-            if (touch.phase == TouchPhase.Began)
-            {
-                RaycastHit2D hitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(touch.position), Vector2.zero);
-                if (hitInfo && hitInfo.transform.gameObject == this.gameObject)
-                {
-                    OnPressed();
-                }
-            }
-        }
+        this.bossLookAtScript = GameObject.FindObjectOfType<BossLookAt>();
     }
 
     void OnMouseDown()
@@ -36,7 +22,7 @@ public class Item : MonoBehaviour
         OnPressed();
     }
 
-    private void OnPressed()
+    public void OnPressed()
     {
         ItemData item = new ItemData();
         item.PercentHealthToHeal = this.PercentHealthToHeal;
@@ -46,6 +32,10 @@ public class Item : MonoBehaviour
 
         GameObject.FindObjectOfType<ItemButtons>().AddItem(item);
         this.waveHandler.ItemRemoved();
-        Destroy(this.gameObject);
+
+        // Leave the item on screen for a minimum amount of time so that the
+        // bossLookAtScript can prevent the boss from rotating if the user
+        // taps the item quickly.
+        this.bossLookAtScript.MarkObjectForDeletion(this.gameObject);
     }
 }
