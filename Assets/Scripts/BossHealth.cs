@@ -128,6 +128,7 @@ public class BossHealth : MonoBehaviour
     {
         WaveNumber.waveNumber = 0;
         AttackLists.ResetUpgradedAttacks();
+        BossItemHolder.BossItems = new ItemData[Parameters.NUMBER_OF_ITEMS];
         SceneHandler.SwitchScene("Main Menu Scene");
     }
 }
