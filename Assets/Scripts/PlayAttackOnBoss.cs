@@ -6,8 +6,6 @@ using TMPro;
 
 public class PlayAttackOnBoss : MonoBehaviour
 {
-    RadialFillControl radialFillControl;
-    AttackMaskControl attackMaskControl;
     private ColorModifier aimColorModifier;
     BossAttack currentAttack;
     CooldownBehaviour currentCooldownBehaviour;
@@ -19,13 +17,13 @@ public class PlayAttackOnBoss : MonoBehaviour
     private float activeAttackWait = 4.0f;
     private SelfShaker shaker;
     private bool started;
+	private Material aimMaterial;
 
     void Awake()
     {
         this.projectile = Resources.Load<GameObject>("Prefabs/BossProjectile");
-        this.radialFillControl = UnityUtils.RecursiveFind(transform, "Mask").GetComponent<RadialFillControl>();
-        this.attackMaskControl = UnityUtils.RecursiveFind(transform, "Mask").GetComponent<AttackMaskControl>();
-        Transform aim = UnityUtils.RecursiveFind(transform, "Image");
+        Transform aim = UnityUtils.RecursiveFind(transform, "Aim");
+		this.aimMaterial = aim.GetComponent<Renderer>().material;
         this.aimColorModifier = aim.GetComponent<ColorModifier>();
         this.tapText = gameObject.GetComponentInChildren<TextMeshProUGUI>();
         this.spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
@@ -37,12 +35,11 @@ public class PlayAttackOnBoss : MonoBehaviour
     {
         if (this.started)
         {
-            return; // setAttack is sometimes called before Start. setAttack calls Start, so we make sure Start is not run again after setAttack.
+            return; // setAttack is sometimes called before Start. Since setAttack calls Start, we make sure Start is not run again after setAttack.
         }
         this.started = true;
         this.chargeSystem = Instantiate(this.chargeSystemResource, transform.position, Quaternion.identity);
-        this.aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
-        UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>().color = Parameters.AIM_DEFAULT_COLOR;
+        this.aimColorModifier.SetColor(Parameters.AIM_DEFAULT_COLOR);
         this.tapText.gameObject.SetActive(false);
         this.chargeSystem.SetActive(false);
     }
@@ -52,15 +49,11 @@ public class PlayAttackOnBoss : MonoBehaviour
         Start();
 
         this.currentAttack = attack;
-
-        if (radialFillControl != null)
-        {
-            radialFillControl.SetMirroredFill(this.currentAttack.angle);
-        }
-        if (attackMaskControl != null)
-        {
-            attackMaskControl.SetSize(this.currentAttack.closeRadius, this.currentAttack.farRadius);
-        }
+        
+        this.aimMaterial.SetFloat("Angle", this.currentAttack.angle);
+        this.aimMaterial.SetFloat("InnerRadius", this.currentAttack.closeRadius);
+        this.aimMaterial.SetFloat("OuterRadius", this.currentAttack.farRadius);
+        this.aimMaterial.SetFloat("Scale", this.transform.localScale.x);
 
         this.tapText.gameObject.SetActive(false);
 

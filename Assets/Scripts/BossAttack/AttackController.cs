@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class AttackController : MonoBehaviour
 {
-    private AttackMaskControl attackMaskControl;
-    private RadialFillControl radialFillControl;
     private PassiveAttackController passiveAttackController;
     private ActiveAttackController activeAttackController;
     private bool aimingActiveAttack;
@@ -18,7 +16,6 @@ public class AttackController : MonoBehaviour
     void Awake()
     {
         this.backgroundFade = GameObject.Find("BackgroundFade");
-        this.attackMaskControl = GameObject.FindObjectOfType<AttackMaskControl>();
         this.passiveAttackController = gameObject.AddComponent<PassiveAttackController>();
         this.activeAttackController = gameObject.AddComponent<ActiveAttackController>();
         Transform aim = UnityUtils.RecursiveFind(transform, "Aim");
