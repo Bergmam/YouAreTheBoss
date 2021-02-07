@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
     private GameObject healthPickup;
     private GameObject freezePickup;
     private GameObject shieldPickup;
-    private StatsHolder projectile;
+    private EnemySettings projectile;
     private float zigZagAngleLow;
     private float zigZagAngleHigh;
     private bool zigZag;
@@ -200,8 +200,18 @@ public class Enemy : MonoBehaviour
     {
         this.colorModifier.FadeToDeselected(this.attackFrequency / 3.0f);
         RadialPosition thisRadialPos = RotationUtils.XYToRadialPos(transform.position);
-        this.projectile.SetRadialSpawnPosition(thisRadialPos.GetAngle(), thisRadialPos.GetRadius());
-        GameObject spawnedProjectile = this.enemySpawner.InstantiateEnemyPrefab(this.projectile);
+
+        if (this.projectile == null)
+        {
+            this.projectile = EnemyFactory.Projectile(this.Damage);
+        }
+
+        EnemySettings instantiatedProjectile = Instantiate(this.projectile);
+        instantiatedProjectile.predefinedPosition = true;
+        instantiatedProjectile.spawnAngle = thisRadialPos.GetAngle();
+        instantiatedProjectile.spawnRadius = thisRadialPos.GetRadius();
+
+        GameObject spawnedProjectile = this.enemySpawner.InstantiateEnemyPrefab(instantiatedProjectile);
     }
 
     public bool isInAttackArea(float lowAngle, float highAngle, float nearRadius, float farRadius)
@@ -221,7 +231,7 @@ public class Enemy : MonoBehaviour
         bool inHighAngle = RotationUtils.InCounterClockwiseLimits(enemyHighAngle, lowAngle, highAngle);
         bool inLowAngle = RotationUtils.InCounterClockwiseLimits(enemyLowAngle, lowAngle, highAngle);
         bool bossLargerThanRadius = RotationUtils.InCounterClockwiseLimits(lowAngle, enemyLowAngle, enemyHighAngle)
-                                        && RotationUtils.InCounterClockwiseLimits(highAngle, enemyLowAngle, enemyHighAngle);
+            && RotationUtils.InCounterClockwiseLimits(highAngle, enemyLowAngle, enemyHighAngle);
         bool inRadius = distanceToBossNear <= farRadius && distanceToBossFar >= nearRadius;
 
         return (inLowAngle || inHighAngle || bossLargerThanRadius) && inRadius;
@@ -274,56 +284,74 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void SetStats(StatsHolder stats)
+    public void SetStats(EnemySettings enemySettings)
     {
-        transform.name = stats.Name;
-        this.EnemyType = stats.enemyType;
-        this.selfDestruct = stats.selfDestruct;
-        this.invunerable = stats.invunerable;
+        // TODO: Move in all initialization logic from StatsHolder to happen here
+        transform.name = enemySettings.Name;
+        this.EnemyType = enemySettings.enemyType;
+        this.selfDestruct = enemySettings.selfDestruct;
+        this.invunerable = enemySettings.invunerable;
         if (invunerable) //Don't show healthbar for invunerable units (projectiles)
         {
             Destroy(UnityUtils.RecursiveFind(transform, "HealthBar").gameObject);
         }
-        MoveTo(new RadialPosition(stats.spawnRadius, stats.spawnAngle));
-        MovementSpeed = stats.MovementSpeed;
-        this.angularSpeed = stats.angularSpeed;
-        this.circlingSpeed = stats.circlingSpeed;
-        Damage = stats.Damage;
-        Range = stats.Range;
-        Health = stats.Health;
-        MaxHealth = stats.Health;
-        Scale = stats.Scale;
+
+        MoveTo(new RadialPosition(enemySettings.spawnRadius, enemySettings.spawnAngle));
+
+        // Randomization variable takes precident over clockwise variable
+        int angularDirectionMultiplier = 1;
+        if (enemySettings.randomizeAngularDirection){
+            angularDirectionMultiplier = UnityEngine.Random.value >= 0.5 ? -1 : 1;
+        }
+        else if (enemySettings.angularMoveClockwise){
+            angularDirectionMultiplier = -1;
+        }
+
+        int circlingDirectionMultiplier = 1;
+        if (enemySettings.randomizeCirclingDirection){
+            circlingDirectionMultiplier = UnityEngine.Random.value >= 0.5 ? -1 : 1;
+        } 
+        else if (enemySettings.circlingMoveClockwise){
+            circlingDirectionMultiplier = -1;
+        }
+
+        this.angularSpeed = enemySettings.angularSpeed * angularDirectionMultiplier;
+        this.circlingSpeed = enemySettings.circlingSpeed * circlingDirectionMultiplier;
+        MovementSpeed = enemySettings.MovementSpeed;
+
+        Damage = enemySettings.Damage;
+        Range = enemySettings.RangeVal;
+        Health = enemySettings.Health;
+        MaxHealth = enemySettings.Health;
+        Scale = enemySettings.Scale;
         Transform sprite = transform.Find("Sprite");
-        sprite.transform.localScale *= stats.Scale;
-        if (stats.Scale > 1)
+        sprite.transform.localScale *= enemySettings.Scale;
+
+        if (enemySettings.Scale > 1)
         {
             Transform canvas = transform.Find("Canvas");
-            canvas.localPosition = new Vector3(canvas.localPosition.x, canvas.localPosition.y * stats.Scale * 0.8f, canvas.localPosition.z);
+            canvas.localPosition = new Vector3(canvas.localPosition.x, canvas.localPosition.y * enemySettings.Scale * 0.8f, canvas.localPosition.z);
         }
-        if (stats.projectile == null)
+
+        this.attackFrequency = enemySettings.attackDelay;
+        this.zigZag = enemySettings.zigZag;
+
+        if (enemySettings.angularSpeed > 0)
         {
-            this.projectile = EnemyFactory.Projectile(this.Damage);
+            this.zigZagAngleLow = enemySettings.spawnAngle;
+            this.zigZagAngleHigh = enemySettings.spawnAngle + enemySettings.zigZagAngle;
         }
         else
         {
-            this.projectile = stats.projectile;
+            this.zigZagAngleHigh = enemySettings.spawnAngle;
+            this.zigZagAngleLow = enemySettings.spawnAngle - enemySettings.zigZagAngle;
         }
-        this.attackFrequency = stats.attackDelay;
-        this.zigZag = stats.zigZag;
-        if (stats.angularSpeed > 0)
-        {
-            this.zigZagAngleLow = stats.spawnAngle;
-            this.zigZagAngleHigh = stats.spawnAngle + stats.zigZagAngle;
-        }
-        else
-        {
-            this.zigZagAngleHigh = stats.spawnAngle;
-            this.zigZagAngleLow = stats.spawnAngle - stats.zigZagAngle;
-        }
-        this.turnBackDistance = stats.TurnBackDistance;
-        this.turnForwardDistance = stats.TurnForwardDistance;
-        this.numberOfTurns = stats.NumberOfTurns;
-        colorModifier.SetDefaultColor(stats.Color);
+
+        this.projectile = enemySettings.projectile ? enemySettings.projectile : null;
+        this.turnBackDistance = enemySettings.TurnBackDistance;
+        this.turnForwardDistance = enemySettings.TurnForwardDistance;
+        this.numberOfTurns = enemySettings.NumberOfTurns;
+        colorModifier.SetDefaultColor(enemySettings.Color);
         colorModifier.SetSelectedColor(Parameters.ENEMY_ATTACK_COLOR);
     }
 

@@ -2,7 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class Parameters
+// TODO:
+// * Create instances of these settings corresponding to whatever enemies we have defined already
+// * For Projectiles, must set damage of the Scriptable Object upon instantiation
+// * Upon enemy creation, add the correct scriptable object settings to that enemy 
+//   (Instead of setting the stats in the script like we do now)
+// * Tests might be breaking?
+
+
+[CreateAssetMenu(menuName = "Parameter Settings")]
+public class ParameterSettings : ScriptableObject
 {
     public static float scrollDelay = 0.15f;
     public static float SELF_DESTRUCT_RANGE = 0.5f;

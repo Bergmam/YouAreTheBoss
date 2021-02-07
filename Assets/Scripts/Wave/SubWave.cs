@@ -1,27 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class SubWave
 {
 
-    private List<StatsHolder> enemies;
+    private List<EnemySettings> enemies;
 
     public SubWave()
     {
-        this.enemies = new List<StatsHolder>();
+        this.enemies = new List<EnemySettings>();
     }
 
-    public SubWave(List<StatsHolder> enemies)
+    public SubWave(List<EnemySettings> enemies)
     {
         this.enemies = enemies;
     }
 
-    public List<StatsHolder> GetEnemies()
+    public List<EnemySettings> GetEnemies()
     {
         return this.enemies;
     }
 
-    public void AddEnemy(StatsHolder enemy)
+    public void AddEnemy(EnemySettings enemy)
     {
         if (this.enemies != null)
         {
@@ -32,7 +33,7 @@ public class SubWave
     public int RequiredKillEnemyCount()
     {
         int count = 0;
-        foreach (StatsHolder enemy in enemies)
+        foreach (EnemySettings enemy in enemies)
         {
             if (enemy.requiredKill)
             {
@@ -44,7 +45,7 @@ public class SubWave
 
     public void ScaleSubWaveDamage(float scaleFactor)
     {
-        foreach (StatsHolder enemy in this.enemies)
+        foreach (EnemySettings enemy in this.enemies)
         {
             enemy.Damage *= scaleFactor;
         }
@@ -52,7 +53,7 @@ public class SubWave
 
     public void ScaleSubWaveHealth(float scaleFactor)
     {
-        foreach (StatsHolder enemy in this.enemies)
+        foreach (EnemySettings enemy in this.enemies)
         {
             enemy.Health *= scaleFactor;
         }
@@ -60,7 +61,7 @@ public class SubWave
 
     public void ScaleSubWaveSpeed(float scaleFactor)
     {
-        foreach (StatsHolder enemy in this.enemies)
+        foreach (EnemySettings enemy in this.enemies)
         {
             enemy.MovementSpeed *= scaleFactor;
         }
@@ -68,7 +69,7 @@ public class SubWave
 
     public void ScaleSubWaveAngularSpeed(float scaleFactor)
     {
-        foreach (StatsHolder enemy in this.enemies)
+        foreach (EnemySettings enemy in this.enemies)
         {
             enemy.angularSpeed *= scaleFactor;
         }
@@ -76,7 +77,7 @@ public class SubWave
 
     public void ScaleSubWaveSize(float scaleFactor)
     {
-        foreach (StatsHolder enemy in this.enemies)
+        foreach (EnemySettings enemy in this.enemies)
         {
             enemy.Scale *= scaleFactor;
         }
@@ -84,15 +85,14 @@ public class SubWave
 
     public void MultiplyNumberOfEnemies(int times)
     {
-        List<StatsHolder> newEnemiesList = new List<StatsHolder>();
-        foreach (StatsHolder enemy in this.enemies)
+        List<EnemySettings> newEnemiesList = new List<EnemySettings>();
+        foreach (EnemySettings enemy in this.enemies)
         {
             newEnemiesList.Add(enemy);
 
             for (int i = 1; i < times; i++)
             {
-                StatsHolder clone = enemy.Clone();
-                newEnemiesList.Add(enemy.Clone());
+                newEnemiesList.Add(GameObject.Instantiate(enemy));
             }
 
         }
@@ -107,7 +107,7 @@ public class SubWave
     public void SpreadOut()
     {
         float randomAngle = UnityEngine.Random.value * 360;
-        foreach (StatsHolder enemy in this.enemies)
+        foreach (EnemySettings enemy in this.enemies)
         {
             enemy.spawnAngle = randomAngle;
             enemy.predefinedPosition = true;
@@ -117,7 +117,7 @@ public class SubWave
 
     public void Shift(float degrees)
     {
-        foreach (StatsHolder enemy in this.enemies)
+        foreach (EnemySettings enemy in this.enemies)
         {
             enemy.predefinedPosition = true;
             enemy.spawnAngle = (enemy.spawnAngle + degrees) % 360;
@@ -138,7 +138,7 @@ public class SubWave
     public override int GetHashCode()
     {
         int hashCode = 0;
-        foreach (StatsHolder enemy in this.enemies)
+        foreach (EnemySettings enemy in this.enemies)
         {
             hashCode += (enemy.GetHashCode()) % 153;
         }
@@ -148,9 +148,9 @@ public class SubWave
     public SubWave Clone()
     {
         SubWave clone = new SubWave();
-        foreach (StatsHolder enemy in enemies)
+        foreach (EnemySettings enemy in enemies)
         {
-            clone.AddEnemy(enemy.Clone());
+            clone.AddEnemy(GameObject.Instantiate(enemy));
         }
         return clone;
     }

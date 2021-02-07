@@ -33,52 +33,12 @@ public class StatsHolder
     public float TurnForwardDistance;
     public int NumberOfTurns; // Negative value means keep turning forever.
 
-    public StatsHolder(
-        string name,
-        float Damage,
-        RangeLevel Range,
-        float Health,
-        float Scale,
-        Color Color) : this(name, Damage, Range, Scale, Color)
+    public StatsHolder(EnemySettings enemySettings)
     {
-        this.Health = Health * Parameters.HEALTH_SCALE;
-    }
-
-    public StatsHolder(
-        string name,
-        float Damage,
-        RangeLevel Range,
-        float Scale,
-        Color Color)
-    {
-        this.Name = name;
-        this.MovementSpeed = Parameters.BASIC_ENEMY_SPEED;
-        this.Damage = Damage;
-        this.Range = RangeUtils.rangeLevelToFloatRange(Range);
-        this.Health = Parameters.BASIC_ENEMY_HEALTH * Parameters.HEALTH_SCALE;
-        this.Scale = Scale;
-        this.Color = Color;
-        this.angularSpeed = 0f;
-        this.predefinedPosition = false;
-        this.spawnRadius = Parameters.ENEMY_SPAWN_RADIUS;
-        this.requiredKill = true;
-        this.attackDelay = 0.5f;
-        this.zigZag = false;
-    }
-
-    public StatsHolder(
-        string name,
-        float MovementSpeed,
-        float Damage,
-        RangeLevel Range,
-        float Health,
-        float Scale,
-        Color Color)
-    {
-        this.Name = name;
-        this.MovementSpeed = MovementSpeed;
-        this.Damage = Damage;
-        this.Range = RangeUtils.rangeLevelToFloatRange(Range);
+        this.Name = enemySettings.name;
+        this.MovementSpeed = enemySettings.MovementSpeed;
+        this.Damage = enemySettings.Damage;
+        // this.Range = RangeUtils.rangeLevelToFloatRange(Range);
         this.Health = Health * Parameters.HEALTH_SCALE;
         this.Scale = Scale;
         this.Color = Color;
@@ -135,33 +95,33 @@ public class StatsHolder
         return attributes;
     }
 
-    public StatsHolder Clone()
-    {
-        StatsHolder clone = new StatsHolder(this.Name,
-            this.MovementSpeed,
-            this.Damage,
-            RangeUtils.floatRangeToRangeLevel(this.Range),
-            this.Health,
-            this.Scale,
-            this.Color);
-        clone.predefinedPosition = this.predefinedPosition;
-        clone.spawnAngle = this.spawnAngle;
-        clone.spawnRadius = this.spawnRadius;
-        clone.selfDestruct = this.selfDestruct;
-        clone.invunerable = this.invunerable;
-        clone.angularSpeed = this.angularSpeed;
-        clone.circlingSpeed = this.circlingSpeed;
-        clone.requiredKill = this.requiredKill;
-        if (this.projectile != null)
-        {
-            clone.projectile = this.projectile.Clone();
-        }
-        clone.projectile = this.projectile;
-        clone.attackDelay = this.attackDelay;
-        clone.zigZagAngle = this.zigZagAngle;
-        clone.zigZag = this.zigZag;
-        return clone;
-    }
+    // public StatsHolder Clone()
+    // {
+    //     StatsHolder clone = new StatsHolder(this.Name,
+    //         this.MovementSpeed,
+    //         this.Damage,
+    //         RangeUtils.floatRangeToRangeLevel(this.Range),
+    //         this.Health,
+    //         this.Scale,
+    //         this.Color);
+    //     clone.predefinedPosition = this.predefinedPosition;
+    //     clone.spawnAngle = this.spawnAngle;
+    //     clone.spawnRadius = this.spawnRadius;
+    //     clone.selfDestruct = this.selfDestruct;
+    //     clone.invunerable = this.invunerable;
+    //     clone.angularSpeed = this.angularSpeed;
+    //     clone.circlingSpeed = this.circlingSpeed;
+    //     clone.requiredKill = this.requiredKill;
+    //     if (this.projectile != null)
+    //     {
+    //         clone.projectile = this.projectile.Clone();
+    //     }
+    //     clone.projectile = this.projectile;
+    //     clone.attackDelay = this.attackDelay;
+    //     clone.zigZagAngle = this.zigZagAngle;
+    //     clone.zigZag = this.zigZag;
+    //     return clone;
+    // }
 
     public void SetRange(RangeLevel range)
     {
