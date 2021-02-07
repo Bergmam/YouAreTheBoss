@@ -23,8 +23,7 @@ public class ActiveAttackController : MonoBehaviour
         this.fireSprite = Resources.Load<Sprite>("Art/UI_Icon_FullScreenExit");
         this.defaultSprite = Resources.Load<Sprite>("Art/UI_Button_Standard_Sky_2");
         this.camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
-        Transform aim = UnityUtils.RecursiveFind(transform, "Image");
-        this.aimColorModifier = aim.GetComponent<ColorModifier>();
+        this.aimColorModifier = UnityUtils.RecursiveFind(transform, "Aim").GetComponent<ColorModifier>();
         this.backgroundFade = GameObject.Find("BackgroundFade");
         this.chargeSystem = Instantiate(Resources.Load<GameObject>("Prefabs/ChargeUp"), transform.position, Quaternion.identity);
         this.activeAttackScreenButton = GameObject.Find("ActiveAttackScreenButton");

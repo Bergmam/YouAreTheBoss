@@ -8,10 +8,12 @@ public class BossLookAt : MonoBehaviour {
 
 	private bool preventBossRotation;
 	private List<GameObject> objectsForDeletion;
+	private Material aimMaterial;
 
 	void Awake()
 	{
 		this.objectsForDeletion = new List<GameObject>();
+		this.aimMaterial = UnityUtils.RecursiveFind(this.transform, "Aim").gameObject.GetComponent<Renderer>().material;
 	}
 
 	void Update ()
@@ -73,6 +75,7 @@ public class BossLookAt : MonoBehaviour {
 		if (touchPos.y > Parameters.ARENA_BOTTOM && !touchPos.Equals (Vector3.zero))
 		{
 			transform.rotation = Quaternion.LookRotation (Vector3.forward, touchPos - transform.position);
+			this.aimMaterial.SetVector("Direction", transform.up);
 		}
 
 		destroyObjectsMarkedForDeletion();

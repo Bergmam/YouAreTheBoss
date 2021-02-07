@@ -14,7 +14,7 @@ public class PassiveAttackController : MonoBehaviour
     void Awake()
     {
         this.projectile = Resources.Load<GameObject>("Prefabs/BossProjectile");
-        this.aimColorModifier = UnityUtils.RecursiveFind(transform, "Image").GetComponent<ColorModifier>();
+        this.aimColorModifier = UnityUtils.RecursiveFind(transform, "Aim").GetComponent<ColorModifier>();
         this.spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
