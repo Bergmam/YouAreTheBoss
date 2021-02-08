@@ -203,10 +203,11 @@ public class Enemy : MonoBehaviour
 
         if (this.projectile == null)
         {
-            this.projectile = EnemyFactory.Projectile(this.Damage);
+            this.projectile = Instantiate(EnemyFactory.Projectile());
         }
 
         EnemySettings instantiatedProjectile = Instantiate(this.projectile);
+        instantiatedProjectile.Damage = this.Damage;
         instantiatedProjectile.predefinedPosition = true;
         instantiatedProjectile.spawnAngle = thisRadialPos.GetAngle();
         instantiatedProjectile.spawnRadius = thisRadialPos.GetRadius();
