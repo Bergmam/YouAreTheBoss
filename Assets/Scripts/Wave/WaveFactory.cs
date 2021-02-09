@@ -70,7 +70,7 @@ public class WaveFactory
         for (int i = 0; i < 7; i++)
         {
             SubWave subWave = new SubWave();
-            EnemySettings enemy = EnemyFactory.FastEnemy();
+            EnemySettings enemy = GameObject.Instantiate(EnemyFactory.Ranged());
             enemy.predefinedPosition = true;
             enemy.spawnAngle = angle + 5.0f * i;
             enemy.TurnBackDistance = 1.0f;
@@ -101,7 +101,7 @@ public class WaveFactory
     {
         Wave wave = new Wave();
         SubWave subWave = new SubWave();
-        subWave.AddEnemy(EnemyFactory.StandardEnemy());
+        subWave.AddEnemy(GameObject.Instantiate(EnemyFactory.StandardEnemy()));
         wave.AddSubWave(subWave, 0.0f);
         return wave;
     }
@@ -118,7 +118,7 @@ public class WaveFactory
     {
         Wave wave = new Wave();
         SubWave subWave = new SubWave();
-        EnemySettings enemy = EnemyFactory.RandomBasicEnemy();
+        EnemySettings enemy = GameObject.Instantiate(EnemyFactory.RandomBasicEnemy());
         subWave.AddEnemy(enemy);
         subWave.AddEnemy(enemy);
         wave.AddSubWave(subWave, 0.0f);
@@ -142,7 +142,7 @@ public class WaveFactory
         for (int i = 0; i < 5; i++)
         {
             SubWave subWave = new SubWave();
-            EnemySettings stats = EnemyFactory.Rotator();
+            EnemySettings stats = GameObject.Instantiate(EnemyFactory.Rotator());
             stats.spawnAngle = angle + i * direction;
             stats.predefinedPosition = true;
             subWave.AddEnemy(stats);
@@ -169,7 +169,7 @@ public class WaveFactory
         for (int i = 0; i < indexes.Length; i++)
         {
             SubWave subWave = new SubWave();
-            EnemySettings enemy = EnemyFactory.Jitterer();
+            EnemySettings enemy = GameObject.Instantiate(EnemyFactory.Jitterer());
             enemy.spawnAngle = (360 / indexes.Length) * indexes[i];
             enemy.predefinedPosition = true;
             subWave.AddEnemy(enemy);
@@ -184,16 +184,16 @@ public class WaveFactory
         float direction = 3.0f;
         Wave wave = new Wave();
         float timeStamp = 0f;
-        // float angle = UnityEngine.Random.value * 360;
+        float angle = UnityEngine.Random.value * 360;
         for (int i = 0; i < 10; i++)
         {
             SubWave subWave = new SubWave();
-            EnemySettings stats = EnemyFactory.ZigZag();
-            // stats.Health = 0.1f;
-            // stats.Damage = 0.5f;
-            // stats.zigZagAngle = 120.0f;
-            // stats.spawnAngle = angle + i * direction;
-            // stats.predefinedPosition = true;
+            EnemySettings stats = GameObject.Instantiate(EnemyFactory.ZigZag());
+            stats.Health = 0.1f;
+            stats.Damage = 0.5f;
+            stats.zigZagAngle = 120.0f;
+            stats.spawnAngle = angle + i * direction;
+            stats.predefinedPosition = true;
             subWave.AddEnemy(stats);
             wave.AddSubWave(subWave, timeStamp);
             timeStamp += 0.05f;
@@ -205,7 +205,7 @@ public class WaveFactory
     {
         Wave wave = new Wave();
         SubWave subWave = new SubWave();
-        EnemySettings stats = EnemyFactory.RangedSpawner();
+        EnemySettings stats = GameObject.Instantiate(EnemyFactory.RangedSpawner());
         subWave.AddEnemy(stats);
         wave.AddSubWave(subWave, 0.0f);
         return wave;
@@ -215,7 +215,7 @@ public class WaveFactory
     {
         Wave wave = new Wave();
         SubWave subWave = new SubWave();
-        EnemySettings stats = EnemyFactory.CirclingSpawner();
+        EnemySettings stats = GameObject.Instantiate(EnemyFactory.CirclingSpawner());
         subWave.AddEnemy(stats);
         wave.AddSubWave(subWave, 0.0f);
         return wave;
@@ -227,7 +227,7 @@ public class WaveFactory
         SubWave subWave = new SubWave();
         for (int i = 0; i < 5; i++)
         {
-            EnemySettings stats = EnemyFactory.Rotator();
+            EnemySettings stats = GameObject.Instantiate(EnemyFactory.Rotator());
             stats.predefinedPosition = true;
             subWave.AddEnemy(stats);
         }
@@ -245,7 +245,7 @@ public class WaveFactory
         {
             SubWave subWave = new SubWave();
             Wave tempWave = new Wave();
-            EnemySettings enemy = EnemyFactory.StandardEnemy();
+            EnemySettings enemy = GameObject.Instantiate(EnemyFactory.StandardEnemy());
             enemy.Health = 100.0f;
             enemy.predefinedPosition = true;
             enemy.spawnAngle = i % 2 == 0 ? angleA : angleB;
@@ -270,7 +270,7 @@ public class WaveFactory
         {
             SubWave subWave = new SubWave();
             float spawnAangle = angle + UnityEngine.Random.value * 30;
-            EnemySettings enemy = EnemyFactory.SmallBomber();
+            EnemySettings enemy = GameObject.Instantiate(EnemyFactory.SmallBomber());
             enemy.predefinedPosition = true;
             enemy.spawnAngle = spawnAangle;
             subWave.AddEnemy(enemy);
@@ -287,7 +287,7 @@ public class WaveFactory
         {
             SubWave subWave = new SubWave();
             float spawnAangle = angle + UnityEngine.Random.value * 30;
-            EnemySettings enemy = EnemyFactory.CirclingSpawnerMinion();
+            EnemySettings enemy = GameObject.Instantiate(EnemyFactory.CirclingSpawnerMinion());
             enemy.predefinedPosition = true;
             enemy.spawnAngle = spawnAangle;
             subWave.AddEnemy(enemy);
@@ -303,7 +303,7 @@ public class WaveFactory
         for (int i = 0; i < 5; i++)
         {
             SubWave subWave = new SubWave();
-            subWave.AddEnemy(EnemyFactory.RangedCirclingEnemy());
+            subWave.AddEnemy(GameObject.Instantiate(EnemyFactory.RangedCirclingEnemy()));
             wave.AddSubWave(subWave, timeStamp);
             timeStamp += 0.5f;
         }
@@ -318,7 +318,7 @@ public class WaveFactory
         for (int i = 0; i < 7; i++)
         {
             SubWave subWave = new SubWave();
-            EnemySettings enemy = EnemyFactory.FastEnemy();
+            EnemySettings enemy = GameObject.Instantiate(EnemyFactory.Ranged());
             enemy.predefinedPosition = true;
             enemy.spawnAngle = angle + 5.0f * i;
             subWave.AddEnemy(enemy);
@@ -332,7 +332,7 @@ public class WaveFactory
     {
         Wave wave = new Wave();
         SubWave subWave = new SubWave();
-        subWave.AddEnemy(EnemyFactory.ZigZag());
+        subWave.AddEnemy(GameObject.Instantiate(EnemyFactory.ZigZag()));
         subWave.ScaleSubWaveSpeed(0.4f);
         subWave.ScaleSubWaveSize(2.5f);
         subWave.ScaleSubWaveHealth(2.5f);
@@ -346,7 +346,7 @@ public class WaveFactory
     {
         Wave wave = new Wave();
         SubWave subWave = new SubWave();
-        subWave.AddEnemy(EnemyFactory.SlowEnemy());
+        subWave.AddEnemy(GameObject.Instantiate(EnemyFactory.SlowEnemy()));
         subWave.ScaleSubWaveHealth(5.0f / 4.0f);
         subWave.ScaleSubWaveDamage(5.0f / 6.0f);
         wave.AddSubWave(subWave, 0.0f);
@@ -359,7 +359,7 @@ public class WaveFactory
         SubWave subWave = new SubWave();
         for (int i = 0; i < 3; i++)
         {
-            EnemySettings bomber = EnemyFactory.SmallBomber();
+            EnemySettings bomber = GameObject.Instantiate(EnemyFactory.SmallBomber());
             bomber.Scale = 4.0f;
             bomber.Health = 200.0f;
             bomber.Damage = 20.0f;
@@ -380,14 +380,14 @@ public class WaveFactory
         for (int i = 0; i < 5; i++)
         {
             SubWave subWave = new SubWave();
-            EnemySettings zigZag1 = EnemyFactory.ZigZag();
-            EnemySettings zigZag2 = EnemyFactory.ZigZag();
-            // zigZag1.zigZagAngle = 20;
-            // zigZag2.zigZagAngle = 20;
-            // zigZag1.predefinedPosition = true;
-            // zigZag2.predefinedPosition = true;
-            // zigZag1.spawnAngle = angle;
-            // zigZag2.spawnAngle = angle;
+            EnemySettings zigZag1 = GameObject.Instantiate(EnemyFactory.ZigZag());
+            EnemySettings zigZag2 = GameObject.Instantiate(EnemyFactory.ZigZag());
+            zigZag1.zigZagAngle = 20;
+            zigZag2.zigZagAngle = 20;
+            zigZag1.predefinedPosition = true;
+            zigZag2.predefinedPosition = true;
+            zigZag1.spawnAngle = angle;
+            zigZag2.spawnAngle = angle;
             subWave.AddEnemy(zigZag1);
             subWave.AddEnemy(zigZag2);
             wave.AddSubWave(subWave, i * 0.7f);

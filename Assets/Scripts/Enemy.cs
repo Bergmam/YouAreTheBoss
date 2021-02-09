@@ -335,6 +335,7 @@ public class Enemy : MonoBehaviour
         }
 
         this.attackFrequency = enemySettings.attackDelay;
+        
         this.zigZag = enemySettings.zigZag;
 
         if (enemySettings.angularSpeed > 0)

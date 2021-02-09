@@ -12,7 +12,7 @@ public class EnemyFactory
     private static List<Func<EnemySettings>> basicEnemyGenerators = new List<Func<EnemySettings>>()
     {
         StandardEnemy,
-        FastEnemy,
+        Ranged,
         Rotator,
         RangedCirclingEnemy,
         ZigZag
@@ -24,9 +24,14 @@ public class EnemyFactory
         return basicEnemyGenerators[randomIndex]();
     }
 
-    public static EnemySettings SlowEnemy()
+    public static EnemySettings StandardEnemy()
     {
-        return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/SlowEnemy");
+        return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/StandardEnemy");
+    }
+
+    public static EnemySettings Ranged()
+    {
+        return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/Ranged");
     }
 
     public static EnemySettings Rotator()
@@ -34,19 +39,19 @@ public class EnemyFactory
         return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/Rotator");
     }
 
-    public static EnemySettings FastEnemy()
-    {
-        return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/FastEnemy");
-    }
-
     public static EnemySettings RangedCirclingEnemy()
     {
         return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/RangedCirclingEnemy");
     }
 
-    public static EnemySettings StandardEnemy()
+    public static EnemySettings ZigZag()
     {
-        return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/StandardEnemy");
+        return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/ZigZag");
+    }
+
+    public static EnemySettings SlowEnemy()
+    {
+        return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/SlowEnemy");
     }
 
     public static EnemySettings Projectile()
@@ -83,11 +88,6 @@ public class EnemyFactory
     public static EnemySettings SmallBomber()
     {
         return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/SmallBomber");
-    }
-
-    public static EnemySettings ZigZag()
-    {
-        return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/ZigZag");
     }
 
     public static EnemySettings Jitterer()
