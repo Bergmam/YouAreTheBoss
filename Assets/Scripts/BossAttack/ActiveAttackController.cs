@@ -17,6 +17,7 @@ public class ActiveAttackController : MonoBehaviour
     private GameObject chargeSystem;
     private bool active;
     private CooldownBehaviour cooldownBehaviour;
+    private IEnumerator reactivateCoroutine;
 
     void Awake()
     {
@@ -78,12 +79,13 @@ public class ActiveAttackController : MonoBehaviour
         this.backgroundFade.SetActive(false);
         this.chargeSystem.SetActive(false);
         this.activeAttackScreenButton.SetActive(false);
-        aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
-        aimColorModifier.SetSelectedColor(Parameters.ACTIVE_ATTACK_AIM_COLOR);
-        aimColorModifier.FadeToSelected(this.currentAttack.frequency);
-        currentAttackButton.transform.Find("Image").gameObject.SetActive(true);
+        this.aimColorModifier.SetDefaultColor(Parameters.AIM_DEFAULT_COLOR);
+        this.aimColorModifier.SetSelectedColor(Parameters.ACTIVE_ATTACK_AIM_COLOR);
+        this.aimColorModifier.FadeToSelected(this.currentAttack.frequency);
+        this.currentAttackButton.transform.Find("Image").gameObject.SetActive(true);
         this.currentAttackButton.GetComponent<Image>().sprite = defaultSprite;
-        StartCoroutine(this.ReactivateAttackAfterTime(this.currentAttack.frequency));
+        this.reactivateCoroutine = ReactivateAttackAfterTime(this.currentAttack.frequency);
+        StartCoroutine(this.reactivateCoroutine);
     }
 
     public IEnumerator ReactivateAttackAfterTime(float seconds)
@@ -91,12 +93,27 @@ public class ActiveAttackController : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         if (this.cooldownBehaviour.Ready && this.active)
         {
-            this.backgroundFade.SetActive(true);
-            this.chargeSystem.SetActive(true);
-            this.activeAttackScreenButton.SetActive(true);
-            currentAttackButton.transform.Find("Image").gameObject.SetActive(false);
-            this.currentAttackButton.GetComponent<Image>().sprite = fireSprite;
+            reactivate();
         }
+    }
+
+    public void ResetCooldown()
+    {
+        if (this.reactivateCoroutine != null)
+        {
+            StopCoroutine(this.reactivateCoroutine);
+        }
+        this.aimColorModifier.Select();
+        reactivate();
+    }
+
+    private void reactivate()
+    {
+        this.backgroundFade.SetActive(true);
+        this.chargeSystem.SetActive(true);
+        this.activeAttackScreenButton.SetActive(true);
+        currentAttackButton.transform.Find("Image").gameObject.SetActive(false);
+        this.currentAttackButton.GetComponent<Image>().sprite = fireSprite;
     }
 
     public void CancelReactivate()

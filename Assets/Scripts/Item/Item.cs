@@ -6,15 +6,17 @@ public class Item : MonoBehaviour
 {
     private WaveHandler waveHandler;
     private BossLookAt bossLookAtScript;
+    private ItemButtons itemButtons;
     public int PercentHealthToHeal;
     public int InvunerableSeconds;
     public int FreezeEnemiesSeconds;
-    public Sprite Sprite;
+    public bool ResetCooldowns;
 
     void Awake()
     {
         this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
         this.bossLookAtScript = GameObject.FindObjectOfType<BossLookAt>();
+        this.itemButtons = GameObject.FindObjectOfType<ItemButtons>();
     }
 
     void OnMouseDown()
@@ -28,9 +30,10 @@ public class Item : MonoBehaviour
         item.PercentHealthToHeal = this.PercentHealthToHeal;
         item.InvunerableSeconds = this.InvunerableSeconds;
         item.FreezeEnemiesSeconds = this.FreezeEnemiesSeconds;
+        item.ResetCooldowns = this.ResetCooldowns;
         item.Sprite = this.gameObject.GetComponent<SpriteRenderer>().sprite;
 
-        GameObject.FindObjectOfType<ItemButtons>().AddItem(item);
+        this.itemButtons.AddItem(item);
         this.waveHandler.ItemRemoved();
 
         // Leave the item on screen for a minimum amount of time so that the

@@ -32,6 +32,7 @@ public class Enemy : MonoBehaviour
     private GameObject healthPickup;
     private GameObject freezePickup;
     private GameObject shieldPickup;
+    private GameObject cooldownResetPickup;
     private StatsHolder projectile;
     private float zigZagAngleLow;
     private float zigZagAngleHigh;
@@ -54,6 +55,7 @@ public class Enemy : MonoBehaviour
         this.healthPickup = Resources.Load("Prefabs/HealthPickup", typeof(GameObject)) as GameObject;
         this.shieldPickup = Resources.Load("Prefabs/ShieldPickup", typeof(GameObject)) as GameObject;
         this.freezePickup = Resources.Load("Prefabs/FreezePickup", typeof(GameObject)) as GameObject;
+        this.cooldownResetPickup = Resources.Load("Prefabs/CooldownResetPickup", typeof(GameObject)) as GameObject;
         this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
     }
 
@@ -255,8 +257,8 @@ public class Enemy : MonoBehaviour
 
     private void SpawnItem()
     {
-        int itemRand = Random.Range(0, 30);
-        if (itemRand < 3)
+        int itemRand = Random.Range(0, 45);
+        if (itemRand < 4)
         {
             if (itemRand == 0)
             {
@@ -265,6 +267,10 @@ public class Enemy : MonoBehaviour
             else if (itemRand == 1)
             {
                 Instantiate(this.shieldPickup, this.transform.position, Quaternion.identity);
+            }
+            else if (itemRand == 2)
+            {
+                Instantiate(this.cooldownResetPickup, this.transform.position, Quaternion.identity);
             }
             else
             {
