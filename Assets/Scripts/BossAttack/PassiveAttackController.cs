@@ -85,4 +85,9 @@ public class PassiveAttackController : MonoBehaviour
         }
         SetAttack(this.currentAttackNumber);
     }
+
+    public void StopAttacking()
+    {
+        CancelInvoke();
+    }
 }

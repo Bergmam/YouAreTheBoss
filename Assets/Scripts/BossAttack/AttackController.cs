@@ -96,4 +96,13 @@ public class AttackController : MonoBehaviour
             this.passiveAttackController.ResetCooldown();
         }
     }
+
+    public void StopAttacking()
+    {
+        this.aimColorModifier.SetDefaultColor(new Color(0, 0, 0, 0));
+        this.aimingActiveAttack = false;
+        this.activeAttackController.CancelReactivate();
+        this.activeAttackController.CancelAiming();
+        this.passiveAttackController.StopAttacking();
+    }
 }
