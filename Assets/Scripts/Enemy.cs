@@ -257,6 +257,11 @@ public class Enemy : MonoBehaviour
 
     private void SpawnItem()
     {
+        if (this.EnemyType != EnemyType.ENEMY)
+        {
+            return;
+        }
+
         int itemRand = Random.Range(0, 45);
         if (itemRand < 4)
         {
