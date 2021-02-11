@@ -108,9 +108,11 @@ public class PlayAttackOnBoss : MonoBehaviour
     {
         if (this.currentAttack.isProjectile)
         {
-            Vector3 projectilePos = this.transform.position;
+            Vector3 projectilePos = this.transform.position + new Vector3(0, 0.01f, 1); // Spawn items just above the preview.
             GameObject spawnedProjectile = Instantiate(this.projectile, projectilePos, Quaternion.identity);
-            spawnedProjectile.GetComponent<BossProjectile>().Attack = this.currentAttack;
+            BossProjectile projectile = spawnedProjectile.GetComponent<BossProjectile>();
+            projectile.Attack = this.currentAttack;
+            projectile.origin = this.transform.position; // Make all projectile travel upwards.
         }
         else
         {
