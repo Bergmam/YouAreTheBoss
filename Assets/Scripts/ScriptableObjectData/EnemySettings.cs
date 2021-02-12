@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO:
-// * ZigZaggers are not zigzagging. Their position is not being clamped properly in Update. 
-
 [CreateAssetMenu(menuName = "Enemy Settings")]
 public class EnemySettings : ScriptableObject
 {
