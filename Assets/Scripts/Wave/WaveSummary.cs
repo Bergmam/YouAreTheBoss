@@ -49,9 +49,9 @@ public class WaveSummary : MonoBehaviour
             attributes.Add("strong", enemySettings.Damage >= Parameters.STRONG_ENEMY_MIN_DAMAGE);
             attributes.Add("fast", enemySettings.MovementSpeed >= Parameters.FAST_ENEMY_MIN_SPEED);
             attributes.Add("rotating", enemySettings.angularSpeed != 0 || enemySettings.circlingSpeed != 0);
-            attributes.Add("ranged", enemySettings.RangeVal > Parameters.MELEE_RANGE);
+            attributes.Add("ranged", RangeUtils.rangeLevelToFloatRange(enemySettings.Range) > Parameters.MELEE_RANGE);
             attributes.Add("durable", enemySettings.Health >= Parameters.DURABLE_ENEMY_MIN_HEALTH);
-            attributes.Add("mele", !(enemySettings.RangeVal > Parameters.MELEE_RANGE));
+            attributes.Add("mele", !(RangeUtils.rangeLevelToFloatRange(enemySettings.Range) > Parameters.MELEE_RANGE));
             attributes.Add("self_destruct", enemySettings.selfDestruct);
             
             foreach (KeyValuePair<string, bool> attribute in attributes)

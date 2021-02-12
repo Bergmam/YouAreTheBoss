@@ -3,13 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // TODO:
-// * Create random/non-random versions
-// * Create instances of these settings corresponding to whatever enemies we have defined already
-// * For Projectiles, must set damage of the Scriptable Object upon instantiation
-// * Upon enemy creation, add the correct scriptable object settings to that enemy 
-//   (Instead of setting the stats in the script like we do now)
-// * Tests might be breaking?
-
+// * ZigZaggers are not zigzagging. Their position is not being clamped properly in Update. 
 
 [CreateAssetMenu(menuName = "Enemy Settings")]
 public class EnemySettings : ScriptableObject
@@ -18,9 +12,6 @@ public class EnemySettings : ScriptableObject
     public float MovementSpeed = Parameters.BASIC_ENEMY_SPEED;
     public float Damage = 1.0f;
 
-    // Public set/Private get to only be able to set through RangeLevel but get everywhere
-    private float rangeVal = 1.0f;
-    public float RangeVal {get {return rangeVal;} private set {rangeVal = value;}}
     public RangeLevel Range = RangeLevel.MELE;
     public RangeLevel RangeLevel {
         get {
@@ -28,24 +19,6 @@ public class EnemySettings : ScriptableObject
         }
         set {
             Range = value;
-            switch (value)
-            {
-                case RangeLevel.SELF_DESTRUCT:
-                    RangeVal = Parameters.SELF_DESTRUCT_RANGE;
-                    break;
-                case RangeLevel.MELE:
-                    RangeVal = Parameters.MELEE_RANGE;
-                    break;
-                case RangeLevel.MID:
-                    RangeVal = Parameters.MID_RANGE;
-                    break;
-                case RangeLevel.LONG:
-                    RangeVal = Parameters.LONG_RANGE;
-                    break;
-                default:
-                    RangeVal = 0.0f;
-                    break;
-            }
         }
     }
 

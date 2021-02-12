@@ -8,24 +8,24 @@ public class WaveFactory
 
     private static List<Func<Wave>> fastWaveComponents = new List<Func<Wave>>()
     {
-        RotatingWorm,
-        RangedShooters,
+        // RotatingWorm,
+        // RangedShooters,
         TwoZigZags,
-        BomberCluster,
-        LineOfRanged,
-        ZigZagWorm,
-        WeakCluster,
-        JittererWave,
-        LineOfBackAndForthShooters
+        // BomberCluster,
+        // LineOfRanged,
+        // ZigZagWorm,
+        // WeakCluster,
+        // JittererWave,
+        // LineOfBackAndForthShooters
     };
 
     private static List<Func<Wave>> slowWaveComponents = new List<Func<Wave>>()
     {
-        RangedSpawner,
+        // RangedSpawner,
         OneZigZag,
-        OneBigGuy,
-        CirclingSpawner,
-        ThreeBombs
+        // OneBigGuy,
+        // CirclingSpawner,
+        // ThreeBombs
     };
 
     public static Wave GenerateWave(int level)
@@ -101,7 +101,8 @@ public class WaveFactory
     {
         Wave wave = new Wave();
         SubWave subWave = new SubWave();
-        subWave.AddEnemy(GameObject.Instantiate(EnemyFactory.StandardEnemy()));
+        EnemySettings zigZag = GameObject.Instantiate(EnemyFactory.ZigZag());
+        subWave.AddEnemy(zigZag);
         wave.AddSubWave(subWave, 0.0f);
         return wave;
     }
@@ -194,6 +195,7 @@ public class WaveFactory
             stats.zigZagAngle = 120.0f;
             stats.spawnAngle = angle + i * direction;
             stats.predefinedPosition = true;
+
             subWave.AddEnemy(stats);
             wave.AddSubWave(subWave, timeStamp);
             timeStamp += 0.05f;
@@ -384,6 +386,7 @@ public class WaveFactory
             EnemySettings zigZag2 = GameObject.Instantiate(EnemyFactory.ZigZag());
             zigZag1.zigZagAngle = 20;
             zigZag2.zigZagAngle = 20;
+
             zigZag1.predefinedPosition = true;
             zigZag2.predefinedPosition = true;
             zigZag1.spawnAngle = angle;

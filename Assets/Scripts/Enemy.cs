@@ -321,7 +321,26 @@ public class Enemy : MonoBehaviour
         MovementSpeed = enemySettings.MovementSpeed;
 
         Damage = enemySettings.Damage;
-        Range = enemySettings.RangeVal;
+
+        switch (enemySettings.Range)
+        {
+            case RangeLevel.SELF_DESTRUCT:
+                Range = Parameters.SELF_DESTRUCT_RANGE;
+                break;
+            case RangeLevel.MELE:
+                Range = Parameters.MELEE_RANGE;
+                break;
+            case RangeLevel.MID:
+                Range = Parameters.MID_RANGE;
+                break;
+            case RangeLevel.LONG:
+                Range = Parameters.LONG_RANGE;
+                break;
+            default:
+                Range = Parameters.MELEE_RANGE;
+                break;
+        }
+
         Health = enemySettings.Health;
         MaxHealth = enemySettings.Health;
         Scale = enemySettings.Scale;
@@ -348,6 +367,10 @@ public class Enemy : MonoBehaviour
             this.zigZagAngleHigh = enemySettings.spawnAngle;
             this.zigZagAngleLow = enemySettings.spawnAngle - enemySettings.zigZagAngle;
         }
+
+        print("zigzag: " + this.zigZag);
+        print("zigZagAngleLow: " + this.zigZagAngleLow);
+        print("zigZagAngleHigh: " + this.zigZagAngleHigh);
 
         this.projectile = enemySettings.projectile ? enemySettings.projectile : null;
         this.turnBackDistance = enemySettings.TurnBackDistance;
