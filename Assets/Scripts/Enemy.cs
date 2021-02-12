@@ -379,10 +379,6 @@ public class Enemy : MonoBehaviour
             this.zigZagAngleLow = enemySettings.spawnAngle - enemySettings.zigZagAngle;
         }
 
-        print("zigzag: " + this.zigZag);
-        print("zigZagAngleLow: " + this.zigZagAngleLow);
-        print("zigZagAngleHigh: " + this.zigZagAngleHigh);
-
         this.projectile = enemySettings.projectile ? enemySettings.projectile : null;
         this.turnBackDistance = enemySettings.TurnBackDistance;
         this.turnForwardDistance = enemySettings.TurnForwardDistance;

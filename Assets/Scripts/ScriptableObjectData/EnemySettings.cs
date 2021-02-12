@@ -10,15 +10,6 @@ public class EnemySettings : ScriptableObject
     public float Damage = 1.0f;
 
     public RangeLevel Range = RangeLevel.MELE;
-    public RangeLevel RangeLevel {
-        get {
-            return Range;
-        }
-        set {
-            Range = value;
-        }
-    }
-
     public float Health = Parameters.BASIC_ENEMY_HEALTH * Parameters.HEALTH_SCALE;
     public float Scale = 1.0f;
     public Color Color = Color.black;
