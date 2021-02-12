@@ -7,6 +7,8 @@ public class BossProjectile : MonoBehaviour
     public float Speed;
     public BossAttack Attack;
 
+    public Vector3 origin = Vector3.zero;
+
     void Update()
     {
         RadialPosition radialPos = RotationUtils.XYToRadialPos(this.transform.position);
@@ -17,8 +19,11 @@ public class BossProjectile : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        radialPos.SetRadius(radialPos.GetRadius() + this.Speed);
-        this.transform.position = RotationUtils.RadialPosToXY(radialPos);
+        // Make projectiles travel outwards from the origin.
+        Vector3 positionRelativeToOrigin = this.transform.position - this.origin;
+        RadialPosition radialPosRelativeToOrigin = RotationUtils.XYToRadialPos(positionRelativeToOrigin);
+        radialPosRelativeToOrigin.SetRadius(radialPosRelativeToOrigin.GetRadius() + (this.Speed * Time.deltaTime));
+        this.transform.position = this.origin + RotationUtils.RadialPosToXY(radialPosRelativeToOrigin);
     }
 
     void OnTriggerEnter2D(Collider2D other)

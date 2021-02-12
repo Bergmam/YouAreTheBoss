@@ -19,6 +19,7 @@ public class BossHealth : MonoBehaviour
     private WaveHandler waveHandler;
     private Coroutine continueFieldShadeCoroutine;
     private CameraShake camShake;
+    private AttackController attackController;
 
     void Awake()
     {
@@ -35,6 +36,7 @@ public class BossHealth : MonoBehaviour
         this.shieldColorModifier.SetSelectedColor(Parameters.BOSS_COLOR);
         this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
         this.camShake = GameObject.FindObjectOfType<CameraShake>();
+        this.attackController = GameObject.FindObjectOfType<AttackController>();
     }
 
     void Start()
@@ -80,6 +82,7 @@ public class BossHealth : MonoBehaviour
             {
                 WaveNumber.highScore = WaveNumber.waveNumber;
             }
+            this.attackController.StopAttacking();
             this.gameOverPanel.SetActive(true);
             this.activeAttackFireButton.SetActive(false);
             this.scoreLabel.SetActive(false);

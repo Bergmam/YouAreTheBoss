@@ -30,7 +30,7 @@ public class CooldownBehaviour : MonoBehaviour
 
     void Update()
     {
-        if (this.cooldown > 0)
+        if (this.cooldown >= 0)
         {
             this.cooldown -= Time.deltaTime;
             this.image.fillAmount = cooldown / originalCooldownValue;
@@ -55,5 +55,10 @@ public class CooldownBehaviour : MonoBehaviour
         this.parentButton.enabled = false;
         this.Ready = false;
         this.cooldown = this.originalCooldownValue;
+    }
+
+    public void ResetCooldown()
+    {
+        this.cooldown = 0;
     }
 }

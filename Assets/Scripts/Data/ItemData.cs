@@ -6,4 +6,5 @@ public class ItemData
     public int PercentHealthToHeal;
     public int InvunerableSeconds;
     public int FreezeEnemiesSeconds;
+    public bool ResetCooldowns;
 }

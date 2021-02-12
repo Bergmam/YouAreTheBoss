@@ -87,6 +87,7 @@ public class ColorModifier : MonoBehaviour
     /// </summary>
     public void Select()
     {
+        StopFade();
         SetColor(selectedColor);
     }
 
@@ -95,6 +96,7 @@ public class ColorModifier : MonoBehaviour
     /// </summary>
     public void DeSelect()
     {
+        StopFade();
         SetColor(defaultColor);
     }
 

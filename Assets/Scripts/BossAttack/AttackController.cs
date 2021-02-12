@@ -78,10 +78,31 @@ public class AttackController : MonoBehaviour
                 this.aimingActiveAttack = false;
                 this.activeAttackController.CancelReactivate();
                 this.activeAttackController.CancelAiming();
-                passiveAttackController.SetAttack(attackNumber);
+                this.passiveAttackController.SetAttack(attackNumber);
             }
             attackMaskControl.SetSize(newAttack.closeRadius, newAttack.farRadius);
             radialFillControl.SetMirroredFill(newAttack.angle);
         }
+    }
+
+    public void ResetCooldown()
+    {
+        if (this.aimingActiveAttack)
+        {
+            this.activeAttackController.ResetCooldown();
+        }
+        else
+        {
+            this.passiveAttackController.ResetCooldown();
+        }
+    }
+
+    public void StopAttacking()
+    {
+        this.aimColorModifier.SetDefaultColor(new Color(0, 0, 0, 0));
+        this.aimingActiveAttack = false;
+        this.activeAttackController.CancelReactivate();
+        this.activeAttackController.CancelAiming();
+        this.passiveAttackController.StopAttacking();
     }
 }

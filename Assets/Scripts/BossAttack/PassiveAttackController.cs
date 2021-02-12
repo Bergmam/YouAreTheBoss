@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,8 @@ public class PassiveAttackController : MonoBehaviour
     private CooldownBehaviour cooldownBehaviour;
     private GameObject projectile;
     private SpriteRenderer spriteRenderer;
+    private IEnumerator changeSpriteColorCoroutine;
+    private int currentAttackNumber;
 
     void Awake()
     {
@@ -21,6 +24,7 @@ public class PassiveAttackController : MonoBehaviour
     public void SetAttack(int attackNumber)
     {
         CancelInvoke();
+        this.currentAttackNumber = attackNumber;
         BossAttack newAttack = AttackLists.selectedAttacks[attackNumber - 1];
         this.currentAttack = newAttack;
         this.aimColorModifier.Select();
@@ -69,6 +73,21 @@ public class PassiveAttackController : MonoBehaviour
         this.spriteRenderer.color = Color.red;
         this.cooldownBehaviour.RestartCooldown();
 
-        StartCoroutine(UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Parameters.BOSS_COLOR, 0.5f));
+        this.changeSpriteColorCoroutine = UnityUtils.ChangeToColorAfterTime(gameObject.GetComponent<SpriteRenderer>(), Parameters.BOSS_COLOR, 0.5f);
+        StartCoroutine(this.changeSpriteColorCoroutine);
+    }
+
+    public void ResetCooldown()
+    {
+        if (this.changeSpriteColorCoroutine != null)
+        {
+            StopCoroutine(this.changeSpriteColorCoroutine);
+        }
+        SetAttack(this.currentAttackNumber);
+    }
+
+    public void StopAttacking()
+    {
+        CancelInvoke();
     }
 }
