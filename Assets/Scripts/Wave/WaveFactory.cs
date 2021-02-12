@@ -8,24 +8,24 @@ public class WaveFactory
 
     private static List<Func<Wave>> fastWaveComponents = new List<Func<Wave>>()
     {
-        // RotatingWorm,
-        // RangedShooters,
+        RotatingWorm,
+        RangedShooters,
         TwoZigZags,
-        // BomberCluster,
-        // LineOfRanged,
-        // ZigZagWorm,
-        // WeakCluster,
-        // JittererWave,
-        // LineOfBackAndForthShooters
+        BomberCluster,
+        LineOfRanged,
+        ZigZagWorm,
+        WeakCluster,
+        JittererWave,
+        LineOfBackAndForthShooters
     };
 
     private static List<Func<Wave>> slowWaveComponents = new List<Func<Wave>>()
     {
-        // RangedSpawner,
+        RangedSpawner,
         OneZigZag,
-        // OneBigGuy,
-        // CirclingSpawner,
-        // ThreeBombs
+        OneBigGuy,
+        CirclingSpawner,
+        ThreeBombs
     };
 
     public static Wave GenerateWave(int level)
@@ -101,8 +101,7 @@ public class WaveFactory
     {
         Wave wave = new Wave();
         SubWave subWave = new SubWave();
-        EnemySettings zigZag = GameObject.Instantiate(EnemyFactory.ZigZag());
-        subWave.AddEnemy(zigZag);
+        subWave.AddEnemy(GameObject.Instantiate(EnemyFactory.StandardEnemy()));
         wave.AddSubWave(subWave, 0.0f);
         return wave;
     }
