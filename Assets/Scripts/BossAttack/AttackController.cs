@@ -4,10 +4,6 @@ using UnityEngine.UI;
 
 public class AttackController : MonoBehaviour
 {
-
-    private Image aimImage;
-    private AttackMaskControl attackMaskControl;
-    private RadialFillControl radialFillControl;
     private PassiveAttackController passiveAttackController;
     private ActiveAttackController activeAttackController;
     private bool aimingActiveAttack;
@@ -15,18 +11,16 @@ public class AttackController : MonoBehaviour
     private ColorModifier aimColorModifier;
     private GameObject activeAttackScreenButton;
     private GameObject backgroundFade;
+    private Material aimMaterial;
 
     void Awake()
     {
         this.backgroundFade = GameObject.Find("BackgroundFade");
-        this.attackMaskControl = GameObject.FindObjectOfType<AttackMaskControl>();
         this.passiveAttackController = gameObject.AddComponent<PassiveAttackController>();
         this.activeAttackController = gameObject.AddComponent<ActiveAttackController>();
-        this.aimImage = UnityUtils.RecursiveFind(transform, "Image").GetComponent<Image>();
-        this.radialFillControl = GameObject.FindObjectOfType<RadialFillControl>();
-        this.attackMaskControl = GameObject.FindObjectOfType<AttackMaskControl>();
-        Transform aim = UnityUtils.RecursiveFind(transform, "Image");
+        Transform aim = UnityUtils.RecursiveFind(transform, "Aim");
         this.aimColorModifier = aim.GetComponent<ColorModifier>();
+        this.aimMaterial = aim.gameObject.GetComponent<Renderer>().material;
         this.activeAttackScreenButton = GameObject.Find("ActiveAttackScreenButton");
     }
 
@@ -80,8 +74,9 @@ public class AttackController : MonoBehaviour
                 this.activeAttackController.CancelAiming();
                 this.passiveAttackController.SetAttack(attackNumber);
             }
-            attackMaskControl.SetSize(newAttack.closeRadius, newAttack.farRadius);
-            radialFillControl.SetMirroredFill(newAttack.angle);
+            this.aimMaterial.SetFloat("Angle", newAttack.angle);
+            this.aimMaterial.SetFloat("InnerRadius", newAttack.closeRadius);
+            this.aimMaterial.SetFloat("OuterRadius", newAttack.farRadius);
         }
     }
 
