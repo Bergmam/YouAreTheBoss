@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EnemyType {
+    ENEMY,
+    PROJECTILE,
+    MINION
+}
+
 public class Enemy : MonoBehaviour
 {
     private float MovementSpeed = 1.0f;
@@ -298,7 +304,6 @@ public class Enemy : MonoBehaviour
 
     public void SetStats(EnemySettings enemySettings)
     {
-        // TODO: Move in all initialization logic from StatsHolder to happen here
         transform.name = enemySettings.Name;
         this.EnemyType = enemySettings.enemyType;
         this.selfDestruct = enemySettings.selfDestruct;
