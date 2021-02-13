@@ -25,6 +25,10 @@ public class AttackButtons : MonoBehaviour
     private static Color whiteNoAlpha = new Color(1, 1, 1, 0);
     GameObject attackButtonPrefab;
 
+    private GameObject mainAttackPreview;
+    private GameObject upgradeAttackPreview1;
+    private GameObject upgradeAttackPreview2;
+
     void Awake()
     {
         this.attackPopUp = GameObject.Find("AttackPopUp");
@@ -34,10 +38,23 @@ public class AttackButtons : MonoBehaviour
         this.playButtonText = this.playButton.transform.Find("PlayButtonText").GetComponent<Text>();
         this.attackButtonPrefab = Resources.Load("Prefabs/AttackButton", typeof(GameObject)) as GameObject;
         this.upgradePopUp = GameObject.Find("UpgradePopUp");
+        this.mainAttackPreview = GameObject.Find("BossAttackPreview");
+        this.upgradeAttackPreview1 = GameObject.Find("BossAttackPreview1");
+        this.upgradeAttackPreview2 = GameObject.Find("BossAttackPreview2");
     }
 
     void Start()
     {
+        this.mainAttackPreview.transform.position = new Vector2(this.attackPopUp.transform.position.x, this.attackPopUp.transform.position.y);
+        Transform upgrade1PreviewPanel = UnityUtils.RecursiveFind(this.upgradePopUp.transform, "Attack1Button");
+        this.upgradeAttackPreview1.transform.position = new Vector2(upgrade1PreviewPanel.position.x, upgrade1PreviewPanel.position.y);
+        Transform upgrade2PreviewPanel = UnityUtils.RecursiveFind(this.upgradePopUp.transform, "Attack2Button");
+        this.upgradeAttackPreview2.transform.position = new Vector2(upgrade2PreviewPanel.position.x, upgrade2PreviewPanel.position.y);
+
+        this.mainAttackPreview.SetActive(false);
+        this.upgradeAttackPreview1.SetActive(false);
+        this.upgradeAttackPreview2.SetActive(false);
+
         attackPopUp.SetActive(false);
         playButton.interactable = false;
         
@@ -100,7 +117,9 @@ public class AttackButtons : MonoBehaviour
         BossAttack attack = AttackLists.chooseableUpgradeAttacks[upgradeAttacksIndex];
         attackText.GetComponent<Text>().text = attack.name;
         attackButton.transform.Find("Text").GetComponent<Text>().text = "Damage: " + attack.damage;
-        playAttackPreview(upgradePopUp.transform, attack, "BossAttackPreview" + upgradePopUpAttackNumber);
+
+        GameObject attackPreview = upgradePopUpAttackNumber == 1 ? this.upgradeAttackPreview1 : this.upgradeAttackPreview2;
+        playAttackPreview(attackPreview, attack);
         attackButton.GetComponent<Button>().onClick.AddListener(() =>
         {
             ChooseUpgrade(attack);
@@ -149,7 +168,7 @@ public class AttackButtons : MonoBehaviour
             UnityUtils.RecursiveFind(attackPopUp.transform, "AttackName").GetComponent<Text>().text = attack.name;
             Text text = UnityUtils.RecursiveFind(attackPopUp.transform, "AttackInfoText").GetComponent<Text>();
             text.text = "Damage: " + attack.damage + "\n";
-            playAttackPreview(attackPopUp.transform, attack, "BossAttackPreview");
+            playAttackPreview(this.mainAttackPreview, attack);
             Button yesButton = UnityUtils.RecursiveFind(attackPopUp.transform, "YesButton").GetComponent<Button>();
             yesButton.onClick.AddListener(() => { SelectAttackButton(button); });
         }
@@ -172,6 +191,10 @@ public class AttackButtons : MonoBehaviour
         EnableAttackButtons();
         DisableUnclickedButtons();
         upgradePopUp.SetActive(false);
+
+        this.upgradeAttackPreview1.SetActive(false);
+        this.upgradeAttackPreview2.SetActive(false);
+
         infoButton.GetComponent<Button>().interactable = false;
     }
 
@@ -179,6 +202,8 @@ public class AttackButtons : MonoBehaviour
     {
         UnityUtils.RecursiveFind(attackPopUp.transform, "YesButton").GetComponent<Button>().onClick.RemoveAllListeners();
         EnableAttackButtons();
+        
+        this.mainAttackPreview.SetActive(false);
 
         attackPopUp.SetActive(false);
         infoButton.GetComponent<Button>().interactable = true;
@@ -231,9 +256,9 @@ public class AttackButtons : MonoBehaviour
         }
     }
 
-    private void playAttackPreview(Transform popupTransform, BossAttack attack, string previewName)
+    private void playAttackPreview(GameObject bossAttackPreview, BossAttack attack)
     {
-        Transform bossAttackPreview = UnityUtils.RecursiveFind(popupTransform, previewName);
+        bossAttackPreview.SetActive(true);
         bossAttackPreview.GetComponent<PlayAttackOnBoss>().setAttack(attack);
     }
 }
