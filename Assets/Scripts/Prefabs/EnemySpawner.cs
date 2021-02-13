@@ -50,30 +50,28 @@ public class EnemySpawner : MonoBehaviour
     // Spawn all enemies of a subwave.
     public void SpawnSubWave(SubWave subWave)
     {
-        foreach (StatsHolder enemy in subWave.GetEnemies())
+        foreach (EnemySettings enemy in subWave.GetEnemies())
         {
             InstantiateEnemyPrefab(enemy);
         }
     }
 
-    public GameObject InstantiateEnemyPrefab(StatsHolder stats)
+    public GameObject InstantiateEnemyPrefab(EnemySettings enemySettings)
     {
         GameObject initEnemy = Instantiate(preInitEnemy);
-        if (!stats.predefinedPosition)
+        if (!enemySettings.predefinedPosition)
         {
-            stats.spawnAngle = Random.value * 360;
+            enemySettings.spawnAngle = Random.value * 360;
         }
 
-        initEnemy.GetComponent<Enemy>().SetStats(
-            stats
-        );
+        initEnemy.GetComponent<Enemy>().SetStats(enemySettings);
 
-        if (stats.requiredKill)
+        if (enemySettings.requiredKill)
         {
             waveHandler.NofifyRequiredKillUnitSpawned();
         }
 
-        initEnemy.name = stats.Name + numberOfEnemies;
+        initEnemy.name = enemySettings.Name + numberOfEnemies;
         initEnemy.transform.localScale *= Parameters.SPRITE_SCALE_FACTOR;
         numberOfEnemies++;
         return initEnemy;

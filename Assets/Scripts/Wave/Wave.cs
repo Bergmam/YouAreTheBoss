@@ -48,9 +48,9 @@ public class Wave
         return nbrOfEnemies;
     }
 
-    public List<StatsHolder> GetEnemies()
+    public List<EnemySettings> GetEnemies()
     {
-        List<StatsHolder> enemies = new List<StatsHolder>();
+        List<EnemySettings> enemies = new List<EnemySettings>();
         foreach (KeyValuePair<float, SubWave> timeStampAndSubWave in this.subWaves)
         {
             enemies.AddRange(timeStampAndSubWave.Value.GetEnemies());

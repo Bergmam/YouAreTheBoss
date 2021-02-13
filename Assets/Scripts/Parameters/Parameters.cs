@@ -4,8 +4,6 @@ using UnityEngine;
 
 public static class Parameters
 {
-    // TODO: Make this a MonoBehaviour or a ScriptableObject so we can edit it in the editor.
-
     public static float scrollDelay = 0.15f;
     public static float SELF_DESTRUCT_RANGE = 0.5f;
     public static float MELEE_RANGE = 0.8f;
@@ -50,5 +48,4 @@ public static class Parameters
     public static float DESTROY_BOSS_PROJECTILES_RADIUS = 6.5f;
 
     public static int NUMBER_OF_ITEMS = 5;
-
 }
