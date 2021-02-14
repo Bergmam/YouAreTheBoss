@@ -53,11 +53,11 @@ public class AttackController : MonoBehaviour
             for (int i = 1; i <= 3; i++)
             {
                 GameObject currentAttackButton = GameObject.Find("Passive" + i + "Button");
-                currentAttackButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/UI_Button_Standard_Sky_2");
+                currentAttackButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/button3");
                 currentAttackButton.transform.Find("Image").gameObject.SetActive(true);
                 this.backgroundFade.SetActive(false);
                 this.activeAttackController.SetChargeSystem(false);
-                currentAttackButton.transform.parent.GetComponent<ColorModifier>().DeSelect();
+                GameObject.Find("Passive" + i + "Background").GetComponent<ColorModifier>().DeSelect();
             }
             this.previousAttackNumber = attackNumber;
             BossAttack newAttack = AttackLists.selectedAttacks[attackNumber - 1];

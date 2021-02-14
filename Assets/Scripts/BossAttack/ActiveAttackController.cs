@@ -22,7 +22,7 @@ public class ActiveAttackController : MonoBehaviour
     void Awake()
     {
         this.fireSprite = Resources.Load<Sprite>("Art/UI_Icon_FullScreenExit");
-        this.defaultSprite = Resources.Load<Sprite>("Art/UI_Button_Standard_Sky_2");
+        this.defaultSprite = Resources.Load<Sprite>("Art/button3");
         this.camShake = GameObject.Find("Handler").GetComponent<CameraShake>();
         this.aimColorModifier = UnityUtils.RecursiveFind(transform, "Aim").GetComponent<ColorModifier>();
         this.backgroundFade = GameObject.Find("BackgroundFade");
@@ -45,7 +45,7 @@ public class ActiveAttackController : MonoBehaviour
     {
         this.currentAttackButton = GameObject.Find("Passive" + attackNumber + "Button");
         this.cooldownBehaviour = this.currentAttackButton.GetComponentInChildren<CooldownBehaviour>();
-        this.currentAttackButton.transform.parent.GetComponent<ColorModifier>().Select();
+        GameObject.Find("Passive" + attackNumber + "Background").GetComponent<ColorModifier>().Select();
         this.currentAttackButton.GetComponent<Image>().sprite = fireSprite;
         this.currentAttackButton.transform.Find("Image").gameObject.SetActive(false);
         gameObject.GetComponent<SpriteRenderer>().color = Color.magenta;
