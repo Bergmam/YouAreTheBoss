@@ -38,11 +38,9 @@ public class WaveFactory
                 return SecondWave();
             case 2:
                 return ThirdWave();
-            case 3:
-                return FourthWave();
             default:
                 Wave wave = new Wave();
-                level -= 3;
+                level -= 2;
                 while (level > 0)
                 {
                     Wave component;
@@ -101,20 +99,14 @@ public class WaveFactory
     {
         Wave wave = new Wave();
         SubWave subWave = new SubWave();
-        subWave.AddEnemy(GameObject.Instantiate(EnemyFactory.StandardEnemy()));
+        EnemySettings enemy = GameObject.Instantiate(EnemyFactory.RandomBasicEnemy());
+        subWave.AddEnemy(enemy);
         wave.AddSubWave(subWave, 0.0f);
         return wave;
     }
 
 
     private static Wave SecondWave()
-    {
-        Wave wave = FirstWave();
-        wave.Merge(FirstWave());
-        return wave;
-    }
-
-    private static Wave ThirdWave()
     {
         Wave wave = new Wave();
         SubWave subWave = new SubWave();
@@ -125,10 +117,10 @@ public class WaveFactory
         return wave;
     }
 
-    private static Wave FourthWave()
+    private static Wave ThirdWave()
     {
-        Wave wave = ThirdWave();
-        wave.Merge(ThirdWave(), 3.0f);
+        Wave wave = SecondWave();
+        wave.Merge(SecondWave(), 3.0f);
         return wave;
     }
 
@@ -174,7 +166,7 @@ public class WaveFactory
             enemy.predefinedPosition = true;
             subWave.AddEnemy(enemy);
             wave.AddSubWave(subWave, timeStamp);
-            timeStamp += 0.75f;
+            timeStamp += 0.85f;
         }
         return wave;
     }
@@ -385,6 +377,7 @@ public class WaveFactory
             EnemySettings zigZag2 = GameObject.Instantiate(EnemyFactory.ZigZag());
             zigZag1.zigZagAngle = 20;
             zigZag2.zigZagAngle = 20;
+            zigZag2.angularSpeed = -zigZag2.angularSpeed;
 
             zigZag1.predefinedPosition = true;
             zigZag2.predefinedPosition = true;

@@ -51,7 +51,7 @@ public class EnemyFactory
 
     public static EnemySettings SlowEnemy()
     {
-        return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/SlowEnemy");
+        return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/BigBoss");
     }
 
     public static EnemySettings Projectile()
