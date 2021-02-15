@@ -96,12 +96,17 @@ public class Wave
         {
             return 0.0f;
         }
-        return this.GetTimeStamp(this.subWaves.Count - 1) + Parameters.STANDARD_WAVE_DURATION;
+        return this.GetTimeStamp(this.subWaves.Count - 1);
     }
 
     public void Append(Wave other)
     {
-        this.Merge(other, this.GetDuration());
+        this.Append(other, Parameters.STANDARD_WAVE_DURATION);
+    }
+
+    public void Append(Wave other, float offset)
+    {
+        this.Merge(other, this.GetDuration() + offset);
     }
 
     public void Merge(Wave other)
