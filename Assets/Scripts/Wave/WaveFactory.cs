@@ -46,7 +46,6 @@ public class WaveFactory
 
     public static Wave GenerateWave(int level)
     {
-        return RotatingWorm2();
         switch (level)
         {
             case 0:
@@ -55,6 +54,11 @@ public class WaveFactory
                 return SecondWave();
             case 2:
                 return ThirdWave();
+
+            // TODO
+            // case 5: BOSS
+            // case 10: BOSS
+            
             default:
                 Wave wave = new Wave();
                 level -= 2;
@@ -70,7 +74,10 @@ public class WaveFactory
                     {
                         component = RandomFastWaveComponent(level);
                     }
-                    wave.Append(component);
+
+                    float waveComponentOffset = level < 10 ? Parameters.STANDARD_WAVE_DURATION : Parameters.STANDARD_WAVE_DURATION - 0.75f;
+                    wave.Append(component, waveComponentOffset);
+                        
                     level--;
                 }
                 return wave;
@@ -107,9 +114,19 @@ public class WaveFactory
             int randomIndex = (int)Mathf.Round(UnityEngine.Random.Range(0, slowWaveComponents.Count));
             return slowWaveComponents[randomIndex]();
         }
-        else
+        else if (level < 10)
         {
             int randomIndex = (int)Mathf.Round(UnityEngine.Random.Range(0, slowWaveComponents2.Count));
+            return slowWaveComponents2[randomIndex]();
+        }
+        else
+        {
+            int randomIndex = (int)Mathf.Round(UnityEngine.Random.Range(0, slowWaveComponents.Count + slowWaveComponents2.Count));
+            if (randomIndex < slowWaveComponents.Count)
+            {
+                return slowWaveComponents[randomIndex]();
+            }
+            randomIndex -= slowWaveComponents.Count;
             return slowWaveComponents2[randomIndex]();
         }
     }
@@ -121,9 +138,19 @@ public class WaveFactory
             int randomIndex = (int)Mathf.Round(UnityEngine.Random.Range(0, fastWaveComponents.Count));
             return fastWaveComponents[randomIndex]();
         }
-        else
+        else if (level < 10)
         {
             int randomIndex = (int)Mathf.Round(UnityEngine.Random.Range(0, fastWaveComponents2.Count));
+            return fastWaveComponents2[randomIndex]();
+        }
+        else
+        {
+            int randomIndex = (int)Mathf.Round(UnityEngine.Random.Range(0, fastWaveComponents.Count + fastWaveComponents2.Count));
+            if (randomIndex < fastWaveComponents.Count)
+            {
+                return fastWaveComponents[randomIndex]();
+            }
+            randomIndex -= fastWaveComponents.Count;
             return fastWaveComponents2[randomIndex]();
         }
     }
