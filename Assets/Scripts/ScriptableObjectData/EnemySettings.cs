@@ -13,7 +13,8 @@ public class EnemySettings : ScriptableObject
     public float Health = Parameters.BASIC_ENEMY_HEALTH * Parameters.HEALTH_SCALE;
     public float Scale = 1.0f;
     public Color Color = Color.black;
-
+    public Sprite Sprite;
+    public Material Material;
 
     // Speed for moving sideways when enemies are moving forward
     public float angularSpeed = 1.0f;

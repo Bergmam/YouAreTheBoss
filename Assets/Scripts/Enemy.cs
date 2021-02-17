@@ -33,6 +33,7 @@ public class Enemy : MonoBehaviour
     BossHealth bossHealth;
     private ColorModifier colorModifier;
     private EnemySpawner enemySpawner;
+    private SpriteRenderer spriteRenderer;
 
     private GameObject hitParticle;
     private GameObject healthPickup;
@@ -56,6 +57,7 @@ public class Enemy : MonoBehaviour
     {
         this.enemySpawner = GameObject.FindObjectOfType<EnemySpawner>();
         this.sprite = transform.Find("Sprite");
+        this.spriteRenderer = this.sprite.GetComponent<SpriteRenderer>();
         this.colorModifier = this.sprite.GetComponent<ColorModifier>();
         this.hitParticle = Resources.Load("Prefabs/HitParticleSystem", typeof(GameObject)) as GameObject;
         this.healthPickup = Resources.Load("Prefabs/HealthPickup", typeof(GameObject)) as GameObject;
@@ -226,7 +228,7 @@ public class Enemy : MonoBehaviour
     public bool isInAttackArea(float lowAngle, float highAngle, float nearRadius, float farRadius)
     {
 
-        float spriteRadius = this.sprite.GetComponent<SpriteRenderer>().bounds.size.x / 2;
+        float spriteRadius = this.spriteRenderer.bounds.size.x / 2;
         float distanceToBossActual = Mathf.Max(Vector3.Distance(Vector3.zero, transform.position), 0);
         float distanceToBossFar = distanceToBossActual + spriteRadius;
         float distanceToBossNear = distanceToBossActual - spriteRadius;
@@ -267,7 +269,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            transform.Find("Sprite").GetComponent<SpriteRenderer>().color = Color.red;
+            this.spriteRenderer.color = Color.red;
             StartCoroutine(UnityUtils.ChangeToDefaultColorAfterTime(colorModifier, 0.5f));
         }
     }
@@ -304,6 +306,9 @@ public class Enemy : MonoBehaviour
 
     public void SetStats(EnemySettings enemySettings)
     {
+        this.spriteRenderer.sprite = enemySettings.Sprite;
+        this.spriteRenderer.material = enemySettings.Material;
+
         transform.name = enemySettings.Name;
         this.EnemyType = enemySettings.enemyType;
         this.selfDestruct = enemySettings.selfDestruct;

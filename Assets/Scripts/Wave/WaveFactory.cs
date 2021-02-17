@@ -40,11 +40,13 @@ public class WaveFactory
         JittererWave,
         RangedShooters2,
         BomberCluster,
-        LineOfBackAndForthShooters
+        LineOfBackAndForthShooters,
+        RotatingWorm2
     };
 
     public static Wave GenerateWave(int level)
     {
+        return RotatingWorm2();
         switch (level)
         {
             case 0:
@@ -175,6 +177,14 @@ public class WaveFactory
         return wave;
     }
 
+    public static Wave RotatingWorm2()
+    {
+        Wave wave = new Wave();
+        wave.Merge(RotatingWorm());
+        wave.Merge(RotatingWorm());
+        return wave;
+    }
+
     private static Wave JittererWave()
     {
         Wave wave = new Wave();
@@ -249,7 +259,7 @@ public class WaveFactory
     {
         Wave wave = new Wave();
         SubWave subWave = new SubWave();
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 4; i++)
         {
             EnemySettings stats = GameObject.Instantiate(EnemyFactory.Rotator());
             stats.predefinedPosition = true;
