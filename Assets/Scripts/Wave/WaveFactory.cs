@@ -54,10 +54,11 @@ public class WaveFactory
                 return SecondWave();
             case 2:
                 return ThirdWave();
+            case 6:
+                return BossEnemy1Wave();
 
             // TODO
-            // case 5: BOSS
-            // case 10: BOSS
+            // case 11: BOSS
             
             default:
                 Wave wave = new Wave();
@@ -181,6 +182,16 @@ public class WaveFactory
     {
         Wave wave = SecondWave();
         wave.Merge(SecondWave(), 3.0f);
+        return wave;
+    }
+
+    private static Wave BossEnemy1Wave()
+    {
+        Wave wave = new Wave();
+        SubWave subWave = new SubWave();
+        EnemySettings enemy = GameObject.Instantiate(EnemyFactory.BossEnemy1());
+        subWave.AddEnemy(enemy);
+        wave.AddSubWave(subWave, 0.0f);
         return wave;
     }
 

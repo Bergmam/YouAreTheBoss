@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour
     private bool selfDestruct;
     private bool invunerable;
     private float attackFrequency;
+    private float initialAttackDelay;
 
     BossHealth bossHealth;
     private ColorModifier colorModifier;
@@ -109,12 +110,12 @@ public class Enemy : MonoBehaviour
             // Melee attack
             else if (Range <= Parameters.MELEE_RANGE && !IsInvoking("doDamageToBoss"))
             {
-                InvokeRepeating("doDamageToBoss", 1.0f, this.attackFrequency);
+                InvokeRepeating("doDamageToBoss", this.initialAttackDelay, this.attackFrequency);
             }
             // Ranged attack
             else if (Range > Parameters.MELEE_RANGE && !IsInvoking("spawnProjectile"))
             {
-                InvokeRepeating("spawnProjectile", 1.0f, this.attackFrequency);
+                InvokeRepeating("spawnProjectile", this.initialAttackDelay, this.attackFrequency);
             }
 
             // Stop moving forward and back if no turns left when in range.
@@ -375,6 +376,7 @@ public class Enemy : MonoBehaviour
         }
 
         this.attackFrequency = enemySettings.attackDelay;
+        this.initialAttackDelay = enemySettings.InitialAttackDelay;
         
         this.zigZag = enemySettings.zigZag;
 

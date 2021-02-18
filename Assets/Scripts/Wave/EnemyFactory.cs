@@ -95,4 +95,9 @@ public class EnemyFactory
         return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/Jitterer");
     }
 
+    public static EnemySettings BossEnemy1()
+    {
+        return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/BossEnemy1");
+    }
+
 }

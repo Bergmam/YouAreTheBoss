@@ -34,6 +34,7 @@ public class EnemySettings : ScriptableObject
     public bool requiredKill = true;
     public EnemySettings projectile;
     public float attackDelay = 0.5f;
+    public float InitialAttackDelay = 1.0f;
     public EnemyType enemyType = EnemyType.ENEMY;
     public float zigZagAngle = 0f;
     public bool zigZag = false;
