@@ -10,7 +10,9 @@ public enum EnemyType {
 
 public class Enemy : MonoBehaviour
 {
+    private float originalMovementSpeed = 1.0f;
     private float MovementSpeed = 1.0f;
+    private float originalAngularSpeed = 0f;
     private float angularSpeed = 0f;
 
     private float Damage = 20.0f;
@@ -44,6 +46,7 @@ public class Enemy : MonoBehaviour
     private GameObject cooldownResetPickup;
     private float zigZagAngleLow;
     private float zigZagAngleHigh;
+    private bool wasZigZag;
     private bool zigZag;
     private WaveHandler waveHandler;
     private bool frozen;
@@ -53,6 +56,8 @@ public class Enemy : MonoBehaviour
     public float turnBackDistance;
     public float turnForwardDistance;
     public int numberOfTurns; // Negative value means keep turning forever.
+    private bool knockedBack;
+    private Rigidbody2D enemyRigidbody;
 
     void Awake()
     {
@@ -66,6 +71,7 @@ public class Enemy : MonoBehaviour
         this.freezePickup = Resources.Load("Prefabs/FreezePickup", typeof(GameObject)) as GameObject;
         this.cooldownResetPickup = Resources.Load("Prefabs/CooldownResetPickup", typeof(GameObject)) as GameObject;
         this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
+        this.enemyRigidbody = gameObject.GetComponent<Rigidbody2D>();
     }
 
     void Start()
@@ -76,16 +82,35 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        float distanceFromBoss = Vector3.Distance(Vector3.zero, transform.position);
+
+        if(this.enemyRigidbody.velocity.magnitude != 0 && this.EnemyType != EnemyType.PROJECTILE)
+        {
+            this.knockedBack = true;
+            if (distanceFromBoss > this.Range)
+            {
+                CancelInvoke();
+            }
+            return;
+        }
+        else if (knockedBack)
+        {
+            this.knockedBack = false;
+            // Reset movement after knock back.
+            this.MovementSpeed = (this.numberOfTurns % 2 == 0) ? this.originalMovementSpeed : -this.originalMovementSpeed;
+            this.zigZag = this.wasZigZag;
+            this.angularSpeed = this.originalAngularSpeed;
+        }
+
         if (this.frozen && this.EnemyType != EnemyType.PROJECTILE)
         {
             return;
         }
 
-        float distanceFromBoss = Vector3.Distance(Vector3.zero, transform.position);
         RadialPosition radialPosition = RotationUtils.XYToRadialPos(this.transform.position);
-
+        
         // Move forward and back
-        float radialStep = MovementSpeed * Time.deltaTime;
+        float radialStep = this.MovementSpeed * Time.deltaTime;
         radialPosition.AddRadius((-1) * radialStep);
 
         // Move sideways
@@ -339,8 +364,10 @@ public class Enemy : MonoBehaviour
         }
 
         this.angularSpeed = enemySettings.angularSpeed * angularDirectionMultiplier;
+        this.originalAngularSpeed = this.angularSpeed;
         this.circlingSpeed = enemySettings.circlingSpeed * circlingDirectionMultiplier;
-        MovementSpeed = enemySettings.MovementSpeed;
+        this.MovementSpeed = enemySettings.MovementSpeed;
+        this.originalMovementSpeed = this.MovementSpeed;
 
         Damage = enemySettings.Damage;
 
@@ -379,6 +406,7 @@ public class Enemy : MonoBehaviour
         this.initialAttackDelay = enemySettings.InitialAttackDelay;
         
         this.zigZag = enemySettings.zigZag;
+        this.wasZigZag = this.zigZag;
 
         if (enemySettings.angularSpeed > 0)
         {

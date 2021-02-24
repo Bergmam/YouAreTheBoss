@@ -7,10 +7,13 @@ public class ItemButton : MonoBehaviour
     private BossHealth bossHealth;
     private AttackController attackController;
     public int Index;
+    private Transform bossTransform;
 
     void Awake()
     {
-        this.bossHealth = GameObject.Find("Boss").GetComponent<BossHealth>();
+        GameObject bossGameObject = GameObject.Find("Boss");
+        this.bossTransform = bossGameObject.transform;
+        this.bossHealth = bossGameObject.GetComponent<BossHealth>();
         this.attackController = GameObject.FindObjectOfType<AttackController>();
     }
 
