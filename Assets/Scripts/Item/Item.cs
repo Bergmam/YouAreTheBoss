@@ -11,6 +11,7 @@ public class Item : MonoBehaviour
     public int InvunerableSeconds;
     public int FreezeEnemiesSeconds;
     public bool ResetCooldowns;
+    public float PushBackForce; // A negative value means pull enemies towards the boss, positive means push them away.
 
     void Awake()
     {
@@ -31,6 +32,7 @@ public class Item : MonoBehaviour
         item.InvunerableSeconds = this.InvunerableSeconds;
         item.FreezeEnemiesSeconds = this.FreezeEnemiesSeconds;
         item.ResetCooldowns = this.ResetCooldowns;
+        item.PushBackForce = this.PushBackForce;
         item.Sprite = this.gameObject.GetComponent<SpriteRenderer>().sprite;
 
         this.itemButtons.AddItem(item);

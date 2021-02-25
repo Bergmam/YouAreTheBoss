@@ -41,6 +41,19 @@ public class ItemButton : MonoBehaviour
             }
         }
 
+        if (item.PushBackForce != 0)
+        {
+            float bossRotationAngle = RotationUtils.MakePositiveAngle(this.bossTransform.eulerAngles.z + 90);
+            foreach (Enemy enemy in GameObject.FindObjectsOfType<Enemy>())
+            {
+                // +-40 for a hardcoded 80 degree angle. This is just an arbitrary angle. We could change it whenever we feel like it.
+                if (enemy.isInAttackArea( bossRotationAngle - 40, bossRotationAngle + 40, 0, 100))
+                {
+                    enemy.GetComponent<Rigidbody2D>().AddForce(enemy.transform.position.normalized * item.PushBackForce);
+                }
+            }
+        }
+
         this.gameObject.SetActive(false);
         BossItemHolder.BossItems[this.Index] = null;
     }
