@@ -24,6 +24,8 @@ public class ItemButtons : MonoBehaviour
                 image.sprite = item.Sprite;
             }
         }
+        
+        GameObject.Find("ItemAim").SetActive(false);
     }
 
     public void AddItem(ItemData item)

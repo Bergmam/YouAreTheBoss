@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EnemyType {
+public enum EnemyType
+{
     ENEMY,
     PROJECTILE,
     MINION
@@ -86,7 +87,7 @@ public class Enemy : MonoBehaviour
     {
         float distanceFromBoss = Vector3.Distance(Vector3.zero, transform.position);
 
-        if(this.enemyRigidbody.velocity.magnitude != 0 && this.EnemyType != EnemyType.PROJECTILE)
+        if (this.enemyRigidbody.velocity.magnitude != 0 && this.EnemyType != EnemyType.PROJECTILE)
         {
             this.knockedBack = true;
             if (distanceFromBoss > this.Range)
@@ -310,7 +311,7 @@ public class Enemy : MonoBehaviour
         }
 
         int itemRand = Random.Range(0, 55);
-        if (itemRand < 4)
+        if (itemRand < 5)
         {
             if (itemRand == 0)
             {
@@ -354,18 +355,22 @@ public class Enemy : MonoBehaviour
 
         // Randomization variable takes precident over clockwise variable
         int angularDirectionMultiplier = 1;
-        if (enemySettings.randomizeAngularDirection){
+        if (enemySettings.randomizeAngularDirection)
+        {
             angularDirectionMultiplier = UnityEngine.Random.value >= 0.5 ? -1 : 1;
         }
-        else if (enemySettings.angularMoveClockwise){
+        else if (enemySettings.angularMoveClockwise)
+        {
             angularDirectionMultiplier = -1;
         }
 
         int circlingDirectionMultiplier = 1;
-        if (enemySettings.randomizeCirclingDirection){
+        if (enemySettings.randomizeCirclingDirection)
+        {
             circlingDirectionMultiplier = UnityEngine.Random.value >= 0.5 ? -1 : 1;
-        } 
-        else if (enemySettings.circlingMoveClockwise){
+        }
+        else if (enemySettings.circlingMoveClockwise)
+        {
             circlingDirectionMultiplier = -1;
         }
 
