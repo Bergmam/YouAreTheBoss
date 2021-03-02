@@ -44,6 +44,19 @@ public class PlayAttackOnBoss : MonoBehaviour
         this.chargeSystem.SetActive(false);
     }
 
+    public void SetRadius(float radius)
+    {
+        // Enemy transform is where shooter attack bullets are stopped. This should be the edge of the preview,
+        // so the diff between the center and the Enemy is the radius.
+        Transform shooterStopperTransform = UnityUtils.RecursiveFind(this.transform, "Enemy");
+        float oldRadius = shooterStopperTransform.position.y - transform.position.y;
+        
+        float newScale = this.transform.localScale.x * (radius / oldRadius);
+        
+        this.transform.localScale = new Vector3(newScale, newScale, 1);
+        this.aimMaterial.SetFloat("Scale", this.transform.localScale.x);
+    }
+
     public void setAttack(BossAttack attack)
     {
         Start();

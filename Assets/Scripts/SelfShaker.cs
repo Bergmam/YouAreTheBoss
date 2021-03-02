@@ -7,11 +7,6 @@ public class SelfShaker : MonoBehaviour
     private Vector3 originalPosition;
     private float shakeAmount = 0;
 
-    void Start()
-    {
-        originalPosition = this.transform.position;
-    }
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
@@ -22,6 +17,7 @@ public class SelfShaker : MonoBehaviour
 
     public void Shake(float amount, float length)
     {
+        originalPosition = this.transform.position;
         this.shakeAmount = amount;
         InvokeRepeating("DoShake", 0, 0.01f);
         Invoke("StopShake", length);
