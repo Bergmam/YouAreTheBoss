@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public enum EnemyType
 {
@@ -20,9 +21,9 @@ public class Enemy : MonoBehaviour
 
     private float Range = 1.0f;
 
-    private float Health = 100.0f;
+    public float Health { get; private set; } = 100.0f;
 
-    private float MaxHealth = 100.0f;
+    public float MaxHealth { get; private set; } = 100.0f;
 
     public bool SetForDeath = false;
 
@@ -60,6 +61,9 @@ public class Enemy : MonoBehaviour
     public int numberOfTurns; // Negative value means keep turning forever.
     private bool knockedBack;
     private Rigidbody2D enemyRigidbody;
+    private ProgressBarBehaviour healthBar;
+
+    private List<HealthInitiatedEnemyAction> healthInitiatedEnemyActions;
 
     void Awake()
     {
@@ -75,6 +79,7 @@ public class Enemy : MonoBehaviour
         this.cooldownResetPickup = Resources.Load("Prefabs/CooldownResetPickup", typeof(GameObject)) as GameObject;
         this.waveHandler = GameObject.FindObjectOfType<WaveHandler>();
         this.enemyRigidbody = gameObject.GetComponent<Rigidbody2D>();
+        this.healthBar = UnityUtils.RecursiveFind(transform, "HealthBar").GetComponent<ProgressBarBehaviour>();
     }
 
     void Start()
@@ -290,7 +295,9 @@ public class Enemy : MonoBehaviour
         Destroy(hitParticle, hitParticle.GetComponent<ParticleSystem>().main.duration);
 
         Health -= damage;
-        UnityUtils.RecursiveFind(transform, "HealthBar").GetComponent<ProgressBarBehaviour>().UpdateFill(Health / MaxHealth);
+        float percentHealthLeft = Health / MaxHealth;
+        this.healthBar.UpdateFill(percentHealthLeft);
+
         if (Health <= 0)
         {
             KillSelf();
@@ -300,6 +307,11 @@ public class Enemy : MonoBehaviour
         {
             this.spriteRenderer.color = Color.red;
             StartCoroutine(UnityUtils.ChangeToDefaultColorAfterTime(colorModifier, 0.5f));
+            
+            this.healthInitiatedEnemyActions
+                .Where(action => percentHealthLeft < action.Health)
+                .ToList()
+                .ForEach(action => action.Action.Execute(this.gameObject));
         }
     }
 
@@ -374,6 +386,16 @@ public class Enemy : MonoBehaviour
             circlingDirectionMultiplier = -1;
         }
 
+        MaxHealth = enemySettings.Health;
+        if (enemySettings.SpawnHealth > 0)
+        {
+            this.Health = enemySettings.SpawnHealth;
+            this.healthBar.UpdateFill(Health / MaxHealth);
+        }
+        else {
+            Health = enemySettings.Health;
+        }
+
         this.angularSpeed = enemySettings.angularSpeed * angularDirectionMultiplier;
         this.originalAngularSpeed = this.angularSpeed;
         this.circlingSpeed = enemySettings.circlingSpeed * circlingDirectionMultiplier;
@@ -401,8 +423,6 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        Health = enemySettings.Health;
-        MaxHealth = enemySettings.Health;
         Scale = enemySettings.Scale;
         Transform sprite = transform.Find("Sprite");
         sprite.transform.localScale *= enemySettings.Scale;
@@ -429,6 +449,8 @@ public class Enemy : MonoBehaviour
             this.zigZagAngleHigh = enemySettings.spawnAngle;
             this.zigZagAngleLow = enemySettings.spawnAngle - enemySettings.zigZagAngle;
         }
+
+        this.healthInitiatedEnemyActions = enemySettings.HealthInitiatedEnemyActions;
 
         this.projectile = enemySettings.projectile ? enemySettings.projectile : null;
         this.turnBackDistance = enemySettings.TurnBackDistance;

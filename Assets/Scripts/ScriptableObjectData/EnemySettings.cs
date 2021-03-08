@@ -41,4 +41,7 @@ public class EnemySettings : ScriptableObject
     public float TurnBackDistance = 0f;
     public float TurnForwardDistance = 0f;
     public int NumberOfTurns = 0; // Negative value means keep turning forever.
+
+    public List<HealthInitiatedEnemyAction> HealthInitiatedEnemyActions;
+    public float SpawnHealth = -1;
 }
