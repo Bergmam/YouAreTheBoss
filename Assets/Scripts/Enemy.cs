@@ -308,10 +308,12 @@ public class Enemy : MonoBehaviour
             this.spriteRenderer.color = Color.red;
             StartCoroutine(UnityUtils.ChangeToDefaultColorAfterTime(colorModifier, 0.5f));
             
-            this.healthInitiatedEnemyActions
+            List<HealthInitiatedEnemyAction> actionsToExectue = this.healthInitiatedEnemyActions
                 .Where(action => percentHealthLeft < action.Health)
-                .ToList()
-                .ForEach(action => action.Action.Execute(this.gameObject));
+                .ToList();
+
+            actionsToExectue.ForEach(action => action.Action.Execute(this.gameObject));
+            this.healthInitiatedEnemyActions = this.healthInitiatedEnemyActions.Except(actionsToExectue).ToList();
         }
     }
 
