@@ -62,8 +62,10 @@ public class Enemy : MonoBehaviour
     private bool knockedBack;
     private Rigidbody2D enemyRigidbody;
     private ProgressBarBehaviour healthBar;
+    private float timeSinceSpawned = 0.0f;
 
     private List<HealthInitiatedEnemyAction> healthInitiatedEnemyActions;
+    private List<TimeInitiatedEnemyAction> timeInitiatedEnemyActions;
 
     void Awake()
     {
@@ -90,6 +92,7 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        this.timeSinceSpawned += Time.deltaTime;
         float distanceFromBoss = Vector3.Distance(Vector3.zero, transform.position);
 
         if (this.enemyRigidbody.velocity.magnitude != 0 && this.EnemyType != EnemyType.PROJECTILE)
@@ -114,6 +117,15 @@ public class Enemy : MonoBehaviour
         {
             return;
         }
+
+            
+        List<TimeInitiatedEnemyAction> actionsToExectue = this.timeInitiatedEnemyActions
+            .Where(action => this.timeSinceSpawned > action.Time)
+            .ToList();
+
+        actionsToExectue.ForEach(action => action.Action.Execute(this.gameObject));
+        this.timeInitiatedEnemyActions = this.timeInitiatedEnemyActions.Except(actionsToExectue).ToList();
+
 
         RadialPosition radialPosition = RotationUtils.XYToRadialPos(this.transform.position);
         
@@ -453,6 +465,7 @@ public class Enemy : MonoBehaviour
         }
 
         this.healthInitiatedEnemyActions = enemySettings.HealthInitiatedEnemyActions;
+        this.timeInitiatedEnemyActions = enemySettings.TimeInitiatedEnemyActions;
 
         this.projectile = enemySettings.projectile ? enemySettings.projectile : null;
         this.turnBackDistance = enemySettings.TurnBackDistance;

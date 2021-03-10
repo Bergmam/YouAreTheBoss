@@ -43,5 +43,6 @@ public class EnemySettings : ScriptableObject
     public int NumberOfTurns = 0; // Negative value means keep turning forever.
 
     public List<HealthInitiatedEnemyAction> HealthInitiatedEnemyActions;
+    public List<TimeInitiatedEnemyAction> TimeInitiatedEnemyActions;
     public float SpawnHealth = -1;
 }
