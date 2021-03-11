@@ -400,14 +400,14 @@ public class Enemy : MonoBehaviour
             circlingDirectionMultiplier = -1;
         }
 
-        MaxHealth = enemySettings.Health;
+        this.MaxHealth = enemySettings.Health;
         if (enemySettings.SpawnHealth > 0)
         {
             this.Health = enemySettings.SpawnHealth;
-            this.healthBar.UpdateFill(Health / MaxHealth);
+            this.healthBar.UpdateFill(this.Health / this.MaxHealth);
         }
         else {
-            Health = enemySettings.Health;
+            this.Health = enemySettings.Health;
         }
 
         this.angularSpeed = enemySettings.angularSpeed * angularDirectionMultiplier;
@@ -464,7 +464,10 @@ public class Enemy : MonoBehaviour
             this.zigZagAngleLow = enemySettings.spawnAngle - enemySettings.zigZagAngle;
         }
 
-        this.healthInitiatedEnemyActions = enemySettings.HealthInitiatedEnemyActions;
+        // Make sure all health initiated actions where the limit has already been passed are not executed immediately on the first attack.
+        this.healthInitiatedEnemyActions = enemySettings.HealthInitiatedEnemyActions
+            .Where(action => action.Health < (this.Health / this.MaxHealth))
+            .ToList();
         this.timeInitiatedEnemyActions = enemySettings.TimeInitiatedEnemyActions;
 
         this.projectile = enemySettings.projectile ? enemySettings.projectile : null;

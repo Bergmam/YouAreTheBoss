@@ -100,4 +100,9 @@ public class EnemyFactory
         return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/BossEnemy1");
     }
 
+    public static EnemySettings Shielder()
+    {
+        return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/Shielder/Shielder_normal");
+    }
+
 }

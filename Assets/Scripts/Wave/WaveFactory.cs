@@ -31,7 +31,8 @@ public class WaveFactory
     private static List<Func<Wave>> slowWaveComponents2 = new List<Func<Wave>>()
     {
         ThreeZigZags,
-        OneBigGuy
+        OneBigGuy,
+        Shielder
     };
 
     private static List<Func<Wave>> fastWaveComponents2 = new List<Func<Wave>>()
@@ -450,6 +451,16 @@ public class WaveFactory
         subWave.AddEnemy(GameObject.Instantiate(EnemyFactory.SlowEnemy()));
         subWave.ScaleSubWaveHealth(5.0f / 4.0f);
         subWave.ScaleSubWaveDamage(5.0f / 6.0f);
+        wave.AddSubWave(subWave, 0.0f);
+        return wave;
+    }
+
+    public static Wave Shielder()
+    {
+        Wave wave = new Wave();
+        SubWave subWave = new SubWave();
+        EnemySettings enemy = GameObject.Instantiate(EnemyFactory.Shielder());
+        subWave.AddEnemy(enemy);
         wave.AddSubWave(subWave, 0.0f);
         return wave;
     }
