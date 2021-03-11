@@ -42,7 +42,8 @@ public class WaveFactory
         RangedShooters2,
         BomberCluster,
         LineOfBackAndForthShooters,
-        RotatingWorm2
+        RotatingWorm2,
+        Splitter
     };
 
     public static Wave GenerateWave(int level)
@@ -460,6 +461,16 @@ public class WaveFactory
         Wave wave = new Wave();
         SubWave subWave = new SubWave();
         EnemySettings enemy = GameObject.Instantiate(EnemyFactory.Shielder());
+        subWave.AddEnemy(enemy);
+        wave.AddSubWave(subWave, 0.0f);
+        return wave;
+    }
+
+    public static Wave Splitter()
+    {
+        Wave wave = new Wave();
+        SubWave subWave = new SubWave();
+        EnemySettings enemy = GameObject.Instantiate(EnemyFactory.Splitter());
         subWave.AddEnemy(enemy);
         wave.AddSubWave(subWave, 0.0f);
         return wave;

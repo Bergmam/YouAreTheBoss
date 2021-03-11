@@ -105,4 +105,9 @@ public class EnemyFactory
         return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/Shielder/Shielder_normal");
     }
 
+    public static EnemySettings Splitter()
+    {
+        return Resources.Load<EnemySettings>("ScriptableObjects/Enemies/Splitter/Splitter");
+    }
+
 }
