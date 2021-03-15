@@ -9,24 +9,25 @@ public class BackgroundController : MonoBehaviour
     // public Material backgroundMaterial;
 
     // private Material backgroundMaterial;
-    public void Start() {
+    public void Start()
+    {
         // backgroundMaterial = backgroundImage.material;
         this.CreateRandomBackground();
     }
 
-    public void CreateRandomBackground() {
-
+    public void CreateRandomBackground()
+    {
         Material tempMaterial = Instantiate(backgroundImage.material);
-        // Color
-        tempMaterial.SetColor("Color_E217BDB6", Random.ColorHSV());
-        // BackgroundColor
-        tempMaterial.SetColor("Color_55139648", Random.ColorHSV());
-        // Scale
-        tempMaterial.SetFloat("Vector1_5B33613A", Random.Range(2f, 5.0f));
-        // TwirlStrength
-        tempMaterial.SetFloat("Vector1_7A46A631", Random.Range(10f, 40.0f));
-        // Speed
-        tempMaterial.SetFloat("Vector1_6ED7C9C8", Random.Range(0f, 10.0f));
+        tempMaterial.SetColor("_Color", Random.ColorHSV());
+        tempMaterial.SetColor("_BackgroundColor", Random.ColorHSV());
+        tempMaterial.SetFloat("_Scale", Random.Range(2f, 5.0f));
+        tempMaterial.SetFloat("_TwirlStrength", Random.Range(10f, 40.0f));
+        tempMaterial.SetFloat("_Speed", Random.Range(0f, 10.0f));
+
+        Vector2 bossScreenPos = Camera.main.WorldToScreenPoint(GameObject.Find("Boss").transform.position);
+        Vector2 bossAnchoredPos = new Vector2(bossScreenPos.x / Screen.width, bossScreenPos.y / Screen.height);
+        tempMaterial.SetVector("_AnchoredPosition", bossAnchoredPos);
+
         backgroundImage.material = tempMaterial;
     }
 
