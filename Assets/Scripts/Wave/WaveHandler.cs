@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WaveHandler : MonoBehaviour
 {
+    public GameObject ContinueButton;
 
     private EnemySpawner enemySpawner;
     private int requiredKillEnemiesInWave;
@@ -18,6 +19,8 @@ public class WaveHandler : MonoBehaviour
 
     void Start()
     {
+        this.ContinueButton.SetActive(false);
+
         Wave wave = CurrentWave.wave;
         requiredKillEnemiesInWave = 0;
         foreach (KeyValuePair<float, SubWave> timeStampSubWave in wave.GetSubWaves())
@@ -34,12 +37,11 @@ public class WaveHandler : MonoBehaviour
         int livingEnemies = GameObject.FindObjectsOfType(typeof(Enemy)).Length;
         if (livingEnemies <= 0
             && requireKillUnitsSpawned >= requiredKillEnemiesInWave
-            && this.activeItemPickups <= 0
             && !gameOver)
         {
             gameOver = true;
             WaveNumber.waveNumber++;
-            StartCoroutine(waitAndGoBack());
+            StartCoroutine(waitAndShowContinueButton());
         }
     }
 
@@ -48,9 +50,14 @@ public class WaveHandler : MonoBehaviour
         requireKillUnitsSpawned++;
     }
 
-    IEnumerator waitAndGoBack()
+    private IEnumerator waitAndShowContinueButton()
     {
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.5f);
+        this.ContinueButton.SetActive(true);
+    }
+
+    public void GoToMainMenu()
+    {
         SceneHandler.SwitchScene("Main Menu Scene");
     }
 
