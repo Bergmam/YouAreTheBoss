@@ -5,6 +5,7 @@ using UnityEngine;
 public class WaveHandler : MonoBehaviour
 {
     public GameObject ContinueButton;
+    public GameObject WaveClearedText;
 
     private EnemySpawner enemySpawner;
     private int requiredKillEnemiesInWave;
@@ -20,6 +21,7 @@ public class WaveHandler : MonoBehaviour
     void Start()
     {
         this.ContinueButton.SetActive(false);
+        this.WaveClearedText.SetActive(false);
 
         Wave wave = CurrentWave.wave;
         requiredKillEnemiesInWave = 0;
@@ -54,6 +56,7 @@ public class WaveHandler : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         this.ContinueButton.SetActive(true);
+        this.WaveClearedText.SetActive(true);
     }
 
     public void GoToMainMenu()
