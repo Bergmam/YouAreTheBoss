@@ -14,6 +14,8 @@ public class ColorModifier : MonoBehaviour
     private float countDownStartTime;
     private bool fadeToSelected;
     private bool fadePaused;
+    public Material Material;
+    public string MaterialColorProperty;
 
     void Awake()
     {
@@ -118,6 +120,11 @@ public class ColorModifier : MonoBehaviour
     /// <param name="color">Color.</param>
     public void SetColor(Color color)
     {
+        if(this.Material != null && this.MaterialColorProperty != null)
+        {
+            this.Material.SetColor(this.MaterialColorProperty, color);
+            return;
+        }
         if (this.spriteRenderer != null)
         {
             this.spriteRenderer.color = color;

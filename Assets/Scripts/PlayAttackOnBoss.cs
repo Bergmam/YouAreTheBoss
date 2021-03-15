@@ -29,6 +29,9 @@ public class PlayAttackOnBoss : MonoBehaviour
         this.spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         this.shaker = gameObject.AddComponent<SelfShaker>();
         this.chargeSystemResource = Resources.Load<GameObject>("Prefabs/ChargeUp");
+
+        this.aimColorModifier.Material = this.aimMaterial;
+        this.aimColorModifier.MaterialColorProperty = "AimColor";
     }
 
     void Start()

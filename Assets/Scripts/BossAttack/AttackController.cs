@@ -22,6 +22,9 @@ public class AttackController : MonoBehaviour
         this.aimColorModifier = aim.GetComponent<ColorModifier>();
         this.aimMaterial = aim.gameObject.GetComponent<Renderer>().material;
         this.activeAttackScreenButton = GameObject.Find("ActiveAttackScreenButton");
+
+        this.aimColorModifier.Material = this.aimMaterial;
+        this.aimColorModifier.MaterialColorProperty = "AimColor";
     }
 
 
