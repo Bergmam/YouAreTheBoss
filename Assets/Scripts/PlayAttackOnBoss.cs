@@ -14,16 +14,16 @@ public class PlayAttackOnBoss : MonoBehaviour
     private GameObject projectile;
     private GameObject chargeSystem;
     private GameObject chargeSystemResource;
-    private float activeAttackWait = 4.0f;
+    private float activeAttackWait = 1.2f;
     private SelfShaker shaker;
     private bool started;
-	private Material aimMaterial;
+    private Material aimMaterial;
 
     void Awake()
     {
         this.projectile = Resources.Load<GameObject>("Prefabs/BossProjectile");
         Transform aim = UnityUtils.RecursiveFind(transform, "Aim");
-		this.aimMaterial = aim.GetComponent<Renderer>().material;
+        this.aimMaterial = aim.GetComponent<Renderer>().material;
         this.aimColorModifier = aim.GetComponent<ColorModifier>();
         this.tapText = gameObject.GetComponentInChildren<TextMeshProUGUI>();
         this.spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
@@ -53,9 +53,9 @@ public class PlayAttackOnBoss : MonoBehaviour
         // so the diff between the center and the Enemy is the radius.
         Transform shooterStopperTransform = UnityUtils.RecursiveFind(this.transform, "Enemy");
         float oldRadius = shooterStopperTransform.position.y - transform.position.y;
-        
+
         float newScale = this.transform.localScale.x * (radius / oldRadius);
-        
+
         this.transform.localScale = new Vector3(newScale, newScale, 1);
         this.aimMaterial.SetFloat("Scale", this.transform.localScale.x);
     }
@@ -65,7 +65,7 @@ public class PlayAttackOnBoss : MonoBehaviour
         Start();
 
         this.currentAttack = attack;
-        
+
         this.aimMaterial.SetFloat("Angle", this.currentAttack.angle);
         this.aimMaterial.SetFloat("InnerRadius", this.currentAttack.closeRadius);
         this.aimMaterial.SetFloat("OuterRadius", this.currentAttack.farRadius);

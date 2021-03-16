@@ -97,7 +97,7 @@ public class AttackButtons : MonoBehaviour
             Vector3[] upgrade1PanelCorners = new Vector3[4];
             upgrade1Transform.GetComponent<RectTransform>().GetWorldCorners(upgrade1PanelCorners);
             float upgrade1PanelHeight = upgrade1PanelCorners[1].y - upgrade1PanelCorners[0].y;
-            float radius = (upgrade1PanelHeight / 2) - 0.4f; // 0.4f to account for name text radius. We might want to calculate this from the UI as well.
+            float radius = (upgrade1PanelHeight / 2) - 0.5f; // 0.5f to account for name text radius. We might want to calculate this from the UI as well.
 
             // Get index of random attack from chooseableUpgradeAttacks
             int index = UnityEngine.Random.Range(0, AttackLists.chooseableUpgradeAttacks.Count);
@@ -114,7 +114,8 @@ public class AttackButtons : MonoBehaviour
         }
     }
 
-    private void SetDonePickingAttacks(bool isDone){
+    private void SetDonePickingAttacks(bool isDone)
+    {
         this.playButton.interactable = isDone;
         this.playButtonText.color = isDone ? this.playButtonTextActiveColor : this.playButtonTextInactiveColor;
         this.chooseThreeAttacksText.SetActive(!isDone);
@@ -124,9 +125,14 @@ public class AttackButtons : MonoBehaviour
     {
         GameObject attackButton = UnityUtils.RecursiveFind(upgradePopUp.transform, "Attack" + upgradePopUpAttackNumber + "Button").gameObject;
         GameObject attackText = UnityUtils.RecursiveFind(upgradePopUp.transform, "Attack" + upgradePopUpAttackNumber + "Name").gameObject;
+        GameObject attackTypeText = UnityUtils.RecursiveFind(upgradePopUp.transform, "Attack" + upgradePopUpAttackNumber + "Type").gameObject;
         BossAttack attack = AttackLists.chooseableUpgradeAttacks[upgradeAttacksIndex];
         attackText.GetComponent<Text>().text = attack.name;
         attackButton.transform.Find("Text").GetComponent<Text>().text = "Damage: " + attack.damage;
+
+        attackTypeText.GetComponent<Text>().text = (attack.frequency > Parameters.SLOW_ATTACK_LIMIT)
+            ? "Active"
+            : "Passive";
 
         GameObject attackPreview = upgradePopUpAttackNumber == 1 ? this.upgradeAttackPreview1 : this.upgradeAttackPreview2;
         attackPreview.GetComponent<PlayAttackOnBoss>().SetRadius(radius);
@@ -175,16 +181,20 @@ public class AttackButtons : MonoBehaviour
             infoButton.GetComponent<Button>().interactable = false;
 
             Transform attackNameTextTransform = UnityUtils.RecursiveFind(attackPopUp.transform, "AttackName");
+            Transform attackTypeTextTransform = UnityUtils.RecursiveFind(attackPopUp.transform, "AttackType");
             Vector3[] attackNameTextCorners = new Vector3[4];
             attackNameTextTransform.GetComponent<RectTransform>().GetWorldCorners(attackNameTextCorners);
             float attackNameTextHeight = attackNameTextCorners[1].y - attackNameTextCorners[0].y;
             float radius = attackNameTextTransform.position.y - attackPopUp.transform.position.y - (attackNameTextHeight / 2);
-            this.mainAttackPreview.GetComponent<PlayAttackOnBoss>().SetRadius(radius - 0.05f); // 0.05 just for some extra padding.
+            this.mainAttackPreview.GetComponent<PlayAttackOnBoss>().SetRadius(radius - 0.5f); // 0.5 just for some extra padding.
 
             attackPopUp.SetActive(true);
             int buttonNumber = Int32.Parse(button.transform.name.Replace("Attack", ""));
             BossAttack attack = AttackLists.GetSelectableAttack(buttonNumber);
             attackNameTextTransform.GetComponent<Text>().text = attack.name;
+            attackTypeTextTransform.GetComponent<Text>().text = (attack.frequency > Parameters.SLOW_ATTACK_LIMIT)
+                ? "Active"
+                : "Passive";
             Text text = UnityUtils.RecursiveFind(attackPopUp.transform, "AttackInfoText").GetComponent<Text>();
             text.text = "Damage: " + attack.damage + "\n";
             playAttackPreview(this.mainAttackPreview, attack);
